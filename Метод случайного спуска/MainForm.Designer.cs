@@ -76,6 +76,10 @@ namespace Метод_случайного_спуска
 			this.par_R = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.button1 = new System.Windows.Forms.Button();
+			this.textBox4 = new System.Windows.Forms.TextBox();
+			this.par_IKF = new System.Windows.Forms.Label();
+			this.label5 = new System.Windows.Forms.Label();
+			this.button3 = new System.Windows.Forms.Button();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -104,7 +108,7 @@ namespace Метод_случайного_спуска
 			this.button2.BackColor = System.Drawing.Color.White;
 			this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.button2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-			this.button2.Location = new System.Drawing.Point(0, 84);
+			this.button2.Location = new System.Drawing.Point(15, 84);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(134, 34);
 			this.button2.TabIndex = 9;
@@ -386,7 +390,7 @@ namespace Метод_случайного_спуска
 			this.button1.BackColor = System.Drawing.Color.White;
 			this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.button1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-			this.button1.Location = new System.Drawing.Point(140, 84);
+			this.button1.Location = new System.Drawing.Point(155, 84);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(134, 34);
 			this.button1.TabIndex = 9;
@@ -394,12 +398,53 @@ namespace Метод_случайного_спуска
 			this.button1.UseVisualStyleBackColor = false;
 			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
+			// textBox4
+			// 
+			this.textBox4.Location = new System.Drawing.Point(148, 307);
+			this.textBox4.Name = "textBox4";
+			this.textBox4.Size = new System.Drawing.Size(135, 20);
+			this.textBox4.TabIndex = 65;
+			// 
+			// par_IKF
+			// 
+			this.par_IKF.AutoSize = true;
+			this.par_IKF.Location = new System.Drawing.Point(41, 307);
+			this.par_IKF.Name = "par_IKF";
+			this.par_IKF.Size = new System.Drawing.Size(13, 13);
+			this.par_IKF.TabIndex = 64;
+			this.par_IKF.Text = "1";
+			// 
+			// label5
+			// 
+			this.label5.AutoSize = true;
+			this.label5.Location = new System.Drawing.Point(20, 307);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(23, 13);
+			this.label5.TabIndex = 63;
+			this.label5.Text = "IKF";
+			// 
+			// button3
+			// 
+			this.button3.BackColor = System.Drawing.Color.White;
+			this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.button3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+			this.button3.Location = new System.Drawing.Point(295, 84);
+			this.button3.Name = "button3";
+			this.button3.Size = new System.Drawing.Size(134, 34);
+			this.button3.TabIndex = 9;
+			this.button3.Text = "Расчет 4-х парам. модель";
+			this.button3.UseVisualStyleBackColor = false;
+			this.button3.Click += new System.EventHandler(this.button3_Click);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.GhostWhite;
 			this.ClientSize = new System.Drawing.Size(1417, 701);
+			this.Controls.Add(this.textBox4);
+			this.Controls.Add(this.par_IKF);
+			this.Controls.Add(this.label5);
 			this.Controls.Add(this.textBox3);
 			this.Controls.Add(this.par_R);
 			this.Controls.Add(this.label6);
@@ -417,6 +462,7 @@ namespace Метод_случайного_спуска
 			this.Controls.Add(this.par_fi);
 			this.Controls.Add(this.par_Is);
 			this.Controls.Add(this.Graffik);
+			this.Controls.Add(this.button3);
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.nSteps);
@@ -461,5 +507,9 @@ namespace Метод_случайного_спуска
 		private System.Windows.Forms.Label par_R;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.TextBox textBox4;
+		private System.Windows.Forms.Label par_IKF;
+		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.Button button3;
 	}
 }

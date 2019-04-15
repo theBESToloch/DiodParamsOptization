@@ -123,7 +123,6 @@ namespace RandomDescent
             dIs0 = dIs;
 
 			c = 0;
-			Is0 = newIS();
             for (int i = 0; i < len; i++)
             {
 				Id = Is0 * (Math.Exp(U[i]/ f0) -1);
@@ -144,8 +143,8 @@ namespace RandomDescent
             for (double i = 0; i < nStep-1; i++)
             {
                 f = Math.Abs(f0 + (rnd.Next(200) * 0.1 - 1) * df);
-				//Is = Math.Abs(Is0 + (rnd.Next(200) * 0.1 - 1) * dIs);
-				Is = newIS();
+				Is = Math.Abs(Is0 + (rnd.Next(200) * 0.1 - 1) * dIs);
+				//Is = newIS();
 
 				S = 0;
                 for (int j = 0; j < len; j++)

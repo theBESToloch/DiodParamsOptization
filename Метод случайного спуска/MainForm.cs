@@ -28,6 +28,9 @@ namespace Метод_случайного_спуска
 			par_fi1.Text = fi[0].ToString();
 			textBox2.Text = fi[0].ToString();
 			par_R.Text = R[0].ToString();
+			textBox3.Text = R[0].ToString();
+			par_IKF.Text = IK[0].ToString();
+			textBox4.Text = IK[0].ToString();
 		}
 
 		#region Поля
@@ -55,10 +58,6 @@ namespace Метод_случайного_спуска
 		//вывод в окне
 		List<double> two_x = new List<double>();
 		List<double> two_y = new List<double>();
-		#endregion
-
-		#region Формы
-
 		#endregion
 
 		#region графики и их вывод
@@ -175,6 +174,22 @@ namespace Метод_случайного_спуска
 			MessageBox.Show(" вычисления выполнены");
 		}
 
+		private void button1_Click(object sender, EventArgs e)
+		{
+			obj = new Optimize3Params(VAX.I, VAX.U, Convert.ToInt32(nSteps.Text), Convert.ToDouble(textBox1.Text.Replace(".", ",")), Convert.ToDouble(textBox2.Text.Replace(".", ",")), Convert.ToDouble(textBox3.Text.Replace(".", ",")));
+			DoWork();
+			RunWorkerCompleted2();
+			MessageBox.Show(" вычисления выполнены");
+		}
+
+		private void button3_Click(object sender, EventArgs e)
+		{
+			obj = new Optimize4Params(VAX.I, VAX.U, Convert.ToInt32(nSteps.Text), Convert.ToDouble(textBox1.Text.Replace(".", ",")), Convert.ToDouble(textBox2.Text.Replace(".", ",")), Convert.ToDouble(textBox3.Text.Replace(".", ",")), Convert.ToDouble(textBox4.Text.Replace(".", ",")));
+			DoWork();
+			RunWorkerCompleted3();
+			MessageBox.Show(" вычисления выполнены");
+		}
+
 		private void DoWork()
 		{
 			try
@@ -199,14 +214,6 @@ namespace Метод_случайного_спуска
 			label1.Text = opt.Z.ToString();
 		}
 
-		private void button1_Click(object sender, EventArgs e)
-		{
-			obj = new Optimize3Params(VAX.I, VAX.U, Convert.ToInt32(nSteps.Text), Convert.ToDouble(textBox1.Text.Replace(".", ",")), Convert.ToDouble(textBox2.Text.Replace(".", ",")), Convert.ToDouble(textBox3.Text.Replace(".", ",")));
-			DoWork();
-			RunWorkerCompleted2();
-			MessageBox.Show(" вычисления выполнены");
-		}
-
 		private void RunWorkerCompleted2()
 		{
 			Optimize3Params opt = (Optimize3Params)obj;
@@ -221,6 +228,21 @@ namespace Метод_случайного_спуска
 			label1.Text = opt.Z.ToString();
 		}
 
+		private void RunWorkerCompleted3()
+		{
+			Optimize4Params opt = (Optimize4Params)obj;
+
+			par_Is1.Text = opt.IS0.ToString();
+			textBox1.Text = opt.IS0.ToString();
+			par_fi1.Text = opt.F0.ToString();
+			textBox2.Text = opt.F0.ToString();
+			par_R.Text = opt.R00.ToString();
+			textBox3.Text = opt.R00.ToString();
+			par_IKF.Text = opt.IKF0.ToString();
+			textBox4.Text = opt.IKF0.ToString();
+
+			label1.Text = opt.Z.ToString();
+		}
 		#endregion
 
 		#region ВАХ

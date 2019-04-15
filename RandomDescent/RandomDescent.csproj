@@ -50,6 +50,7 @@
     <Compile Include="generators\Distribution.cs" />
     <Compile Include="generators\ExceptionMessages.Designer.cs" />
     <Compile Include="generators\Generator.cs" />
+    <Compile Include="optimize4Params.cs" />
     <Compile Include="OptimizeIntrface.cs" />
     <Compile Include="optimize2Params.cs" />
     <Compile Include="generators\NormalDistribution.cs" />
