@@ -22,5 +22,8 @@ namespace RandomDescent
 		double[] inaccuracyOfCUrrent();
 		double getSCO_ABS_cur();
 		double getSCO_REL_cur();
+
+		double initErr();
+		double optimizeErr();
 	}
 }

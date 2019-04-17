@@ -1,10 +1,9 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using RandomDescent;
-using ZedGraph;
+using GraphCreator;
 
 namespace Метод_случайного_спуска
 {
@@ -15,11 +14,7 @@ namespace Метод_случайного_спуска
 			InitializeComponent();
 
 			//настраиваем форму
-			VAX = new LOAD_CHARACTERISTICs("","");
-
-			Graffik.GraphPane.Title.Text = "";
-			Graffik.GraphPane.XAxis.Title.Text = "";
-			Graffik.GraphPane.YAxis.Title.Text = "";
+			VAX = new LOAD_CHARACTERISTICs("", "");
 
 			par_Is1.Text = Is[0].ToString();
 			textBox1.Text = Is[0].ToString();
@@ -49,7 +44,7 @@ namespace Метод_случайного_спуска
 		List<int> z = new List<int>();
 
 		public double length = 0;
-		
+
 		double[] Is = { 22.3E-12 },
 				 fi = { 0.029 },
 				 IK = { 0.005 },
@@ -60,121 +55,17 @@ namespace Метод_случайного_спуска
 		List<double> two_y = new List<double>();
 		#endregion
 
-		#region графики и их вывод
-		Random ran = new Random();
-
-		//главная функция вывода графиков
-
-		void Graff(double[] x1, double[] y1, string titel, string xL, string yL, Color col)
-		{
-			Color color = Color.FromArgb(ran.Next(255), ran.Next(255), ran.Next(255));
-			Graffik.IsShowPointValues = true;
-			Graffik.GraphPane.XAxis.Title.Text = xL;
-			Graffik.GraphPane.YAxis.Title.Text = yL;
-			Graffik.GraphPane.Title.Text = "";
-			Graffik.GraphPane.AddCurve(titel, x1, y1, color, SymbolType.None);
-			LineItem myCurve = Graffik.GraphPane.AddCurve("Scatter", x1, y1, color);
-			myCurve.Symbol.Fill.Color = color;
-			Graffik.GraphPane.XAxis.MajorGrid.IsVisible = true;
-			Graffik.GraphPane.YAxis.MajorGrid.IsVisible = true;
-			Graffik.AxisChange();
-			Graffik.Invalidate();
-		}
-
-		void Graff(double[] x1, double[] y1, string titel, string xL, string yL)
-		{
-
-			Color color = Color.FromArgb(ran.Next(255), ran.Next(255), ran.Next(255));
-			Graffik.IsShowPointValues = true;
-			Graffik.GraphPane.XAxis.Title.Text = xL;
-			Graffik.GraphPane.YAxis.Title.Text = yL;
-			Graffik.GraphPane.Title.Text = "";
-			Graffik.GraphPane.AddCurve(titel, x1, y1, color, SymbolType.None);
-			Graffik.GraphPane.XAxis.MajorGrid.IsVisible = true;
-			Graffik.GraphPane.YAxis.MajorGrid.IsVisible = true;
-			Graffik.AxisChange();
-			Graffik.Invalidate();
-		}
-
-		void GraffSyY(double[] x1, double[] y1, string titel, string xL, string yL, Color a)
-		{
-			Graffik.IsShowPointValues = true;
-			Graffik.GraphPane.XAxis.Title.Text = xL;
-			Graffik.GraphPane.YAxis.Title.Text = yL;
-			Graffik.GraphPane.Title.Text = "";
-			Graffik.GraphPane.AddCurve(titel, x1, y1, a, SymbolType.None);
-			Graffik.GraphPane.XAxis.MajorGrid.IsVisible = true;
-			Graffik.GraphPane.YAxis.MajorGrid.IsVisible = true;
-			Graffik.AxisChange();
-			Graffik.Invalidate();
-		}
-
-		private void очститьToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			Graffik.GraphPane.CurveList.Clear();
-			Graffik.IsShowPointValues = true;
-			Graffik.GraphPane.XAxis.Title.Text = "";
-			Graffik.GraphPane.YAxis.Title.Text = "";
-			Graffik.GraphPane.Title.Text = "";
-			Graffik.GraphPane.XAxis.MajorGrid.IsVisible = true;
-			Graffik.GraphPane.YAxis.MajorGrid.IsVisible = true;
-			Graffik.AxisChange();
-			Graffik.Invalidate();
-
-			two_x.Clear();
-			two_y.Clear();
-
-		}
-		//масштаб логарифмический
-		bool press_x = false, press_y = false;
-		private void button4_Click(object sender, EventArgs e)
-		{
-			if (press_x == false)
-			{
-				Graffik.GraphPane.XAxis.Type = AxisType.Log;
-				press_x = true;
-			}
-			else
-			{
-				Graffik.GraphPane.XAxis.Type = AxisType.Linear;
-				press_x = false;
-			}
-
-			Graffik.AxisChange();
-			Graffik.Invalidate();
-		}
-
-		private void button5_Click(object sender, EventArgs e)
-		{
-			if (press_y == false)
-			{
-				Graffik.GraphPane.YAxis.Type = AxisType.Log;
-				press_y = true;
-			}
-			else
-			{
-				Graffik.GraphPane.YAxis.Type = AxisType.Linear;
-				press_y = false;
-			}
-
-			Graffik.AxisChange();
-			Graffik.Invalidate();
-		}
-
-		#endregion
-
 		#region вычисления
 
 		void Button2Click(object sender, EventArgs e)
 		{
 			obj = new optimize2Params(VAX.I, VAX.U, Convert.ToInt32(nSteps.Text), Convert.ToDouble(textBox1.Text.Replace(".", ",")), Convert.ToDouble(textBox2.Text.Replace(".", ",")));
-
 			DoWork();
 			RunWorkerCompleted();
 			MessageBox.Show(" вычисления выполнены");
 		}
 
-		private void button1_Click(object sender, EventArgs e)
+		private void Button1_Click(object sender, EventArgs e)
 		{
 			obj = new Optimize3Params(VAX.I, VAX.U, Convert.ToInt32(nSteps.Text), Convert.ToDouble(textBox1.Text.Replace(".", ",")), Convert.ToDouble(textBox2.Text.Replace(".", ",")), Convert.ToDouble(textBox3.Text.Replace(".", ",")));
 			DoWork();
@@ -182,7 +73,7 @@ namespace Метод_случайного_спуска
 			MessageBox.Show(" вычисления выполнены");
 		}
 
-		private void button3_Click(object sender, EventArgs e)
+		private void Button3_Click(object sender, EventArgs e)
 		{
 			obj = new Optimize4Params(VAX.I, VAX.U, Convert.ToInt32(nSteps.Text), Convert.ToDouble(textBox1.Text.Replace(".", ",")), Convert.ToDouble(textBox2.Text.Replace(".", ",")), Convert.ToDouble(textBox3.Text.Replace(".", ",")), Convert.ToDouble(textBox4.Text.Replace(".", ",")));
 			DoWork();
@@ -212,6 +103,10 @@ namespace Метод_случайного_спуска
 			par_fi1.Text = opt.F0.ToString();
 			textBox2.Text = opt.F0.ToString();
 			label1.Text = opt.Z.ToString();
+
+			initErr.Text = obj.initErr().ToString();
+			Err.Text = obj.optimizeErr().ToString();
+
 		}
 
 		private void RunWorkerCompleted2()
@@ -224,8 +119,10 @@ namespace Метод_случайного_спуска
 			textBox2.Text = opt.F0.ToString();
 			par_R.Text = opt.R00.ToString();
 			textBox3.Text = opt.R00.ToString();
-
 			label1.Text = opt.Z.ToString();
+
+			initErr.Text = obj.initErr().ToString();
+			Err.Text = obj.optimizeErr().ToString();
 		}
 
 		private void RunWorkerCompleted3()
@@ -240,13 +137,15 @@ namespace Метод_случайного_спуска
 			textBox3.Text = opt.R00.ToString();
 			par_IKF.Text = opt.IKF0.ToString();
 			textBox4.Text = opt.IKF0.ToString();
-
 			label1.Text = opt.Z.ToString();
+
+			initErr.Text = obj.initErr().ToString();
+			Err.Text = obj.optimizeErr().ToString();
 		}
 		#endregion
 
 		#region ВАХ
-		private void загрузитьВАХToolStripMenuItem_Click(object sender, EventArgs e)
+		private void ЗагрузитьВАХToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			try
 			{
@@ -258,33 +157,37 @@ namespace Метод_случайного_спуска
 			}
 		}
 
-		private void измереннаяToolStripMenuItem_Click(object sender, EventArgs e)
+		private void ИзмереннаяToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			GraffSyY(VAX.U, VAX.I, "ВАХ", "U", "I", Color.Brown);
+			new Graph(VAX.U, VAX.I, "ВАХ", "U", "I", Color.Brown).Show();
 		}
 
-		private void аппроксимированнаяToolStripMenuItem_Click(object sender, EventArgs e)
+		private void АппроксимированнаяToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			GraffSyY(obj.getMassU(), obj.getMassI(), "ВАХ(аппроксимированная)", "U", "I", Color.Black);
+			Graph graph = new Graph(obj.getMassU(), obj.getMassI(), "ВАХ(аппроксимированная)", "U", "I", Color.Black);
+			graph.Show();
 		}
 
-		private void погрешностьПоТокуToolStripMenuItem_Click_1(object sender, EventArgs e)
+		private void ПогрешностьПоТокуToolStripMenuItem_Click_1(object sender, EventArgs e)
 		{
 			double[] I = obj.inaccuracyOfCUrrent();
 
 			SCO_ABS.Text = obj.getSCO_ABS_cur().ToString();
 			SCO_REL.Text = obj.getSCO_REL_cur().ToString();
-			GraffSyY(obj.getMassU(), I, "погрешность", "U", "%", Color.Green);
+
+			Graph graph = new Graph(obj.getMassU(), I, "погрешность", "U", "%", Color.Green);
+			graph.Show();
 		}
 
-		private void погрешностьПоНапряжениюToolStripMenuItem_Click(object sender, EventArgs e)
+		private void ПогрешностьПоНапряжениюToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			double[] U = obj.inaccuracyOfVoltage();
 
 			SCO_ABS.Text = obj.getSCO_ABS_vol().ToString();
 			SCO_REL.Text = obj.getSCO_REL_vol().ToString();
 
-			GraffSyY(obj.getMassI(), U, "погрешность", "I", "%", Color.Red);
+			Graph graph = new Graph(obj.getMassI(), U, "погрешность", "I", "%", Color.Red);
+			graph.Show();
 		}
 
 		#endregion

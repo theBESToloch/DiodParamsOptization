@@ -53,6 +53,7 @@
 			this.params_cancel.TabIndex = 9;
 			this.params_cancel.Text = "отмена";
 			this.params_cancel.UseVisualStyleBackColor = true;
+			this.params_cancel.Click += new System.EventHandler(this.params_cancel_Click);
 			// 
 			// params_save
 			// 

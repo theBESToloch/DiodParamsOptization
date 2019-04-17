@@ -42,7 +42,7 @@ namespace RandomDescent
 
 		double
 			c = 0,
-			Id = 0, S = 0;
+			VD = 0, S = 0;
 
 		#endregion
 
@@ -156,9 +156,10 @@ namespace RandomDescent
 			c = 0;
 			for (int i = 0; i < len; i++)
 			{
-				Id = Is0 * (Math.Exp((U[i] - R0 * I[i]) / f0) - 1)*Math.Sqrt(IKF0/(IKF0+ Is0 * (Math.Exp((U[i] - R0 * I[i]) / f0) - 1)));
-				c += Math.Pow((I[i] - Id) / I[i], 2);
+				VD = Math.Log((Math.Pow(I[i], 2) + Math.Sqrt(Math.Pow(I[i], 4) + 4 * Math.Pow(I[i], 2) * Math.Pow(IK0, 2))) / (2 * IK0 * Is0) + 1) * f0;
+				c += Math.Pow((U[i] - VD - R0*I[i]) / U[i], 2);
 			}
+			initEr = c;
 		}
 
 		public void doOptimize()
@@ -172,16 +173,16 @@ namespace RandomDescent
 			// Основной цикл
 			for (double i = 0; i < nStep - 1; i++)
 			{
-				f = Math.Abs(f0 + Math.Pow((rnd.Next(200) * 0.1 - 1),3) * df);
-				Is = Math.Abs(Is0 + Math.Pow((rnd.Next(200) * 0.1 - 1), 3) * dIs);
-				R = Math.Abs(R0 + Math.Pow((rnd.Next(200) * 0.1 - 1), 3) * dR);
-				IK = Math.Abs(IK0 + Math.Pow((rnd.Next(200) * 0.1 - 1), 3) * dIK);
+				f = Math.Abs(f0 + Math.Pow((rnd.Next(200) * 0.01 - 1),3) * df);
+				Is = Math.Abs(Is0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dIs);
+				R = Math.Abs(R0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dR);
+				IK = Math.Abs(IK0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dIK);
 				S = 0;
 
 				for (int j = 0; j < len; j++)
 				{
-					Id = Is * (Math.Exp((U[j] - R * I[j]) / f) - 1) * Math.Sqrt(IK / (IK + Is * (Math.Exp((U[j] - R * I[j]) / f) - 1)));
-					S += Math.Pow((I[j] - Id) / I[j], 2);
+					VD = Math.Log((Math.Pow(I[j], 2) + Math.Sqrt(Math.Pow(I[j], 4) + 4 * Math.Pow(I[j], 2) * Math.Pow(IK, 2))) / (2 * IK * Is) + 1) * f;
+					S += Math.Pow((U[j] - VD - R * I[j]) / U[j], 2);
 				}
 				// условие
 				if (S < c)
@@ -209,33 +210,39 @@ namespace RandomDescent
 			fy.Add(f0);
 			Ry.Add(R0);
 			IKy.Add(IK0);
+			er = c;
 		}
 
-		double[] II_;
+		private double initEr = 0, er = 0;
+
+		public double initErr()
+		{
+			return initEr;
+		}
+		public double optimizeErr()
+		{
+			return er;
+		}
+
+		double[] UU_;
 		private void getVAX()
 		{
-			double iMin = I[0], iMax = I[I.Length - 1], dI;
-
-			II_ = new double[U.Length];
-
-			dI = (iMax - iMin) / (U.Length - 1);
-
-			for (int i = 0; i < U.Length; i++)
+			UU_ = new double[U.Length];
+			for (int j = 0; j < U.Length; j++)
 			{
-				II_[i] = Is * (Math.Exp((U[i] - R * I[i]) / f) - 1) * Math.Sqrt(IK / (IK + Is * (Math.Exp((U[i] - R * I[i]) / f) - 1)));
+				UU_[j] = Math.Log((Math.Pow(I[j], 2) + Math.Sqrt(Math.Pow(I[j], 4) + 4 * Math.Pow(I[j], 2) * Math.Pow(IK0, 2))) / (2 * IK0 * Is0) + 1) * f0 + R0*I[j];
 			}
 		}
 
-
 		public double[] getMassI()
 		{
-			return II_;
+			return I;
 		}
 
 		public double[] getMassU()
 		{
 			getVAX();
-			return U;
+			return UU_;
 		}
 
 		double SCO_ABS_cur, SCO_REL_cur;
@@ -264,12 +271,12 @@ namespace RandomDescent
 			I_err = new double[I.Length];
 			double SCO_absolut = 0;
 			double SCO_relative = 0;
-			double VD = 0;
+			double VD = U[0];
 
 			for (int i = 0; i < I.Length; i++)
 			{
-				VD = _VD(U[i], Is, f, IK, R, VD);
-				I_err[i] = I[i] - Is * (Math.Exp(VD / f) - 1) * Math.Sqrt(IK / (IK + Is * (Math.Exp(VD / f) - 1)));
+				//VD = _VD(U[i], Is0, f0, IK0, R0, VD);
+				I_err[i] = I[i] - Is0 * (Math.Exp((U[i] - I[i]*R) / f0) - 1) * Math.Sqrt(IK0 / (IK0 + Is0 * (Math.Exp((U[i] - I[i] * R) / f0) - 1)));
 
 				SCO_absolut += Math.Pow((I_err[i]), 2);
 				SCO_relative += Math.Pow(I_err[i] / I[i], 2);
@@ -289,7 +296,7 @@ namespace RandomDescent
 
 			for (int i = 0; i < U.Length; i++)
 			{
-				U_err[i] = U[i] - Math.Log((Math.Pow(I[i], 2) + Math.Sqrt(Math.Pow(I[i], 4) + 4 * Math.Pow(I[i], 2) * Math.Pow(IK, 2))) / (2 * IK * Is) + 1) * f - R * I[i];
+				U_err[i] = U[i] - Math.Log((Math.Pow(I[i], 2) + Math.Sqrt(Math.Pow(I[i], 4) + 4 * Math.Pow(I[i], 2) * Math.Pow(IK0, 2))) / (2 * IK0 * Is0) + 1) * f0 - R0 * I[i];
 
 				SCO_absolut += Math.Pow(U_err[i], 2);
 				SCO_relative += Math.Pow(U_err[i] / U[i], 2);
@@ -317,6 +324,5 @@ namespace RandomDescent
 			}
 			return VD;
 		}
-
 	}
 }

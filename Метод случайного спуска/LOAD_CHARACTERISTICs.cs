@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Метод_случайного_спуска
@@ -39,6 +33,7 @@ namespace Метод_случайного_спуска
                 PathToI.Text = openFileDialog1.FileName;
             }
         }
+
         private void open_U_Click(object sender, EventArgs e)
         {
             openFileDialog1.InitialDirectory = PathToU.Text;
@@ -48,7 +43,12 @@ namespace Метод_случайного_спуска
             }
         }
 
-        private void params_save_Click(object sender, EventArgs e)
+		private void params_cancel_Click(object sender, EventArgs e)
+		{
+			LOAD_CHARACTERISTICs.ActiveForm.Close();
+		}
+
+		private void params_save_Click(object sender, EventArgs e)
         {
 			error.Text = "";
 			if (LoadCharacteristics())
@@ -56,6 +56,8 @@ namespace Метод_случайного_спуска
 				LOAD_CHARACTERISTICs.ActiveForm.Close();
 			}
         }
+
+
 		private bool LoadCharacteristics() {
 
 			try {
@@ -81,10 +83,10 @@ namespace Метод_случайного_спуска
 			}
 			catch (FormatException fe)
 			{
-				error.Text = "Не удалось преобразовать строку в массиве."; return false;
+				error.Text = "Не удалось преобразовать строку в массиве." + fe.ToString(); return false;
 			}
 			catch(Exception e) {
-				error.Text = "Неудалось загрузить массивы."; return false;
+				error.Text = "Неудалось загрузить массивы." + e.ToString(); return false;
 			}
 			return true;
 		}

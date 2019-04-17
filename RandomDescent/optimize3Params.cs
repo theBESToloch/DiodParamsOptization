@@ -156,9 +156,10 @@ namespace RandomDescent
 				Id = Is0 * (Math.Exp((U[i] - R0*I[i]) / f0) - 1);
 				c += Math.Abs((I[i] - Id) / I[i]);
 			}
+			initEr = c;
 		}
 
-		public Optimize3Params(double[] I, double[] U, int nStep, double Is, double f)
+		/*public Optimize3Params(double[] I, double[] U, int nStep, double Is, double f)
 		{
 
 			ISy = new List<double>();
@@ -200,7 +201,7 @@ namespace RandomDescent
 				Id = Is0 * (Math.Exp((U[i] - R0 * I[i]) / f0) - 1);
 				c += Math.Abs((I[i] - Id) / I[i]);
 			}
-		}
+		}*/
 
 		// сам спуск - простейший
 		public void doOptimize()
@@ -214,9 +215,9 @@ namespace RandomDescent
 			// Основной цикл
 			for (double i = 0; i < nStep - 1; i++)
 			{
-				f = Math.Abs(f0 + (rnd.Next(200) * 0.1 - 1) * df);
-				Is = Math.Abs(Is0 + (rnd.Next(200) * 0.1 - 1) * dIs);
-				R = Math.Abs(R0 + (rnd.Next(200) * 0.1 - 1) * dR);
+				f = Math.Abs(f0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * df);
+				Is = Math.Abs(Is0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dIs);
+				R = Math.Abs(R0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dR);
 				S = 0;
 
 				for (int j = 0; j < len; j++)
@@ -247,32 +248,25 @@ namespace RandomDescent
 			ISy.Add(Is);
 			fy.Add(f0);
 			Ry.Add(R0);
+			er = c;
 		}
 
-		private double newR()
+
+		private double initEr = 0, er = 0;
+
+		public double initErr()
 		{
-			double R = 0, a, b;
-
-			for (int j = 0; j < len; j++)
-			{
-				b = Math.Log(I[j] / Is + 1);
-				a = f * b;
-				R += (U[j] - a) / I[j];
-			}
-			return R < 0 ? 0 : R;
+			return initEr;
 		}
-
+		public double optimizeErr()
+		{
+			return er;
+		}
 
 		double[] UU_;
-
 		private void getVAX()
 		{
-			double iMin = I[0], iMax = I[I.Length - 1], dI;
-
 			UU_ = new double[U.Length];
-
-			dI = (iMax - iMin) / (U.Length - 1);
-
 			for (int i = 0; i < U.Length; i++)
 			{
 				UU_[i] = f * Math.Log((I[i] / Is) + 1) + R*I[i];
@@ -319,8 +313,6 @@ namespace RandomDescent
 			SCO_REL_cur = Math.Sqrt(SCO_relative / (I_err.Length - 1));
 			return I_err;
 		}
-
-
 
 		double SCO_ABS_vol, SCO_REL_vol;
 		public double getSCO_ABS_vol()

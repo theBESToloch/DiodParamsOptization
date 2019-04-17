@@ -82,6 +82,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GraphCreator\GraphCreator.csproj">
+      <Project>{f1fff482-db37-4c73-959f-99429f490261}</Project>
+      <Name>GraphCreator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RandomDescent\RandomDescent.csproj">
       <Project>{AA7393FC-7FBA-4208-AB00-A76102B71D0D}</Project>
       <Name>RandomDescent</Name>

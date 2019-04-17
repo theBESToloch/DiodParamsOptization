@@ -17,7 +17,6 @@ namespace Метод_случайного_спуска
 		private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox nSteps;
         private System.Windows.Forms.Button button2;
-        private ZedGraph.ZedGraphControl Graffik;
 		
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -40,11 +39,9 @@ namespace Метод_случайного_спуска
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
 			this.label3 = new System.Windows.Forms.Label();
 			this.nSteps = new System.Windows.Forms.TextBox();
 			this.button2 = new System.Windows.Forms.Button();
-			this.Graffik = new ZedGraph.ZedGraphControl();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.загрузитьВАХToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,10 +52,6 @@ namespace Метод_случайного_спуска
 			this.аппроксимированнаяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.погрешностиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.погрешностьПоТокуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.очститьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.масштабToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.lnXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.lnYToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.par_Is = new System.Windows.Forms.Label();
 			this.par_fi = new System.Windows.Forms.Label();
 			this.par_Is1 = new System.Windows.Forms.Label();
@@ -80,6 +73,10 @@ namespace Метод_случайного_спуска
 			this.par_IKF = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.button3 = new System.Windows.Forms.Button();
+			this.label4 = new System.Windows.Forms.Label();
+			this.Err = new System.Windows.Forms.Label();
+			this.label11 = new System.Windows.Forms.Label();
+			this.initErr = new System.Windows.Forms.Label();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -116,24 +113,6 @@ namespace Метод_случайного_спуска
 			this.button2.UseVisualStyleBackColor = false;
 			this.button2.Click += new System.EventHandler(this.Button2Click);
 			// 
-			// Graffik
-			// 
-			this.Graffik.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.Graffik.IsZoomOnMouseCenter = true;
-			this.Graffik.Location = new System.Drawing.Point(537, 27);
-			this.Graffik.Name = "Graffik";
-			this.Graffik.ScrollGrace = 0D;
-			this.Graffik.ScrollMaxX = 0D;
-			this.Graffik.ScrollMaxY = 0D;
-			this.Graffik.ScrollMaxY2 = 0D;
-			this.Graffik.ScrollMinX = 0D;
-			this.Graffik.ScrollMinY = 0D;
-			this.Graffik.ScrollMinY2 = 0D;
-			this.Graffik.Size = new System.Drawing.Size(868, 662);
-			this.Graffik.TabIndex = 14;
-			// 
 			// menuStrip1
 			// 
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -141,7 +120,7 @@ namespace Метод_случайного_спуска
             this.графикToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(1417, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(462, 24);
 			this.menuStrip1.TabIndex = 40;
 			this.menuStrip1.TabStop = true;
 			this.menuStrip1.Text = "menuStrip1";
@@ -160,7 +139,7 @@ namespace Метод_случайного_спуска
 			this.загрузитьВАХToolStripMenuItem.Name = "загрузитьВАХToolStripMenuItem";
 			this.загрузитьВАХToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
 			this.загрузитьВАХToolStripMenuItem.Text = "Загрузить ВАХ";
-			this.загрузитьВАХToolStripMenuItem.Click += new System.EventHandler(this.загрузитьВАХToolStripMenuItem_Click);
+			this.загрузитьВАХToolStripMenuItem.Click += new System.EventHandler(this.ЗагрузитьВАХToolStripMenuItem_Click);
 			// 
 			// открытьToolStripMenuItem
 			// 
@@ -171,9 +150,7 @@ namespace Метод_случайного_спуска
 			// графикToolStripMenuItem
 			// 
 			this.графикToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.вАХToolStripMenuItem,
-            this.очститьToolStripMenuItem,
-            this.масштабToolStripMenuItem});
+            this.вАХToolStripMenuItem});
 			this.графикToolStripMenuItem.Name = "графикToolStripMenuItem";
 			this.графикToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
 			this.графикToolStripMenuItem.Text = "Графики";
@@ -186,7 +163,7 @@ namespace Метод_случайного_спуска
             this.погрешностиToolStripMenuItem,
             this.погрешностьПоТокуToolStripMenuItem});
 			this.вАХToolStripMenuItem.Name = "вАХToolStripMenuItem";
-			this.вАХToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+			this.вАХToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.вАХToolStripMenuItem.Text = "ВАХ";
 			// 
 			// измереннаяToolStripMenuItem
@@ -194,58 +171,28 @@ namespace Метод_случайного_спуска
 			this.измереннаяToolStripMenuItem.Name = "измереннаяToolStripMenuItem";
 			this.измереннаяToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
 			this.измереннаяToolStripMenuItem.Text = "измеренная";
-			this.измереннаяToolStripMenuItem.Click += new System.EventHandler(this.измереннаяToolStripMenuItem_Click);
+			this.измереннаяToolStripMenuItem.Click += new System.EventHandler(this.ИзмереннаяToolStripMenuItem_Click);
 			// 
 			// аппроксимированнаяToolStripMenuItem
 			// 
 			this.аппроксимированнаяToolStripMenuItem.Name = "аппроксимированнаяToolStripMenuItem";
 			this.аппроксимированнаяToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
 			this.аппроксимированнаяToolStripMenuItem.Text = "Аппроксимированная";
-			this.аппроксимированнаяToolStripMenuItem.Click += new System.EventHandler(this.аппроксимированнаяToolStripMenuItem_Click);
+			this.аппроксимированнаяToolStripMenuItem.Click += new System.EventHandler(this.АппроксимированнаяToolStripMenuItem_Click);
 			// 
 			// погрешностиToolStripMenuItem
 			// 
 			this.погрешностиToolStripMenuItem.Name = "погрешностиToolStripMenuItem";
 			this.погрешностиToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
 			this.погрешностиToolStripMenuItem.Text = "Погрешности по напряжению";
-			this.погрешностиToolStripMenuItem.Click += new System.EventHandler(this.погрешностьПоНапряжениюToolStripMenuItem_Click);
+			this.погрешностиToolStripMenuItem.Click += new System.EventHandler(this.ПогрешностьПоНапряжениюToolStripMenuItem_Click);
 			// 
 			// погрешностьПоТокуToolStripMenuItem
 			// 
 			this.погрешностьПоТокуToolStripMenuItem.Name = "погрешностьПоТокуToolStripMenuItem";
 			this.погрешностьПоТокуToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
 			this.погрешностьПоТокуToolStripMenuItem.Text = "Погрешность по току";
-			this.погрешностьПоТокуToolStripMenuItem.Click += new System.EventHandler(this.погрешностьПоТокуToolStripMenuItem_Click_1);
-			// 
-			// очститьToolStripMenuItem
-			// 
-			this.очститьToolStripMenuItem.Name = "очститьToolStripMenuItem";
-			this.очститьToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
-			this.очститьToolStripMenuItem.Text = "Очистить";
-			this.очститьToolStripMenuItem.Click += new System.EventHandler(this.очститьToolStripMenuItem_Click);
-			// 
-			// масштабToolStripMenuItem
-			// 
-			this.масштабToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lnXToolStripMenuItem,
-            this.lnYToolStripMenuItem});
-			this.масштабToolStripMenuItem.Name = "масштабToolStripMenuItem";
-			this.масштабToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
-			this.масштабToolStripMenuItem.Text = "масштаб";
-			// 
-			// lnXToolStripMenuItem
-			// 
-			this.lnXToolStripMenuItem.Name = "lnXToolStripMenuItem";
-			this.lnXToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
-			this.lnXToolStripMenuItem.Text = "log(X)";
-			this.lnXToolStripMenuItem.Click += new System.EventHandler(this.button4_Click);
-			// 
-			// lnYToolStripMenuItem
-			// 
-			this.lnYToolStripMenuItem.Name = "lnYToolStripMenuItem";
-			this.lnYToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
-			this.lnYToolStripMenuItem.Text = "log(Y)";
-			this.lnYToolStripMenuItem.Click += new System.EventHandler(this.button5_Click);
+			this.погрешностьПоТокуToolStripMenuItem.Click += new System.EventHandler(this.ПогрешностьПоТокуToolStripMenuItem_Click_1);
 			// 
 			// par_Is
 			// 
@@ -327,7 +274,7 @@ namespace Метод_случайного_спуска
 			// label7
 			// 
 			this.label7.AutoSize = true;
-			this.label7.Location = new System.Drawing.Point(234, 427);
+			this.label7.Location = new System.Drawing.Point(20, 493);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(96, 13);
 			this.label7.TabIndex = 57;
@@ -336,7 +283,7 @@ namespace Метод_случайного_спуска
 			// SCO_ABS
 			// 
 			this.SCO_ABS.AutoSize = true;
-			this.SCO_ABS.Location = new System.Drawing.Point(429, 427);
+			this.SCO_ABS.Location = new System.Drawing.Point(215, 493);
 			this.SCO_ABS.Name = "SCO_ABS";
 			this.SCO_ABS.Size = new System.Drawing.Size(13, 13);
 			this.SCO_ABS.TabIndex = 53;
@@ -345,7 +292,7 @@ namespace Метод_случайного_спуска
 			// label8
 			// 
 			this.label8.AutoSize = true;
-			this.label8.Location = new System.Drawing.Point(234, 456);
+			this.label8.Location = new System.Drawing.Point(20, 522);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(111, 13);
 			this.label8.TabIndex = 59;
@@ -354,7 +301,7 @@ namespace Метод_случайного_спуска
 			// SCO_REL
 			// 
 			this.SCO_REL.AutoSize = true;
-			this.SCO_REL.Location = new System.Drawing.Point(429, 456);
+			this.SCO_REL.Location = new System.Drawing.Point(215, 522);
 			this.SCO_REL.Name = "SCO_REL";
 			this.SCO_REL.Size = new System.Drawing.Size(13, 13);
 			this.SCO_REL.TabIndex = 58;
@@ -396,7 +343,7 @@ namespace Метод_случайного_спуска
 			this.button1.TabIndex = 9;
 			this.button1.Text = "Расчет 3-х парам. модель";
 			this.button1.UseVisualStyleBackColor = false;
-			this.button1.Click += new System.EventHandler(this.button1_Click);
+			this.button1.Click += new System.EventHandler(this.Button1_Click);
 			// 
 			// textBox4
 			// 
@@ -434,14 +381,54 @@ namespace Метод_случайного_спуска
 			this.button3.TabIndex = 9;
 			this.button3.Text = "Расчет 4-х парам. модель";
 			this.button3.UseVisualStyleBackColor = false;
-			this.button3.Click += new System.EventHandler(this.button3_Click);
+			this.button3.Click += new System.EventHandler(this.Button3_Click);
+			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Location = new System.Drawing.Point(35, 401);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(19, 13);
+			this.label4.TabIndex = 69;
+			this.label4.Text = "err";
+			// 
+			// Err
+			// 
+			this.Err.AutoSize = true;
+			this.Err.Location = new System.Drawing.Point(230, 401);
+			this.Err.Name = "Err";
+			this.Err.Size = new System.Drawing.Size(13, 13);
+			this.Err.TabIndex = 68;
+			this.Err.Text = "1";
+			// 
+			// label11
+			// 
+			this.label11.AutoSize = true;
+			this.label11.Location = new System.Drawing.Point(35, 372);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(35, 13);
+			this.label11.TabIndex = 67;
+			this.label11.Text = "init err";
+			// 
+			// initErr
+			// 
+			this.initErr.AutoSize = true;
+			this.initErr.Location = new System.Drawing.Point(230, 372);
+			this.initErr.Name = "initErr";
+			this.initErr.Size = new System.Drawing.Size(13, 13);
+			this.initErr.TabIndex = 66;
+			this.initErr.Text = "1";
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.GhostWhite;
-			this.ClientSize = new System.Drawing.Size(1417, 701);
+			this.ClientSize = new System.Drawing.Size(462, 701);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.Err);
+			this.Controls.Add(this.label11);
+			this.Controls.Add(this.initErr);
 			this.Controls.Add(this.textBox4);
 			this.Controls.Add(this.par_IKF);
 			this.Controls.Add(this.label5);
@@ -461,7 +448,6 @@ namespace Метод_случайного_спуска
 			this.Controls.Add(this.par_Is1);
 			this.Controls.Add(this.par_fi);
 			this.Controls.Add(this.par_Is);
-			this.Controls.Add(this.Graffik);
 			this.Controls.Add(this.button3);
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.button2);
@@ -486,15 +472,11 @@ namespace Метод_случайного_спуска
         private System.Windows.Forms.Label par_fi;
         private System.Windows.Forms.Label par_Is1;
         private System.Windows.Forms.Label par_fi1;
-        private System.Windows.Forms.ToolStripMenuItem очститьToolStripMenuItem;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.ToolStripMenuItem загрузитьВАХToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem открытьToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem масштабToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem lnXToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem lnYToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem погрешностиToolStripMenuItem;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
@@ -511,5 +493,9 @@ namespace Метод_случайного_спуска
 		private System.Windows.Forms.Label par_IKF;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Button button3;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.Label Err;
+		private System.Windows.Forms.Label label11;
+		private System.Windows.Forms.Label initErr;
 	}
 }

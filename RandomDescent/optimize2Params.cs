@@ -128,6 +128,7 @@ namespace RandomDescent
 				Id = Is0 * (Math.Exp(U[i]/ f0) -1);
 				c += Math.Abs((I[i] - Id) /I[i]);
 			}
+			initEr = c;
 		}
 
         // сам спуск - простейший
@@ -142,8 +143,8 @@ namespace RandomDescent
             // Основной цикл
             for (double i = 0; i < nStep-1; i++)
             {
-                f = Math.Abs(f0 + (rnd.Next(200) * 0.1 - 1) * df);
-				Is = Math.Abs(Is0 + (rnd.Next(200) * 0.1 - 1) * dIs);
+                f = Math.Abs(f0 + (rnd.Next(200) * 0.01 - 1) * df);
+				Is = Math.Abs(Is0 + (rnd.Next(200) * 0.01 - 1) * dIs);
 				//Is = newIS();
 
 				S = 0;
@@ -171,7 +172,19 @@ namespace RandomDescent
             Sy.Add(c);
             ISy.Add(Is0);
             fy.Add(f0);
+			er = c;
         }
+
+		private double initEr = 0, er = 0;
+
+		public double initErr()
+		{
+			return initEr;
+		}
+		public double optimizeErr()
+		{
+			return er;
+		}
 
 		private double newIS()
 		{
