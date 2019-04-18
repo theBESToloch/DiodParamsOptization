@@ -202,11 +202,7 @@ namespace RandomDescent
 
 		private void initVAX()
 		{
-			double uMin = U[0], uMax = U[U.Length - 1], dU;
-
 			II_ = new double[U.Length];
-
-			dU = (uMax - uMin) / (U.Length - 1);
 
 			for (int i = 0; i < U.Length; i++)
 			{

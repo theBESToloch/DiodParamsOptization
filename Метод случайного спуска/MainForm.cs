@@ -144,9 +144,8 @@ namespace Метод_случайного_спуска
 			}
 		}
 
-		
-		MyEventHandler d;
 
+		MyEventHandler d;
 
 		private void InitOptimizeModel_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -185,7 +184,6 @@ namespace Метод_случайного_спуска
 			}
 			InitParamsList();
 		}
-
 
 		private void InitParamsList()
 		{
@@ -281,19 +279,30 @@ namespace Метод_случайного_спуска
 
 		}
 
+		private void Perform_Click(object sender, EventArgs e)
+		{
+			if (d != null)
+				d();
+		}
 
 		#region ВАХ
 
+		public List<Graph> graphs = new List<Graph>();
+
 		private void ИзмереннаяToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			Graph graph = new Graph(VAX.U, VAX.I, "ВАХ", "U", "I", Color.Brown);
+			Graph graph = new Graph(VAX.U, VAX.I, "ВАХ", "U", "I", Color.Brown, graphs);
+			graph.Owner = this;
 			graph.Show();
+			graphs.Add(graph);
 		}
 
 		private void АппроксимированнаяToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			Graph graph = new Graph(obj.getMassU(), obj.getMassI(), "ВАХ(аппроксимированная)", "U", "I", Color.Black);
+			Graph graph = new Graph(obj.getMassU(), obj.getMassI(), "ВАХ(аппроксимированная)", "U", "I", Color.Black, graphs);
+			graph.Owner = this;
 			graph.Show();
+			graphs.Add(graph);
 		}
 
 		private void ПогрешностьПоТокуToolStripMenuItem_Click_1(object sender, EventArgs e)
@@ -303,8 +312,10 @@ namespace Метод_случайного_спуска
 			SCO_ABS.Text = obj.getSCO_ABS_cur().ToString();
 			SCO_REL.Text = obj.getSCO_REL_cur().ToString();
 
-			Graph graph = new Graph(obj.getMassU(), I, "погрешность", "U", "%", Color.Green);
+			Graph graph = new Graph(VAX.U, I, "погрешность", "U", "%", Color.Green, graphs);
+			graph.Owner = this;
 			graph.Show();
+			graphs.Add(graph);
 		}
 
 		private void ПогрешностьПоНапряжениюToolStripMenuItem_Click(object sender, EventArgs e)
@@ -314,16 +325,12 @@ namespace Метод_случайного_спуска
 			SCO_ABS.Text = obj.getSCO_ABS_vol().ToString();
 			SCO_REL.Text = obj.getSCO_REL_vol().ToString();
 
-			Graph graph = new Graph(obj.getMassI(), U, "погрешность", "I", "%", Color.Red);
+			Graph graph = new Graph(VAX.I, U, "погрешность", "I", "%", Color.Red, graphs);
+			graph.Owner = this;
 			graph.Show();
+			graphs.Add(graph);
 		}
 
 		#endregion
-
-		private void Perform_Click(object sender, EventArgs e)
-		{
-			if (d != null)
-				d();
-		}
 	}
 }

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2019
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Метод случайного спуска", "Метод случайного спуска\Метод случайного спуска.csproj", "{14088383-80BF-4C5F-A532-32D3A9DA168B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainForm", "Метод случайного спуска\MainForm.csproj", "{14088383-80BF-4C5F-A532-32D3A9DA168B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RandomDescent", "RandomDescent\RandomDescent.csproj", "{AA7393FC-7FBA-4208-AB00-A76102B71D0D}"
 EndProject

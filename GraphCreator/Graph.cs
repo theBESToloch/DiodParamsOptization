@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using ZedGraph;
@@ -7,23 +8,28 @@ namespace GraphCreator
 {
 	public partial class Graph : Form
 	{
-		Graph()
-		{
-			InitializeComponent();
-		}
 
-		public Graph(double[] x1, double[] y1, string titel, string xL, string yL, Color col)
+		bool combine = false;
+		List<Chart> charts = new List<Chart>();
+		List<Graph> graphs;
+
+		public Graph(double[] x1, double[] y1, string titel, string xL, string yL, Color col, List<Graph> graphs)
 		{
 			InitializeComponent();
 			Graff(x1, y1, titel, xL, yL, col);
+			Chart chart = new Chart(x1, y1, titel, xL, yL);
+			charts.Add(chart);
+			this.graphs = graphs;
 		}
 
-		public Graph(double[] x1, double[] y1, string titel, string xL, string yL)
+		public Graph(double[] x1, double[] y1, string titel, string xL, string yL, List<Graph> graphs)
 		{
 			InitializeComponent();
 			Graff(x1, y1, titel, xL, yL);
+			Chart chart = new Chart(x1, y1, titel, xL, yL);
+			charts.Add(chart);
+			this.graphs = graphs;
 		}
-
 
 		//масштаб логарифмический
 		bool press_x = false, press_y = false;
@@ -64,14 +70,14 @@ namespace GraphCreator
 		//главная функция вывода графиков
 		void Graff(double[] x1, double[] y1, string titel, string xL, string yL, Color col)
 		{
-			Color color = Color.FromArgb(0, 0, 0);
 			GraphPanel.IsShowPointValues = true;
 			GraphPanel.GraphPane.XAxis.Title.Text = xL;
 			GraphPanel.GraphPane.YAxis.Title.Text = yL;
 			GraphPanel.GraphPane.Title.Text = "";
-			GraphPanel.GraphPane.AddCurve(titel, x1, y1, color, SymbolType.None);
-			LineItem myCurve = GraphPanel.GraphPane.AddCurve("", x1, y1, color);
-			myCurve.Symbol.Fill.Color = color;
+			GraphPanel.GraphPane.AddCurve(titel, x1, y1, col, SymbolType.None);
+			LineItem myCurve = GraphPanel.GraphPane.AddCurve("", x1, y1, col);
+			myCurve.Line.Width = 5;
+			myCurve.Symbol.Fill.Color = col;
 			GraphPanel.GraphPane.XAxis.MajorGrid.IsVisible = true;
 			GraphPanel.GraphPane.YAxis.MajorGrid.IsVisible = true;
 			GraphPanel.AxisChange();
@@ -105,5 +111,40 @@ namespace GraphCreator
 			GraphPanel.AxisChange();
 			GraphPanel.Invalidate();
 		}
+
+		private void AddToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Graph[] graphsAr = graphs.ToArray();
+
+			for(int i = 0; i < graphsAr.Length; i++)
+			{
+				if(graphsAr[i].combine == true)
+				{
+					charts.AddRange(graphsAr[i].charts);
+					graphs.RemoveAt(i);
+					Redraw();
+					break;
+				}
+			}
+		}
+
+		Random ran = new Random();
+
+		private void Redraw()
+		{
+			GraphPanel.GraphPane.CurveList.Clear();
+			Chart[] chartsAr = charts.ToArray();
+			for (int i = 0; i < chartsAr.Length; i++)
+			{
+				Graff(chartsAr[i].X, chartsAr[i].Y, chartsAr[i].Title, chartsAr[i].XL, chartsAr[i].YL, Color.FromArgb(ran.Next(255), ran.Next(255), ran.Next(255)));
+			}
+		}
+
+		private void СombineToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			combine = true;
+			this.Close();
+		}
+
 	}
 }
