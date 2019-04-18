@@ -72,7 +72,7 @@ namespace Метод_случайного_спуска
 			// 
 			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.label3.ForeColor = System.Drawing.Color.Navy;
-			this.label3.Location = new System.Drawing.Point(-3, 29);
+			this.label3.Location = new System.Drawing.Point(25, 24);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(121, 23);
 			this.label3.TabIndex = 4;
@@ -82,7 +82,7 @@ namespace Метод_случайного_спуска
 			// 
 			this.nSteps.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.nSteps.ForeColor = System.Drawing.Color.Navy;
-			this.nSteps.Location = new System.Drawing.Point(-1, 55);
+			this.nSteps.Location = new System.Drawing.Point(27, 50);
 			this.nSteps.Name = "nSteps";
 			this.nSteps.Size = new System.Drawing.Size(119, 23);
 			this.nSteps.TabIndex = 5;
@@ -172,7 +172,7 @@ namespace Метод_случайного_спуска
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(145, 60);
+			this.label1.Location = new System.Drawing.Point(173, 55);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(13, 13);
 			this.label1.TabIndex = 47;
@@ -256,9 +256,8 @@ namespace Метод_случайного_спуска
 			this.InitOptimizeModel.Items.AddRange(new object[] {
             "2-х параметрическая модель",
             "3-х параметрическая модель",
-            "4-х параметрическая модель",
-            "5-х параметрическая модель"});
-			this.InitOptimizeModel.Location = new System.Drawing.Point(12, 84);
+            "4-х параметрическая модель"});
+			this.InitOptimizeModel.Location = new System.Drawing.Point(28, 79);
 			this.InitOptimizeModel.Name = "InitOptimizeModel";
 			this.InitOptimizeModel.Size = new System.Drawing.Size(347, 21);
 			this.InitOptimizeModel.TabIndex = 70;
@@ -267,12 +266,13 @@ namespace Метод_случайного_спуска
 			// 
 			// Perform
 			// 
-			this.Perform.Location = new System.Drawing.Point(356, 83);
+			this.Perform.Location = new System.Drawing.Point(378, 79);
 			this.Perform.Name = "Perform";
-			this.Perform.Size = new System.Drawing.Size(62, 21);
+			this.Perform.Size = new System.Drawing.Size(53, 21);
 			this.Perform.TabIndex = 71;
 			this.Perform.Text = "расчет";
 			this.Perform.UseVisualStyleBackColor = true;
+			this.Perform.Click += new System.EventHandler(this.Perform_Click);
 			// 
 			// ParamsListViewer
 			// 
@@ -280,9 +280,9 @@ namespace Метод_случайного_спуска
             this.ParamName,
             this.Value,
             this.approximation});
-			this.ParamsListViewer.Location = new System.Drawing.Point(15, 143);
+			this.ParamsListViewer.Location = new System.Drawing.Point(28, 138);
 			this.ParamsListViewer.Name = "ParamsListViewer";
-			this.ParamsListViewer.Size = new System.Drawing.Size(344, 104);
+			this.ParamsListViewer.Size = new System.Drawing.Size(403, 104);
 			this.ParamsListViewer.TabIndex = 72;
 			this.ParamsListViewer.UseCompatibleStateImageBehavior = false;
 			this.ParamsListViewer.View = System.Windows.Forms.View.Details;
@@ -297,7 +297,7 @@ namespace Метод_случайного_спуска
 			// 
 			this.Value.Text = "Значение";
 			this.Value.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.Value.Width = 128;
+			this.Value.Width = 185;
 			// 
 			// approximation
 			// 
