@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.Graffik = new ZedGraph.ZedGraphControl();
+			this.GraphPanel = new ZedGraph.ZedGraphControl();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.графикToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.масштабToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -38,22 +38,22 @@
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// Graffik
+			// GraphPanel
 			// 
-			this.Graffik.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.GraphPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.Graffik.Location = new System.Drawing.Point(0, 27);
-			this.Graffik.Name = "Graffik";
-			this.Graffik.ScrollGrace = 0D;
-			this.Graffik.ScrollMaxX = 0D;
-			this.Graffik.ScrollMaxY = 0D;
-			this.Graffik.ScrollMaxY2 = 0D;
-			this.Graffik.ScrollMinX = 0D;
-			this.Graffik.ScrollMinY = 0D;
-			this.Graffik.ScrollMinY2 = 0D;
-			this.Graffik.Size = new System.Drawing.Size(633, 423);
-			this.Graffik.TabIndex = 0;
+			this.GraphPanel.Location = new System.Drawing.Point(0, 27);
+			this.GraphPanel.Name = "GraphPanel";
+			this.GraphPanel.ScrollGrace = 0D;
+			this.GraphPanel.ScrollMaxX = 0D;
+			this.GraphPanel.ScrollMaxY = 0D;
+			this.GraphPanel.ScrollMaxY2 = 0D;
+			this.GraphPanel.ScrollMinX = 0D;
+			this.GraphPanel.ScrollMinY = 0D;
+			this.GraphPanel.ScrollMinY2 = 0D;
+			this.GraphPanel.Size = new System.Drawing.Size(633, 423);
+			this.GraphPanel.TabIndex = 0;
 			// 
 			// menuStrip1
 			// 
@@ -101,7 +101,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(633, 450);
-			this.Controls.Add(this.Graffik);
+			this.Controls.Add(this.GraphPanel);
 			this.Controls.Add(this.menuStrip1);
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "Graph";
@@ -115,7 +115,7 @@
 
 		#endregion
 
-		private ZedGraph.ZedGraphControl Graffik;
+		private ZedGraph.ZedGraphControl GraphPanel;
 		private System.Windows.Forms.MenuStrip menuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem графикToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem масштабToolStripMenuItem;

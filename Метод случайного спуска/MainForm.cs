@@ -16,16 +16,18 @@ namespace Метод_случайного_спуска
 			//настраиваем форму
 			VAX = new LOAD_CHARACTERISTICs("", "");
 
-			par_Is1.Text = Is[0].ToString();
-			textBox1.Text = Is[0].ToString();
-			par_fi1.Text = fi[0].ToString();
-			textBox2.Text = fi[0].ToString();
-			par_fi1.Text = fi[0].ToString();
-			textBox2.Text = fi[0].ToString();
-			par_R.Text = R[0].ToString();
-			textBox3.Text = R[0].ToString();
-			par_IKF.Text = IK[0].ToString();
-			textBox4.Text = IK[0].ToString();
+			string[] IsPar = new string[3];
+			IsPar[0] = "Is";
+			IsPar[1] = Is[0].ToString();
+			IsPar[2] = Is[0].ToString();
+			ParamsListViewer.Items.Add(new ListViewItem(IsPar));
+			string[] fPar = new string[3];
+			fPar[0] = "fi";
+			fPar[1] = fi[0].ToString();
+			fPar[2] = fi[0].ToString();
+			ParamsListViewer.Items.Add(new ListViewItem(fPar));
+
+			Perform.Click += OptimizeTwoParamsModel;
 		}
 
 		#region Поля
@@ -33,49 +35,37 @@ namespace Метод_случайного_спуска
 		Optimize obj;
 		LOAD_CHARACTERISTICs VAX;
 
-
-		List<double> Sy = new List<double>(),
-					  y = new List<double>(),
-					ISy = new List<double>(),
-					 fy = new List<double>(),
-					IKy = new List<double>(),
-					 Ry = new List<double>();
-
-		List<int> z = new List<int>();
-
-		public double length = 0;
-
 		double[] Is = { 22.3E-12 },
 				 fi = { 0.029 },
 				 IK = { 0.005 },
 				  R = { 13 };
 
-		//вывод в окне
-		List<double> two_x = new List<double>();
-		List<double> two_y = new List<double>();
 		#endregion
 
 		#region вычисления
 
-		void Button2Click(object sender, EventArgs e)
+		void OptimizeTwoParamsModel(object sender, EventArgs e)
 		{
-			obj = new optimize2Params(VAX.I, VAX.U, Convert.ToInt32(nSteps.Text), Convert.ToDouble(textBox1.Text.Replace(".", ",")), Convert.ToDouble(textBox2.Text.Replace(".", ",")));
+			obj = new optimize2Params(VAX.I, VAX.U, 
+				Convert.ToInt32(nSteps.Text), 
+				Convert.ToDouble(ParamsListViewer.Items[0].SubItems[2].Text.Replace(".", ",")),
+				Convert.ToDouble(ParamsListViewer.Items[1].SubItems[2].Text.Replace(".", ",")));
 			DoWork();
 			RunWorkerCompleted();
 			MessageBox.Show(" вычисления выполнены");
 		}
 
-		private void Button1_Click(object sender, EventArgs e)
+		private void OptimizeThreeParamsModel(object sender, EventArgs e)
 		{
-			obj = new Optimize3Params(VAX.I, VAX.U, Convert.ToInt32(nSteps.Text), Convert.ToDouble(textBox1.Text.Replace(".", ",")), Convert.ToDouble(textBox2.Text.Replace(".", ",")), Convert.ToDouble(textBox3.Text.Replace(".", ",")));
+			obj = new Optimize3Params(VAX.I, VAX.U, Convert.ToInt32(nSteps.Text), Convert.ToDouble(ParamsListViewer.Items[0].SubItems[2].Text.Replace(".", ",")), Convert.ToDouble(ParamsListViewer.Items[1].SubItems[2].Text.Replace(".", ",")), Convert.ToDouble(ParamsListViewer.Items[3].SubItems[2].Text.Replace(".", ",")));
 			DoWork();
 			RunWorkerCompleted2();
 			MessageBox.Show(" вычисления выполнены");
 		}
 
-		private void Button3_Click(object sender, EventArgs e)
+		private void OptimizeFourParamsModel(object sender, EventArgs e)
 		{
-			obj = new Optimize4Params(VAX.I, VAX.U, Convert.ToInt32(nSteps.Text), Convert.ToDouble(textBox1.Text.Replace(".", ",")), Convert.ToDouble(textBox2.Text.Replace(".", ",")), Convert.ToDouble(textBox3.Text.Replace(".", ",")), Convert.ToDouble(textBox4.Text.Replace(".", ",")));
+			obj = new Optimize4Params(VAX.I, VAX.U, Convert.ToInt32(nSteps.Text), Convert.ToDouble(ParamsListViewer.Items[0].SubItems[2].Text.Replace(".", ",")), Convert.ToDouble(ParamsListViewer.Items[1].SubItems[2].Text.Replace(".", ",")), Convert.ToDouble(ParamsListViewer.Items[2].SubItems[2].Text.Replace(".", ",")), Convert.ToDouble(ParamsListViewer.Items[3].SubItems[2].Text.Replace(".", ",")));
 			DoWork();
 			RunWorkerCompleted3();
 			MessageBox.Show(" вычисления выполнены");
@@ -98,10 +88,10 @@ namespace Метод_случайного_спуска
 		{
 			optimize2Params opt = (optimize2Params)obj;
 
-			par_Is1.Text = opt.IS0.ToString();
-			textBox1.Text = opt.IS0.ToString();
-			par_fi1.Text = opt.F0.ToString();
-			textBox2.Text = opt.F0.ToString();
+			ParamsListViewer.Items[0].SubItems[1].Text = opt.IS0.ToString();
+			ParamsListViewer.Items[1].SubItems[1].Text = opt.F0.ToString();
+			ParamsListViewer.Items[1].SubItems[2].Text = opt.F0.ToString();
+			ParamsListViewer.Items[0].SubItems[2].Text = opt.IS0.ToString();
 			label1.Text = opt.Z.ToString();
 
 			initErr.Text = obj.initErr().ToString();
@@ -113,12 +103,12 @@ namespace Метод_случайного_спуска
 		{
 			Optimize3Params opt = (Optimize3Params)obj;
 
-			par_Is1.Text = opt.IS0.ToString();
-			textBox1.Text = opt.IS0.ToString();
-			par_fi1.Text = opt.F0.ToString();
-			textBox2.Text = opt.F0.ToString();
-			par_R.Text = opt.R00.ToString();
-			textBox3.Text = opt.R00.ToString();
+			ParamsListViewer.Items[0].SubItems[1].Text = opt.IS0.ToString();
+			ParamsListViewer.Items[0].SubItems[2].Text = opt.IS0.ToString();
+			ParamsListViewer.Items[1].SubItems[1].Text = opt.F0.ToString();
+			ParamsListViewer.Items[1].SubItems[2].Text = opt.F0.ToString();
+			ParamsListViewer.Items[2].SubItems[1].Text = opt.R00.ToString();
+			ParamsListViewer.Items[2].SubItems[2].Text = opt.R00.ToString();
 			label1.Text = opt.Z.ToString();
 
 			initErr.Text = obj.initErr().ToString();
@@ -129,14 +119,14 @@ namespace Метод_случайного_спуска
 		{
 			Optimize4Params opt = (Optimize4Params)obj;
 
-			par_Is1.Text = opt.IS0.ToString();
-			textBox1.Text = opt.IS0.ToString();
-			par_fi1.Text = opt.F0.ToString();
-			textBox2.Text = opt.F0.ToString();
-			par_R.Text = opt.R00.ToString();
-			textBox3.Text = opt.R00.ToString();
-			par_IKF.Text = opt.IKF0.ToString();
-			textBox4.Text = opt.IKF0.ToString();
+			ParamsListViewer.Items[0].SubItems[1].Text = opt.IS0.ToString();
+			ParamsListViewer.Items[0].SubItems[2].Text = opt.IS0.ToString();
+			ParamsListViewer.Items[1].SubItems[1].Text = opt.F0.ToString();
+			ParamsListViewer.Items[1].SubItems[2].Text = opt.F0.ToString();
+			ParamsListViewer.Items[2].SubItems[1].Text = opt.R00.ToString();
+			ParamsListViewer.Items[2].SubItems[2].Text = opt.R00.ToString();
+			ParamsListViewer.Items[3].SubItems[1].Text = opt.IKF0.ToString();
+			ParamsListViewer.Items[3].SubItems[2].Text = opt.IKF0.ToString();
 			label1.Text = opt.Z.ToString();
 
 			initErr.Text = obj.initErr().ToString();
@@ -144,7 +134,6 @@ namespace Метод_случайного_спуска
 		}
 		#endregion
 
-		#region ВАХ
 		private void ЗагрузитьВАХToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			try
@@ -157,9 +146,101 @@ namespace Метод_случайного_спуска
 			}
 		}
 
+		private void InitOptimizeModel_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			int selectedState = InitOptimizeModel.SelectedIndex;
+
+			switch (InitOptimizeModel.SelectedIndex)
+			{
+				case 0: {
+						Perform.Click += OptimizeTwoParamsModel;
+						break; }
+				case 1: {
+						Perform.Click += OptimizeThreeParamsModel;
+						break; }
+				case 2: {
+						Perform.Click += OptimizeFourParamsModel;
+						break; }
+				case 3: {
+						Perform.Click += null;
+						break; }
+				case 4: {
+						Perform.Click += null;
+						break; }
+			}
+
+		}
+
+		private void ParamsListViewer_MouseDown(object sender, MouseEventArgs e)
+		{
+			if (e.Clicks > 1)
+			{
+				TextBox tbox = new TextBox();
+				this.Controls.Add(tbox);
+				tbox.Width = ParamsListViewer.Columns[2].Width;
+				ListViewItem item = ParamsListViewer.GetItemAt(0, e.Y);
+				if (item != null)
+				{
+					int x_cord = 0;
+					for (int i = 0; i < ParamsListViewer.Columns.Count - 1; i++)
+						x_cord += ParamsListViewer.Columns[i].Width;
+					tbox.Left = x_cord;
+					tbox.Top = item.Position.Y;
+					tbox.Text = item.SubItems[2].Text;
+					tbox.Leave += DisposeTextBox;
+					tbox.KeyPress += TextBoxKeyPress;
+					ParamsListViewer.Controls.Add(tbox);
+					tbox.Focus();
+					tbox.Select(tbox.Text.Length, 1);
+				}
+			}
+		}
+
+		private void DisposeTextBox(object sender, EventArgs e)
+		{
+			var tb = (sender as TextBox);
+			var item = ParamsListViewer.GetItemAt(0, tb.Top + 1);
+			if (item != null)
+				item.SubItems[2].Text = tb.Text;
+			tb.Dispose();
+		}
+
+		private void TextBoxKeyPress(object sender, KeyPressEventArgs e)
+		{
+			if (e.KeyChar == 13)
+				DisposeTextBox((sender as TextBox), null);
+			if (e.KeyChar == 27)
+				(sender as TextBox).Dispose();
+
+			if (!Char.IsDigit(e.KeyChar))
+			{
+				e.Handled = true;
+			}
+
+			if(e.KeyChar == 'e' || e.KeyChar == 'E' || e.KeyChar == 'е' || e.KeyChar == 'E')
+			{
+				if((sender as TextBox).Text.Contains("e") || (sender as TextBox).Text.Contains("E") || (sender as TextBox).Text.Contains("е") || (sender as TextBox).Text.Contains("Е")) e.Handled = true;
+				else e.Handled = false;
+			}
+
+			if(e.KeyChar == 8 || e.KeyChar == '-')
+			{
+				e.Handled = false;
+			}
+
+
+
+		}
+
+
+		#region ВАХ
+
+		Graph[] graph;
+
 		private void ИзмереннаяToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			new Graph(VAX.U, VAX.I, "ВАХ", "U", "I", Color.Brown).Show();
+			Graph graph = new Graph(VAX.U, VAX.I, "ВАХ", "U", "I", Color.Brown);
+			graph.Show();
 		}
 
 		private void АппроксимированнаяToolStripMenuItem_Click(object sender, EventArgs e)
@@ -191,6 +272,5 @@ namespace Метод_случайного_спуска
 		}
 
 		#endregion
-
 	}
 }

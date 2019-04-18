@@ -59,5 +59,15 @@ namespace GraphCreator.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] ZedGraph {
+            get {
+                object obj = ResourceManager.GetObject("ZedGraph", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }
