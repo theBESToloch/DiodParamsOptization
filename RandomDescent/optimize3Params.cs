@@ -159,50 +159,6 @@ namespace RandomDescent
 			initEr = c;
 		}
 
-		/*public Optimize3Params(double[] I, double[] U, int nStep, double Is, double f)
-		{
-
-			ISy = new List<double>();
-			fy = new List<double>();
-			Ry = new List<double>();
-
-			dfy = new List<double>();
-			dIsy = new List<double>();
-			dRy = new List<double>();
-
-
-			Sy = new List<double>();
-			y = new List<double>();
-
-			this.Is = Is;
-			this.f = f;
-			this.R = newR();
-
-			// Загрузка данных
-			this.I = I;
-			this.U = U;
-			len = I.Length;
-
-			this.nStep = nStep;
-			this.Is0 = Is;
-			this.f0 = f;
-			this.R0 = newR();
-
-			df = f0 / 100;
-			dIs = Is0 / 100;
-			dR = R0 / 100;
-
-			df0 = df;
-			dR0 = dR;
-
-			c = 0;
-			for (int i = 0; i < len; i++)
-			{
-				Id = Is0 * (Math.Exp((U[i] - R0 * I[i]) / f0) - 1);
-				c += Math.Abs((I[i] - Id) / I[i]);
-			}
-		}*/
-
 		// сам спуск - простейший
 		public void doOptimize()
 		{
@@ -298,7 +254,7 @@ namespace RandomDescent
 			I_err = new double[I.Length];
 			double SCO_absolut = 0;
 			double SCO_relative = 0;
-			double VD = 0;
+			double VD = U[0];
 			for (int i = 0; i < I.Length; i++)
 			{
 				VD = _VD(U[i], Is, f, 1000, R, U[i]-R*I[i]);

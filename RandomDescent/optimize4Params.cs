@@ -275,8 +275,8 @@ namespace RandomDescent
 
 			for (int i = 0; i < I.Length; i++)
 			{
-				//VD = _VD(U[i], Is0, f0, IK0, R0, VD);
-				I_err[i] = I[i] - Is0 * (Math.Exp((U[i] - I[i]*R) / f0) - 1) * Math.Sqrt(IK0 / (IK0 + Is0 * (Math.Exp((U[i] - I[i] * R) / f0) - 1)));
+				VD = _VD(U[i], Is0, f0, IK0, R0, VD);
+				I_err[i] = I[i] - Is0 * (Math.Exp((VD) / f0) - 1) * Math.Sqrt(IK0 / (IK0 + Is0 * (Math.Exp((VD) / f0) - 1)));
 
 				SCO_absolut += Math.Pow((I_err[i]), 2);
 				SCO_relative += Math.Pow(I_err[i] / I[i], 2);
