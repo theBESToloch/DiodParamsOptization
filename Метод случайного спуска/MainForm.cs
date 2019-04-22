@@ -11,17 +11,36 @@ namespace Метод_случайного_спуска
 
 	public partial class MainForm : Form
 	{
+
+		#region Поля
+
+		private Optimize obj;
+
+		private LOAD_CHARACTERISTICs VAX;
+
+		private Dictionary<string, double> par;
+
+		private MyEventHandler d;
+
+		private List<Graph> graphs;
+		#endregion
+
 		public MainForm()
 		{
 			InitializeComponent();
 
-			//настраиваем форму
 			VAX = new LOAD_CHARACTERISTICs("", "");
-
-			par.Add("IKF", 0.005);
-			par.Add("R", 13);
-			par.Add("fi", 0.029);
-			par.Add("Is", 22.3E-12);
+			graphs = new List<Graph>();
+			par = new Dictionary<string, double>
+			{
+				{ "IKF", 0.005 },
+				{ "R", 13 },
+				{ "fi", 0.029 },
+				{ "Is", 22.3E-12 },
+				{ "a1", 0.001 },
+				{ "a2", 0.001 },
+				{ "b1", 0.001 }
+			};
 
 			ParamsListViewer.Items.Add(new ListViewItem(new string[] { "Is", par["Is"].ToString(), par["Is"].ToString() }));
 			ParamsListViewer.Items.Add(new ListViewItem(new string[] { "fi", par["fi"].ToString(), par["fi"].ToString() }));
@@ -29,44 +48,7 @@ namespace Метод_случайного_спуска
 			d += OptimizeTwoParamsModel;
 		}
 
-		#region Поля
-
-		Optimize obj;
-
-		LOAD_CHARACTERISTICs VAX;
-
-		private Dictionary<string, double> par = new Dictionary<string, double>();
-
-		#endregion
-
 		#region вычисления
-
-		void OptimizeTwoParamsModel()
-		{
-			obj = new optimize2Params(VAX.I, VAX.U,
-				Convert.ToInt32(nSteps.Text),
-				Convert.ToDouble(ParamsListViewer.Items[0].SubItems[2].Text.Replace(".", ",")),
-				Convert.ToDouble(ParamsListViewer.Items[1].SubItems[2].Text.Replace(".", ",")));
-			DoWork();
-			RunWorkerCompleted();
-			MessageBox.Show(" вычисления выполнены");
-		}
-
-		private void OptimizeThreeParamsModel()
-		{
-			obj = new Optimize3Params(VAX.I, VAX.U, Convert.ToInt32(nSteps.Text), Convert.ToDouble(ParamsListViewer.Items[0].SubItems[2].Text.Replace(".", ",")), Convert.ToDouble(ParamsListViewer.Items[1].SubItems[2].Text.Replace(".", ",")), Convert.ToDouble(ParamsListViewer.Items[2].SubItems[2].Text.Replace(".", ",")));
-			DoWork();
-			RunWorkerCompleted2();
-			MessageBox.Show(" вычисления выполнены");
-		}
-
-		private void OptimizeFourParamsModel()
-		{
-			obj = new Optimize4Params(VAX.I, VAX.U, Convert.ToInt32(nSteps.Text), Convert.ToDouble(ParamsListViewer.Items[0].SubItems[2].Text.Replace(".", ",")), Convert.ToDouble(ParamsListViewer.Items[1].SubItems[2].Text.Replace(".", ",")), Convert.ToDouble(ParamsListViewer.Items[2].SubItems[2].Text.Replace(".", ",")), Convert.ToDouble(ParamsListViewer.Items[3].SubItems[2].Text.Replace(".", ",")));
-			DoWork();
-			RunWorkerCompleted3();
-			MessageBox.Show(" вычисления выполнены");
-		}
 
 		private void DoWork()
 		{
@@ -81,7 +63,17 @@ namespace Метод_случайного_спуска
 
 		}
 
-		private void RunWorkerCompleted()
+		private void OptimizeTwoParamsModel()
+		{
+			obj = new optimize2Params(VAX.I, VAX.U,
+				Convert.ToInt32(nSteps.Text),
+				Convert.ToDouble(ParamsListViewer.Items[0].SubItems[2].Text.Replace(".", ",")),
+				Convert.ToDouble(ParamsListViewer.Items[1].SubItems[2].Text.Replace(".", ",")));
+			DoWork();
+			CompleteTwoParamsModelOptimize();
+			MessageBox.Show(" вычисления выполнены");
+		}
+		private void CompleteTwoParamsModelOptimize()
 		{
 			optimize2Params opt = (optimize2Params)obj;
 
@@ -93,10 +85,20 @@ namespace Метод_случайного_спуска
 
 			initErr.Text = obj.initErr().ToString();
 			Err.Text = obj.optimizeErr().ToString();
-
 		}
 
-		private void RunWorkerCompleted2()
+		private void OptimizeThreeParamsModel()
+		{
+			obj = new Optimize3Params(VAX.I, VAX.U,
+				Convert.ToInt32(nSteps.Text),
+				Convert.ToDouble(ParamsListViewer.Items[0].SubItems[2].Text.Replace(".", ",")),
+				Convert.ToDouble(ParamsListViewer.Items[1].SubItems[2].Text.Replace(".", ",")),
+				Convert.ToDouble(ParamsListViewer.Items[2].SubItems[2].Text.Replace(".", ",")));
+			DoWork();
+			CompleteThreeParamsModelOptimize();
+			MessageBox.Show(" вычисления выполнены");
+		}
+		private void CompleteThreeParamsModelOptimize()
 		{
 			Optimize3Params opt = (Optimize3Params)obj;
 
@@ -112,7 +114,19 @@ namespace Метод_случайного_спуска
 			Err.Text = obj.optimizeErr().ToString();
 		}
 
-		private void RunWorkerCompleted3()
+		private void OptimizeFourParamsModel()
+		{
+			obj = new Optimize4Params(VAX.I, VAX.U,
+				Convert.ToInt32(nSteps.Text),
+				Convert.ToDouble(ParamsListViewer.Items[0].SubItems[2].Text.Replace(".", ",")),
+				Convert.ToDouble(ParamsListViewer.Items[1].SubItems[2].Text.Replace(".", ",")),
+				Convert.ToDouble(ParamsListViewer.Items[2].SubItems[2].Text.Replace(".", ",")),
+				Convert.ToDouble(ParamsListViewer.Items[3].SubItems[2].Text.Replace(".", ",")));
+			DoWork();
+			CompleteFourParamsModelOptimize();
+			MessageBox.Show(" вычисления выполнены");
+		}
+		private void CompleteFourParamsModelOptimize()
 		{
 			Optimize4Params opt = (Optimize4Params)obj;
 
@@ -130,6 +144,55 @@ namespace Метод_случайного_спуска
 			Err.Text = obj.optimizeErr().ToString();
 		}
 
+		private void OptimizeFiParamsModel()
+		{
+			obj = new OptimizeParams_Fi(VAX.I, VAX.U,
+				Convert.ToInt32(nSteps.Text),
+				Convert.ToDouble(ParamsListViewer.Items[0].SubItems[2].Text.Replace(".", ",")),
+				Convert.ToDouble(ParamsListViewer.Items[1].SubItems[2].Text.Replace(".", ",")),
+				Convert.ToDouble(ParamsListViewer.Items[2].SubItems[2].Text.Replace(".", ",")),
+				Convert.ToDouble(ParamsListViewer.Items[3].SubItems[2].Text.Replace(".", ",")),
+				new double[]
+				{
+					Convert.ToDouble(ParamsListViewer.Items[4].SubItems[2].Text.Replace(".", ",")),
+					Convert.ToDouble(ParamsListViewer.Items[5].SubItems[2].Text.Replace(".", ",")),
+					Convert.ToDouble(ParamsListViewer.Items[6].SubItems[2].Text.Replace(".", ","))
+				}
+				);
+			DoWork();
+			CompleteFiParamsModelOptimize();
+			MessageBox.Show(" вычисления выполнены");
+		}
+		private void CompleteFiParamsModelOptimize()
+		{
+			OptimizeParams_Fi opt = (OptimizeParams_Fi)obj;
+
+			ParamsListViewer.Items[0].SubItems[1].Text = opt.IS0.ToString();
+			ParamsListViewer.Items[0].SubItems[2].Text = opt.IS0.ToString();
+			ParamsListViewer.Items[1].SubItems[1].Text = opt.F0.ToString();
+			ParamsListViewer.Items[1].SubItems[2].Text = opt.F0.ToString();
+			ParamsListViewer.Items[2].SubItems[1].Text = opt.R00.ToString();
+			ParamsListViewer.Items[2].SubItems[2].Text = opt.R00.ToString();
+			ParamsListViewer.Items[3].SubItems[1].Text = opt.IKF0.ToString();
+			ParamsListViewer.Items[3].SubItems[2].Text = opt.IKF0.ToString();
+
+			ParamsListViewer.Items[4].SubItems[1].Text = opt.FPAR0[0].ToString();
+			ParamsListViewer.Items[4].SubItems[2].Text = opt.FPAR0[0].ToString();
+			ParamsListViewer.Items[5].SubItems[1].Text = opt.FPAR0[1].ToString();
+			ParamsListViewer.Items[5].SubItems[2].Text = opt.FPAR0[1].ToString();
+			ParamsListViewer.Items[6].SubItems[1].Text = opt.FPAR0[2].ToString();
+			ParamsListViewer.Items[6].SubItems[2].Text = opt.FPAR0[2].ToString();
+			label1.Text = opt.Z.ToString();
+
+			initErr.Text = obj.initErr().ToString();
+			Err.Text = obj.optimizeErr().ToString();
+		}
+
+		private void Perform_Click(object sender, EventArgs e)
+		{
+			d?.Invoke();
+		}
+
 		#endregion
 
 		private void ЗагрузитьВАХToolStripMenuItem_Click(object sender, EventArgs e)
@@ -138,20 +201,16 @@ namespace Метод_случайного_спуска
 			{
 				VAX.ShowDialog();
 			}
-			catch
+			catch (Exception ex)
 			{
-				MessageBox.Show("ошибка");
+				MessageBox.Show("Ошибка:" + ex);
 			}
 		}
 
-
-		MyEventHandler d;
+		#region обработчики выбора модели
 
 		private void InitOptimizeModel_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			int selectedState = InitOptimizeModel.SelectedIndex;
-
-
 			d = null;
 
 			switch (InitOptimizeModel.SelectedIndex)
@@ -173,7 +232,7 @@ namespace Метод_случайного_спуска
 					}
 				case 3:
 					{
-						d += null;
+						d += OptimizeFiParamsModel;
 						break;
 					}
 				case 4:
@@ -189,7 +248,7 @@ namespace Метод_случайного_спуска
 		{
 			for (int i = ParamsListViewer.Items.Count; i > 0; i--)
 			{
-				par[ParamsListViewer.Items[i-1].SubItems[0].Text] = Convert.ToDouble(ParamsListViewer.Items[i-1].SubItems[2].Text);
+				par[ParamsListViewer.Items[i - 1].SubItems[0].Text] = Convert.ToDouble(ParamsListViewer.Items[i - 1].SubItems[2].Text);
 			}
 			ParamsListViewer.Items.Clear();
 			switch (InitOptimizeModel.SelectedIndex)
@@ -211,13 +270,28 @@ namespace Метод_случайного_спуска
 					{
 						ParamsListViewer.Items.Add(new ListViewItem(new string[] { "Is", par["Is"].ToString(), par["Is"].ToString() }));
 						ParamsListViewer.Items.Add(new ListViewItem(new string[] { "fi", par["fi"].ToString(), par["fi"].ToString() }));
-						ParamsListViewer.Items.Add(new ListViewItem(new string[] { "R",  par["R"].ToString(),  par["R"].ToString() }));
+						ParamsListViewer.Items.Add(new ListViewItem(new string[] { "R", par["R"].ToString(), par["R"].ToString() }));
 						ParamsListViewer.Items.Add(new ListViewItem(new string[] { "IKF", par["IKF"].ToString(), par["IKF"].ToString() }));
+						break;
+					}
+				case 3:
+					{
+
+						ParamsListViewer.Items.Add(new ListViewItem(new string[] { "Is", par["Is"].ToString(), par["Is"].ToString() }));
+						ParamsListViewer.Items.Add(new ListViewItem(new string[] { "fi", par["fi"].ToString(), par["fi"].ToString() }));
+						ParamsListViewer.Items.Add(new ListViewItem(new string[] { "R", par["R"].ToString(), par["R"].ToString() }));
+						ParamsListViewer.Items.Add(new ListViewItem(new string[] { "IKF", par["IKF"].ToString(), par["IKF"].ToString() }));
+
+						ParamsListViewer.Items.Add(new ListViewItem(new string[] { "a1", par["a1"].ToString(), par["a1"].ToString() }));
+						ParamsListViewer.Items.Add(new ListViewItem(new string[] { "a2", par["a2"].ToString(), par["a2"].ToString() }));
+						ParamsListViewer.Items.Add(new ListViewItem(new string[] { "b1", par["b1"].ToString(), par["b1"].ToString() }));
+
 						break;
 					}
 			}
 		}
 
+		#region обработчики изменения поля в listview
 		private void ParamsListViewer_MouseDown(object sender, MouseEventArgs e)
 		{
 			if (e.Clicks > 1)
@@ -274,20 +348,11 @@ namespace Метод_случайного_спуска
 			{
 				e.Handled = false;
 			}
-
-
-
 		}
+		#endregion
+		#endregion
 
-		private void Perform_Click(object sender, EventArgs e)
-		{
-			if (d != null)
-				d();
-		}
-
-		#region ВАХ
-
-		public List<Graph> graphs = new List<Graph>();
+		#region обработчики кнопок пункта меню - ВАХ
 
 		private void ИзмереннаяToolStripMenuItem_Click(object sender, EventArgs e)
 		{

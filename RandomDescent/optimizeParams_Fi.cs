@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RandomDescent
 {
-	public class Optimize4Params : Optimize
+	public class OptimizeParams_Fi : Optimize
 	{
 
 		#region Поля
@@ -20,19 +20,26 @@ namespace RandomDescent
 		private double f0;
 		private double R0;
 		private double IK0;
+		private double[] FPar0;
 
 		List<double> Sy;
 		List<double> y;
 
 		private double
-			df0 = 0, df = 0, f = 0,
-			dIs0 = 0, dIs = 0, Is = 0,
-			dR0 = 0, dR = 0, R = 0,
-			dIK0 = 0, dIK = 0, IK = 0;
+		 df = 0, f = 0,
+		 dIs = 0, Is = 0,
+		 dR = 0, R = 0,
+		 dIK = 0, IK = 0;
+
+		private double[]
+			dFPar0, dFPar, FPar;
+
 
 		double
 			c = 0,
 			VD = 0, S = 0;
+
+		double parF;
 
 		#endregion
 
@@ -76,10 +83,17 @@ namespace RandomDescent
 			get { return IK0; }
 			set { IK0 = value; }
 		}
+
+		public double[] FPAR0
+		{
+			get { return FPar0; }
+			set { FPAR0 = value; }
+		}
+
 		#endregion
 
 
-		public Optimize4Params(double[] I, double[] U, int nStep, double Is, double f, double R, double IKF)
+		public OptimizeParams_Fi(double[] I, double[] U, int nStep, double Is, double f, double R, double IKF, double[] FPar)
 		{
 			Sy = new List<double>();
 			y = new List<double>();
@@ -94,30 +108,38 @@ namespace RandomDescent
 			this.f0 = f;
 			this.R0 = R;
 			this.IK0 = IKF;
+			this.FPar0 = new double[3];
+			for (int i = 0; i < 3; i++) this.FPar0[i] = FPar[i];
 
 			this.Is = Is;
 			this.f = f;
 			this.R = R;
 			this.IK = IKF;
-
+			this.FPar = new double[3];
+			for (int i = 0; i < 3; i++) this.FPar[i] = FPar[i];
 
 			df = f0 / 100;
 			dIs = Is0 / 100;
 			dR = R0 / 100;
 			dIK = IKF / 100;
 
-			df0 = df;
-			dIs0 = dIs;
-			dR0 = dR;
-			dIK0 = dIK;
+			dFPar = new double[3];
+			for (int i = 0; i < 3; i++) dFPar[i] = FPar[i] / 100;
 
 			c = 0;
 			for (int i = 0; i < len; i++)
 			{
-				VD = Math.Log((Math.Pow(I[i], 2) + Math.Sqrt(Math.Pow(I[i], 4) + 4 * Math.Pow(I[i], 2) * Math.Pow(IK0, 2))) / (2 * IK0 * Is0) + 1) * f0;
-				c += Math.Pow((U[i] - VD - R0*I[i]) / U[i], 2);
+				parF = calcFi(f0, FPar0, I[i]);
+				VD = Math.Log((Math.Pow(I[i], 2) + Math.Sqrt(Math.Pow(I[i], 4) + 4 * Math.Pow(I[i], 2) * Math.Pow(IK0, 2))) / (2 * IK0 * Is0) + 1) * parF;
+				c += Math.Pow((U[i] - VD - R0 * I[i]) / U[i], 2);
 			}
 			initEr = c;
+		}
+
+
+		private double calcFi(double f, double[] FPar, double I)
+		{
+			return f * (1 + FPar[0] * I + FPar[1] * Math.Pow(I, 2)) / (FPar[2] * I);
 		}
 
 		public void doOptimize()
@@ -131,15 +153,20 @@ namespace RandomDescent
 			// Основной цикл
 			for (double i = 0; i < nStep - 1; i++)
 			{
-				f = Math.Abs(f0 + Math.Pow((rnd.Next(200) * 0.01 - 1),3) * df);
+				f = Math.Abs(f0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * df);
 				Is = Math.Abs(Is0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dIs);
 				R = Math.Abs(R0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dR);
 				IK = Math.Abs(IK0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dIK);
+
+				FPar[0] = FPar0[0] + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dFPar[0];
+				FPar[1] = FPar0[1] + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dFPar[1];
+				FPar[2] = FPar0[2] + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dFPar[2];
 				S = 0;
 
 				for (int j = 0; j < len; j++)
 				{
-					VD = Math.Log((Math.Pow(I[j], 2) + Math.Sqrt(Math.Pow(I[j], 4) + 4 * Math.Pow(I[j], 2) * Math.Pow(IK, 2))) / (2 * IK * Is) + 1) * f;
+					parF = calcFi(f, FPar, I[j]);
+					VD = Math.Log((Math.Pow(I[j], 2) + Math.Sqrt(Math.Pow(I[j], 4) + 4 * Math.Pow(I[j], 2) * Math.Pow(IK, 2))) / (2 * IK * Is) + 1) * parF;
 					S += Math.Pow((U[j] - VD - R * I[j]) / U[j], 2);
 				}
 				// условие
@@ -151,6 +178,10 @@ namespace RandomDescent
 					f0 = f;
 					R0 = R;
 					IK0 = IK;
+
+					
+					for(int k = 0; k < 3; k++) FPar0[k] = FPar[k];
+
 
 					y.Add(i);
 					Sy.Add(S);
@@ -179,7 +210,8 @@ namespace RandomDescent
 			UU_ = new double[U.Length];
 			for (int j = 0; j < U.Length; j++)
 			{
-				UU_[j] = Math.Log((Math.Pow(I[j], 2) + Math.Sqrt(Math.Pow(I[j], 4) + 4 * Math.Pow(I[j], 2) * Math.Pow(IK0, 2))) / (2 * IK0 * Is0) + 1) * f0 + R0*I[j];
+				parF = calcFi(f0, FPar0, I[j]);
+				UU_[j] = Math.Log((Math.Pow(I[j], 2) + Math.Sqrt(Math.Pow(I[j], 4) + 4 * Math.Pow(I[j], 2) * Math.Pow(IK0, 2))) / (2 * IK0 * Is0) + 1) * parF + R0 * I[j];
 			}
 		}
 
@@ -224,8 +256,9 @@ namespace RandomDescent
 
 			for (int i = 0; i < I.Length; i++)
 			{
-				VD = _VD(U[i], Is0, f0, IK0, R0, VD);
-				I_err[i] = I[i] - Is0 * (Math.Exp((VD) / f0) - 1) * Math.Sqrt(IK0 / (IK0 + Is0 * (Math.Exp((VD) / f0) - 1)));
+				parF = calcFi(f0, FPar0, I[i]);
+				VD = _VD(U[i], Is0, parF, IK0, R0, VD);
+				I_err[i] = I[i] - Is0 * (Math.Exp((VD) / parF) - 1) * Math.Sqrt(IK0 / (IK0 + Is0 * (Math.Exp((VD) / parF) - 1)));
 
 				SCO_absolut += Math.Pow((I_err[i]), 2);
 				SCO_relative += Math.Pow(I_err[i] / I[i], 2);
@@ -245,7 +278,8 @@ namespace RandomDescent
 
 			for (int i = 0; i < U.Length; i++)
 			{
-				U_err[i] = U[i] - Math.Log((Math.Pow(I[i], 2) + Math.Sqrt(Math.Pow(I[i], 4) + 4 * Math.Pow(I[i], 2) * Math.Pow(IK0, 2))) / (2 * IK0 * Is0) + 1) * f0 - R0 * I[i];
+				parF = calcFi(f0, FPar0, I[i]);
+				U_err[i] = U[i] - Math.Log((Math.Pow(I[i], 2) + Math.Sqrt(Math.Pow(I[i], 4) + 4 * Math.Pow(I[i], 2) * Math.Pow(IK0, 2))) / (2 * IK0 * Is0) + 1) * parF - R0 * I[i];
 
 				SCO_absolut += Math.Pow(U_err[i], 2);
 				SCO_relative += Math.Pow(U_err[i] / U[i], 2);

@@ -256,7 +256,8 @@ namespace Метод_случайного_спуска
 			this.InitOptimizeModel.Items.AddRange(new object[] {
             "2-х параметрическая модель",
             "3-х параметрическая модель",
-            "4-х параметрическая модель"});
+            "4-х параметрическая модель",
+            "замена f полиномом"});
 			this.InitOptimizeModel.Location = new System.Drawing.Point(28, 79);
 			this.InitOptimizeModel.Name = "InitOptimizeModel";
 			this.InitOptimizeModel.Size = new System.Drawing.Size(347, 21);
