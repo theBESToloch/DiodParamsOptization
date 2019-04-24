@@ -92,7 +92,6 @@ namespace RandomDescent
 
 		#endregion
 
-
 		public OptimizeParams_Fi(double[] I, double[] U, int nStep, double Is, double f, double R, double IKF, double[] FPar)
 		{
 			Sy = new List<double>();
@@ -135,14 +134,7 @@ namespace RandomDescent
 			}
 			initEr = c;
 		} 
-
-
-		private double calcFi(double f, double[] FPar, double I)
-		{
-			//return f * (1 + FPar[0] * I + FPar[1] * Math.Pow(I, 2)) / (FPar[2] * I);
-			return f - 0.5 * FPar[0] * ((1 - Math.Exp(-(FPar[1] * (I - FPar[2])))) / (1 + Math.Exp(-(FPar[1] * (I - FPar[2])))));
-		}
-
+		
 		public void doOptimize()
 		{
 			Random rnd = new Random();
@@ -195,15 +187,21 @@ namespace RandomDescent
 			er = c;
 		}
 
+		private double calcFi(double f, double[] FPar, double I)
+		{
+			//return f * (1 + FPar[0] * I + FPar[1] * Math.Pow(I, 2)) / (FPar[2] * I);
+			return f - 0.5 * FPar[0] * ((1 - Math.Exp(-(FPar[1] * (I - FPar[2])))) / (1 + Math.Exp(-(FPar[1] * (I - FPar[2])))));
+		}
+		
 		private void normalizeParams(double _f, double df, double _Is, double dIs, double _R, double dR, double _IK, double dIK)
 		{
 			double LenghtVector = Math.Abs(_f / df) + Math.Abs(_Is / dIs) + Math.Abs(_R / dR) + Math.Abs(_IK / dIK);
 			if (LenghtVector > 1)
 			{
-				f = f0 + _f / df / LenghtVector;
-				Is = Is0 + _Is / dIs / LenghtVector;
-				R = R0 + _R / dR / LenghtVector;
-				IK = IK0 + _IK / df / LenghtVector;
+				f = f0 + _f / LenghtVector;
+				Is = Is0 + _Is / LenghtVector;
+				R = R0 + _R / LenghtVector;
+				IK = IK0 + _IK / LenghtVector;
 			}
 		}
 
@@ -228,12 +226,10 @@ namespace RandomDescent
 				UU_[j] = Math.Log((Math.Pow(I[j], 2) + Math.Sqrt(Math.Pow(I[j], 4) + 4 * Math.Pow(I[j], 2) * Math.Pow(IK0, 2))) / (2 * IK0 * Is0) + 1) * parF + R0 * I[j];
 			}
 		}
-
 		public double[] getMassI()
 		{
 			return I;
 		}
-
 		public double[] getMassU()
 		{
 			getVAX();

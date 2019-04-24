@@ -115,7 +115,7 @@ namespace RandomDescent
 			for (int i = 0; i < len; i++)
 			{
 				VD = Math.Log((Math.Pow(I[i], 2) + Math.Sqrt(Math.Pow(I[i], 4) + 4 * Math.Pow(I[i], 2) * Math.Pow(IK0, 2))) / (2 * IK0 * Is0) + 1) * f0;
-				c += Math.Pow((U[i] - VD - R0*I[i]) / U[i], 2);
+				c += Math.Pow((U[i] - VD - R0 * I[i]) / U[i], 2);
 			}
 			initEr = c;
 		}
@@ -131,7 +131,7 @@ namespace RandomDescent
 			// Основной цикл
 			for (double i = 0; i < nStep - 1; i++)
 			{
-				f = Math.Abs(f0 + Math.Pow((rnd.Next(200) * 0.01 - 1),3) * df);
+				f = Math.Abs(f0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * df);
 				Is = Math.Abs(Is0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dIs);
 				R = Math.Abs(R0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dR);
 				IK = Math.Abs(IK0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dIK);
@@ -168,10 +168,10 @@ namespace RandomDescent
 			double LenghtVector = Math.Abs(_f / df) + Math.Abs(_Is / dIs) + Math.Abs(_R / dR) + Math.Abs(_IK / dIK);
 			if (LenghtVector > 1)
 			{
-				f = f0 + _f / df / LenghtVector;
-				Is = Is0 + _Is / dIs / LenghtVector;
-				R = R0 + _R / dR / LenghtVector;
-				IK = IK0 + _IK / df / LenghtVector;
+				f = f0 + _f / LenghtVector;
+				Is = Is0 + _Is / LenghtVector;
+				R = R0 + _R / LenghtVector;
+				IK = IK0 + _IK / LenghtVector;
 			}
 		}
 
@@ -192,7 +192,7 @@ namespace RandomDescent
 			UU_ = new double[U.Length];
 			for (int j = 0; j < U.Length; j++)
 			{
-				UU_[j] = Math.Log((Math.Pow(I[j], 2) + Math.Sqrt(Math.Pow(I[j], 4) + 4 * Math.Pow(I[j], 2) * Math.Pow(IK0, 2))) / (2 * IK0 * Is0) + 1) * f0 + R0*I[j];
+				UU_[j] = Math.Log((Math.Pow(I[j], 2) + Math.Sqrt(Math.Pow(I[j], 4) + 4 * Math.Pow(I[j], 2) * Math.Pow(IK0, 2))) / (2 * IK0 * Is0) + 1) * f0 + R0 * I[j];
 			}
 		}
 

@@ -179,8 +179,8 @@ namespace RandomDescent
 			double LenghtVector = Math.Abs(_f / df) + Math.Abs(_Is / dIs);
 			if (LenghtVector > 1)
 			{
-				f = f0 + _f / df / LenghtVector;
-				Is = Is0 + _Is / dIs / LenghtVector;
+				f = f0 + _f / LenghtVector;
+				Is = Is0 + _Is / LenghtVector;
 			}
 		}
 
