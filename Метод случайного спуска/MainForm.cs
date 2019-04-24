@@ -37,9 +37,9 @@ namespace Метод_случайного_спуска
 				{ "R", 13 },
 				{ "fi", 0.029 },
 				{ "Is", 22.3E-12 },
-				{ "a1", 0.001 },
+				{ "a1", 0.029 },
 				{ "a2", 0.001 },
-				{ "b1", 0.001 }
+				{ "b1", 100 }
 			};
 
 			ParamsListViewer.Items.Add(new ListViewItem(new string[] { "Is", par["Is"].ToString(), par["Is"].ToString() }));

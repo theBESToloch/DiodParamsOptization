@@ -32,7 +32,7 @@ namespace RandomDescent
 		 dIK = 0, IK = 0;
 
 		private double[]
-			dFPar0, dFPar, FPar;
+			dFPar, FPar;
 
 
 		double
@@ -134,12 +134,13 @@ namespace RandomDescent
 				c += Math.Pow((U[i] - VD - R0 * I[i]) / U[i], 2);
 			}
 			initEr = c;
-		}
+		} 
 
 
 		private double calcFi(double f, double[] FPar, double I)
 		{
-			return f * (1 + FPar[0] * I + FPar[1] * Math.Pow(I, 2)) / (FPar[2] * I);
+			//return f * (1 + FPar[0] * I + FPar[1] * Math.Pow(I, 2)) / (FPar[2] * I);
+			return f - 0.5 * FPar[0] * ((1 - Math.Exp(-(FPar[1] * (I - FPar[2])))) / (1 + Math.Exp(-(FPar[1] * (I - FPar[2])))));
 		}
 
 		public void doOptimize()
@@ -157,6 +158,7 @@ namespace RandomDescent
 				Is = Math.Abs(Is0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dIs);
 				R = Math.Abs(R0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dR);
 				IK = Math.Abs(IK0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dIK);
+				normalizeParams(f - f0, df,Is - Is0, dIs, R - R0, dR,IK - IK0, dIK);
 
 				FPar[0] = FPar0[0] + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dFPar[0];
 				FPar[1] = FPar0[1] + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dFPar[1];
@@ -191,6 +193,18 @@ namespace RandomDescent
 			y.Add(nStep);
 			Sy.Add(c);
 			er = c;
+		}
+
+		private void normalizeParams(double _f, double df, double _Is, double dIs, double _R, double dR, double _IK, double dIK)
+		{
+			double LenghtVector = Math.Abs(_f / df) + Math.Abs(_Is / dIs) + Math.Abs(_R / dR) + Math.Abs(_IK / dIK);
+			if (LenghtVector > 1)
+			{
+				f = f0 + _f / df / LenghtVector;
+				Is = Is0 + _Is / dIs / LenghtVector;
+				R = R0 + _R / dR / LenghtVector;
+				IK = IK0 + _IK / df / LenghtVector;
+			}
 		}
 
 		private double initEr = 0, er = 0;

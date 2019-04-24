@@ -174,6 +174,7 @@ namespace RandomDescent
 				f = Math.Abs(f0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * df);
 				Is = Math.Abs(Is0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dIs);
 				R = Math.Abs(R0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dR);
+				normalizeParams(f - f0, df, Is - Is0, dIs, R - R0, dR);
 				S = 0;
 
 				for (int j = 0; j < len; j++)
@@ -207,6 +208,16 @@ namespace RandomDescent
 			er = c;
 		}
 
+		private void normalizeParams(double _f, double df, double _Is, double dIs, double _R, double dR)
+		{
+			double LenghtVector = Math.Abs(_f / df) + Math.Abs(_Is / dIs) + Math.Abs(_R / dR);
+			if (LenghtVector > 1)
+			{
+				f = f0 + _f / df / LenghtVector;
+				Is = Is0 + _Is / dIs / LenghtVector;
+				R = R0 + _R / dR / LenghtVector;
+			}
+		}
 
 		private double initEr = 0, er = 0;
 

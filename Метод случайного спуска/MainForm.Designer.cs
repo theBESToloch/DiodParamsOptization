@@ -283,7 +283,7 @@ namespace Метод_случайного_спуска
             this.approximation});
 			this.ParamsListViewer.Location = new System.Drawing.Point(28, 138);
 			this.ParamsListViewer.Name = "ParamsListViewer";
-			this.ParamsListViewer.Size = new System.Drawing.Size(403, 104);
+			this.ParamsListViewer.Size = new System.Drawing.Size(403, 190);
 			this.ParamsListViewer.TabIndex = 72;
 			this.ParamsListViewer.UseCompatibleStateImageBehavior = false;
 			this.ParamsListViewer.View = System.Windows.Forms.View.Details;
