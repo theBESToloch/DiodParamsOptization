@@ -65,7 +65,8 @@ namespace Метод_случайного_спуска
 
 		private void OptimizeTwoParamsModel()
 		{
-			obj = new optimize2Params(VAX.I, VAX.U,
+			if(!(obj != null && obj.GetType() == typeof (Optimize2Params)))
+			obj = new Optimize2Params(VAX.I, VAX.U,
 				Convert.ToInt32(nSteps.Text),
 				Convert.ToDouble(ParamsListViewer.Items[0].SubItems[2].Text.Replace(".", ",")),
 				Convert.ToDouble(ParamsListViewer.Items[1].SubItems[2].Text.Replace(".", ",")));
@@ -75,7 +76,7 @@ namespace Метод_случайного_спуска
 		}
 		private void CompleteTwoParamsModelOptimize()
 		{
-			optimize2Params opt = (optimize2Params)obj;
+			Optimize2Params opt = (Optimize2Params)obj;
 
 			ParamsListViewer.Items[0].SubItems[1].Text = opt.IS0.ToString();
 			ParamsListViewer.Items[1].SubItems[1].Text = opt.F0.ToString();
@@ -89,7 +90,8 @@ namespace Метод_случайного_спуска
 
 		private void OptimizeThreeParamsModel()
 		{
-			obj = new Optimize3Params(VAX.I, VAX.U,
+			if (!(obj != null && obj.GetType() == typeof(Optimize3Params)))
+				obj = new Optimize3Params(VAX.I, VAX.U,
 				Convert.ToInt32(nSteps.Text),
 				Convert.ToDouble(ParamsListViewer.Items[0].SubItems[2].Text.Replace(".", ",")),
 				Convert.ToDouble(ParamsListViewer.Items[1].SubItems[2].Text.Replace(".", ",")),
@@ -106,8 +108,8 @@ namespace Метод_случайного_спуска
 			ParamsListViewer.Items[0].SubItems[2].Text = opt.IS0.ToString();
 			ParamsListViewer.Items[1].SubItems[1].Text = opt.F0.ToString();
 			ParamsListViewer.Items[1].SubItems[2].Text = opt.F0.ToString();
-			ParamsListViewer.Items[2].SubItems[1].Text = opt.R00.ToString();
-			ParamsListViewer.Items[2].SubItems[2].Text = opt.R00.ToString();
+			ParamsListViewer.Items[2].SubItems[1].Text = opt.R0.ToString();
+			ParamsListViewer.Items[2].SubItems[2].Text = opt.R0.ToString();
 			label1.Text = opt.Z.ToString();
 
 			initErr.Text = obj.initErr().ToString();
@@ -134,8 +136,8 @@ namespace Метод_случайного_спуска
 			ParamsListViewer.Items[0].SubItems[2].Text = opt.IS0.ToString();
 			ParamsListViewer.Items[1].SubItems[1].Text = opt.F0.ToString();
 			ParamsListViewer.Items[1].SubItems[2].Text = opt.F0.ToString();
-			ParamsListViewer.Items[2].SubItems[1].Text = opt.R00.ToString();
-			ParamsListViewer.Items[2].SubItems[2].Text = opt.R00.ToString();
+			ParamsListViewer.Items[2].SubItems[1].Text = opt.R0.ToString();
+			ParamsListViewer.Items[2].SubItems[2].Text = opt.R0.ToString();
 			ParamsListViewer.Items[3].SubItems[1].Text = opt.IKF0.ToString();
 			ParamsListViewer.Items[3].SubItems[2].Text = opt.IKF0.ToString();
 			label1.Text = opt.Z.ToString();
@@ -397,5 +399,71 @@ namespace Метод_случайного_спуска
 		}
 
 		#endregion
+
+		private void IsToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			double[] Is = obj.DISY();
+			int length = Is.Length;
+			int step = 0;
+			double[] x = new double[2000];
+			double[] y = new double[2000];
+
+			if(length > 2000)
+			{
+				step = length / 2000;
+				for(int i = 0; i < 2000; i += 1)
+				{
+					x[i] = i*step;
+					y[i] = Is[i * step];
+				}
+
+			}
+			else
+			{
+				x = new double[length];
+				for (int i = 0; i < x.Length; i++) { x[i] = i; }
+				y = Is;
+			}
+
+
+			Graph graph = new Graph(x, y, "dIs от n", "n", "Is", graphs)
+			{
+				Owner = this
+			};
+			graph.Show();
+			graphs.Add(graph);
+		}
+		private void FiToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			double[] fi = obj.DFY();
+			int length = fi.Length;
+			int step = 0;
+			double[] x = new double[2000];
+			double[] y = new double[2000];
+
+			if (length > 2000)
+			{
+				step = length / 2000;
+				for (int i = 0; i < 2000; i += 1)
+				{
+					x[i] = i * step;
+					y[i] = fi[i * step];
+				}
+
+			}
+			else
+			{
+				x = new double[length];
+				for (int i = 0; i < x.Length; i++) { x[i] = i; }
+				y = fi;
+			}
+
+			Graph graph = new Graph(x, y, "dFi от n", "n", "Fi", graphs)
+			{
+				Owner = this
+			};
+			graph.Show();
+			graphs.Add(graph);
+		}
 	}
 }

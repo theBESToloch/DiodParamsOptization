@@ -47,17 +47,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="generators\Distribution.cs" />
+    <Compile Include="Domain\OptimizeParams.cs" />
+    <Compile Include="generators\RandomEngine.cs" />
+    <Compile Include="generators\DistributionModel\Distribution.cs" />
     <Compile Include="generators\ExceptionMessages.Designer.cs" />
     <Compile Include="generators\Generator.cs" />
-    <Compile Include="optimize4Params.cs" />
+    <Compile Include="Model\optimize4Params.cs" />
     <Compile Include="OptimizeIntrface.cs" />
-    <Compile Include="optimize2Params.cs" />
-    <Compile Include="generators\NormalDistribution.cs" />
-    <Compile Include="optimize3Params.cs" />
-    <Compile Include="optimizeParams_Fi.cs" />
+    <Compile Include="Model\optimize2Params.cs" />
+    <Compile Include="generators\DistributionModel\NormalDistribution.cs" />
+    <Compile Include="Model\optimize3Params.cs" />
+    <Compile Include="Domain\OptimizeParam.cs" />
+    <Compile Include="Model\optimizeParams_Fi2.cs" />
+    <Compile Include="Model\optimizeParams_Fi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="generators\StandardGenerator.cs" />
+    <Compile Include="generators\DistributionModel\StandardGenerator.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -70,5 +74,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -10,14 +10,12 @@ namespace RandomDescent
 		#region Поля
 
 		private int nStep;
+
 		double z = 0;
 		int len = 0;
 
 		private double[] I, U;
 
-		private double Is0;
-		private double f0;
-		private double R0;
 
 		List<double> ISy;
 		List<double> fy;
@@ -27,19 +25,14 @@ namespace RandomDescent
 		List<double> dIsy;
 		List<double> dRy;
 
-
 		List<double> Sy;
 		List<double> y;
 
-		double
-			df0 = 0, df = 0, f = 0,
-			dIs0 = 0, dIs = 0, Is = 0,
-			dR0 = 0, dR = 0, R = 0;
+		double c = 0, Id = 0, S = 0;
 
-		double
-			c = 0,
-			Id = 0, S = 0;
-
+		OptimizeParam Is;
+		OptimizeParam f;
+		OptimizeParam R;
 		#endregion
 
 		#region Свойства
@@ -64,15 +57,9 @@ namespace RandomDescent
 			get { return ISy; }
 		}
 
-		public double[] DISY
+		public double[] DISY()
 		{
-			get { return dIsy.ToArray(); }
-		}
-
-		public double IS0
-		{
-			get { return Is0; }
-			set { Is0 = value; }
+			return dIsy.ToArray();
 		}
 
 		public List<double> FY
@@ -80,15 +67,9 @@ namespace RandomDescent
 			get { return fy; }
 		}
 
-		public double[] DFY
+		public double[] DFY()
 		{
-			get { return dfy.ToArray(); }
-		}
-
-		public double F0
-		{
-			get { return f0; }
-			set { f0 = value; }
+			return dfy.ToArray();
 		}
 
 		public List<double> RY
@@ -101,11 +82,10 @@ namespace RandomDescent
 			get { return dRy.ToArray(); }
 		}
 
-		public double R00
-		{
-			get { return R0; }
-			set { R0 = value; }
-		}
+
+		public object IS0 { get { return Is.Value; } }
+		public object F0 { get { return f.Value; } }
+		public object R0 { get { return R.Value; } }
 
 		#endregion
 
@@ -123,10 +103,12 @@ namespace RandomDescent
 			dIsy = new List<double>();
 			dRy = new List<double>();
 
-
 			Sy = new List<double>();
 			y = new List<double>();
 
+			this.Is = new OptimizeParam(Is, Is / 100);
+			this.f = new OptimizeParam(f, f / 100);
+			this.R = new OptimizeParam(R, R / 100);
 
 			// Загрузка данных
 			this.I = I;
@@ -134,88 +116,77 @@ namespace RandomDescent
 			len = I.Length;
 
 			this.nStep = nStep;
-			this.Is0 = Is;
-			this.f0 = f;
-			this.R0 = R;
 
-			this.Is = Is;
-			this.f = f;
-			this.R = R;
 
-			df = f0 / 100;
-			dIs = Is0 / 100;
-			dR = R0 / 100;
-
-			df0 = df;
-			dIs0 = dIs;
-			dR0 = dR;
-
-			c = 0;
-			for (int i = 0; i < len; i++)
-			{
-				Id = Is0 * (Math.Exp((U[i] - R0*I[i]) / f0) - 1);
-				c += Math.Abs((I[i] - Id) / I[i]);
-			}
+			c = CalculationError(Is, f, R);
 			initEr = c;
 		}
 
 		// сам спуск - простейший
 		public void doOptimize()
 		{
-			Random rnd = new Random();
 			z = 0;
-
-			Sy.Clear();
-			y.Clear();
 
 			// Основной цикл
 			for (double i = 0; i < nStep - 1; i++)
 			{
-				f = Math.Abs(f0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * df);
-				Is = Math.Abs(Is0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dIs);
-				R = Math.Abs(R0 + Math.Pow((rnd.Next(200) * 0.01 - 1), 3) * dR);
-				normalizeParams(f - f0, df, Is - Is0, dIs, R - R0, dR);
-				S = 0;
+				normalizeParams();
 
-				for (int j = 0; j < len; j++)
-				{
-					Id = Is * (Math.Exp((U[j]-R*I[j]) / f) - 1);
-					S += Math.Abs((I[j] - Id) / I[j]);
-				}
+				S = CalculationError(Is.GetNewValue(), f.GetNewValue(), R.GetNewValue());
+
 				// условие
 				if (S < c)
 				{
 					c = S;
 
-					Is0 = Is;
-					f0 = f;
-					R0 = R;
+					Is.InitValue();
+					f.InitValue();
+					R.InitValue();
 
 					y.Add(i);
 					Sy.Add(S);
-					ISy.Add(Is0);
-					fy.Add(f);
-					Ry.Add(R);
-
+					ISy.Add(Is.CurrentValue);
+					fy.Add(f.CurrentValue);
+					Ry.Add(R.CurrentValue);
 					z++;
 				}
+				else
+				{
+					Is.MissValues();
+					f.MissValues();
+					R.MissValues();
+				}
+				dfy.Add(f.Range);
+				dIsy.Add(Is.Range);
+				dRy.Add(R.Range);
 			}
 			y.Add(nStep);
 			Sy.Add(c);
-			ISy.Add(Is);
-			fy.Add(f0);
-			Ry.Add(R0);
+			ISy.Add(Is.Value);
+			fy.Add(f.Value);
+			Ry.Add(R.Value);
 			er = c;
 		}
 
-		private void normalizeParams(double _f, double df, double _Is, double dIs, double _R, double dR)
+		double CalculationError(double Is, double f, double R)
 		{
-			double LenghtVector = Math.Abs(_f / df) + Math.Abs(_Is / dIs) + Math.Abs(_R / dR);
+			double S = 0;
+			for (int j = 0; j < I.Length; j++)
+			{
+				Id = Is * (Math.Exp(U[j] / f - R * I[j]) - 1);
+				S += Math.Abs((I[j] - Id) / I[j]);
+			}
+			return S;
+		}
+
+		private void normalizeParams()
+		{
+			double LenghtVector = Math.Abs(f.Vector) + Math.Abs(Is.Vector) + Math.Abs(R.Vector);
 			if (LenghtVector > 1)
 			{
-				f = f0 + _f / LenghtVector;
-				Is = Is0 + _Is  / LenghtVector;
-				R = R0 + _R  / LenghtVector;
+				f.CurrentValue += f.Value + f.Vector * f.Range / LenghtVector;
+				Is.CurrentValue += Is.Value + Is.Vector * Is.Range / LenghtVector;
+				R.CurrentValue += R.Value + R.Vector * R.Range / LenghtVector;
 			}
 		}
 
@@ -231,18 +202,18 @@ namespace RandomDescent
 		}
 
 		double[] UU_;
-		private void getVAX()
+		private void initVAX()
 		{
 			UU_ = new double[U.Length];
 			for (int i = 0; i < U.Length; i++)
 			{
-				UU_[i] = f * Math.Log((I[i] / Is) + 1) + R*I[i];
+				UU_[i] = f.Value * Math.Log((I[i] / Is.Value) + 1) + R.Value * I[i];
 			}
 		}
 
 		public double[] getMassU()
 		{
-			getVAX();
+			initVAX();
 			return UU_;
 		}
 		public double[] getMassI()
@@ -268,9 +239,9 @@ namespace RandomDescent
 			double VD = U[0];
 			for (int i = 0; i < I.Length; i++)
 			{
-				VD = _VD(U[i], Is, f, 1000, R, U[i]-R*I[i]);
+				VD = _VD(U[i], Is.Value, f.Value, 1000, R.Value, U[i] - R.Value * I[i]);
 
-				I_err[i] = (I[i] - Is * (Math.Exp(VD / f) - 1));
+				I_err[i] = (I[i] - Is.Value * (Math.Exp(VD / f.Value) - 1));
 
 				SCO_absolut += Math.Pow((I_err[i]), 2);
 				SCO_relative += Math.Pow(I_err[i] / I[i], 2);
@@ -299,7 +270,7 @@ namespace RandomDescent
 
 			for (int i = 0; i < U.Length; i++)
 			{
-				U_err[i] = U[i] - Math.Log(I[i] / Is + 1) * f - R*I[i];
+				U_err[i] = U[i] - Math.Log(I[i] / Is.Value + 1) * f.Value - R.Value * I[i];
 
 				SCO_absolut += Math.Pow(U_err[i], 2);
 				SCO_relative += Math.Pow(U_err[i] / U[i], 2);

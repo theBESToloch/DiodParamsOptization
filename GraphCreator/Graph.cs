@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using ZedGraph;
 
@@ -116,9 +117,9 @@ namespace GraphCreator
 		{
 			Graph[] graphsAr = graphs.ToArray();
 
-			for(int i = 0; i < graphsAr.Length; i++)
+			for (int i = 0; i < graphsAr.Length; i++)
 			{
-				if(graphsAr[i].combine == true)
+				if (graphsAr[i].combine == true)
 				{
 					charts.AddRange(graphsAr[i].charts);
 					graphs.RemoveAt(i);
@@ -137,6 +138,39 @@ namespace GraphCreator
 			for (int i = 0; i < chartsAr.Length; i++)
 			{
 				Graff(chartsAr[i].X, chartsAr[i].Y, chartsAr[i].Title, chartsAr[i].XL, chartsAr[i].YL, Color.FromArgb(ran.Next(255), ran.Next(255), ran.Next(255)));
+			}
+		}
+
+		private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+			String Path = "";
+
+			if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+			{
+				Path = folderBrowserDialog.SelectedPath;
+			}
+			for (int i = 0; i < charts.Count; i++)
+				WriteArray(Path + "\\" + (i + 1) + " ", charts[i].X, charts[i].Y);
+
+		}
+
+		void WriteArray(string path, double[] array1, double[] array2)
+		{
+			using (StreamWriter sw = new StreamWriter(path + DateTime.Now.ToString().Replace(".", "-").Replace(":", "-") + ".txt", false))
+			{
+				sw.WriteLine(array1.Length);
+
+				string[] line = new string[array1.Length],
+						 line1 = new string[array2.Length];
+
+				for (int i = 0; i < array1.Length; i++)
+				{
+					line[i] = array1[i].ToString();
+					line1[i] = array2[i].ToString();
+				}
+				sw.WriteLine(String.Join(" ", line));
+				sw.WriteLine(String.Join(" ", line1));
 			}
 		}
 

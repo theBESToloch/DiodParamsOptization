@@ -25,5 +25,9 @@ namespace RandomDescent
 
 		double initErr();
 		double optimizeErr();
+
+		double[] DFY();
+		double[] DISY();
+
 	}
 }
