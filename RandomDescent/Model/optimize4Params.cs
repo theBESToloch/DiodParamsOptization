@@ -69,6 +69,8 @@ namespace RandomDescent
 		{
 			return dIsy.ToArray();
 		}
+
+		public double[] Error() { return Sy.ToArray(); }
 		#endregion
 
 		public Optimize4Params(double[] I, double[] U, int nStep, double Is, double f, double R, double IKF)

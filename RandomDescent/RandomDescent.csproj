@@ -58,7 +58,6 @@
     <Compile Include="generators\DistributionModel\NormalDistribution.cs" />
     <Compile Include="Model\optimize3Params.cs" />
     <Compile Include="Domain\OptimizeParam.cs" />
-    <Compile Include="Model\optimizeParams_Fi2.cs" />
     <Compile Include="Model\optimizeParams_Fi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="generators\DistributionModel\StandardGenerator.cs" />

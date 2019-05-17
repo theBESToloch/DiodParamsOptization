@@ -118,7 +118,8 @@ namespace Метод_случайного_спуска
 
 		private void OptimizeFourParamsModel()
 		{
-			obj = new Optimize4Params(VAX.I, VAX.U,
+			if (!(obj != null && obj.GetType() == typeof(Optimize4Params)))
+				obj = new Optimize4Params(VAX.I, VAX.U,
 				Convert.ToInt32(nSteps.Text),
 				Convert.ToDouble(ParamsListViewer.Items[0].SubItems[2].Text.Replace(".", ",")),
 				Convert.ToDouble(ParamsListViewer.Items[1].SubItems[2].Text.Replace(".", ",")),
@@ -148,7 +149,8 @@ namespace Метод_случайного_спуска
 
 		private void OptimizeFiParamsModel()
 		{
-			obj = new OptimizeParams_Fi(VAX.I, VAX.U,
+			if (!(obj != null && obj.GetType() == typeof(OptimizeParams_Fi)))
+				obj = new OptimizeParams_Fi(VAX.I, VAX.U,
 				Convert.ToInt32(nSteps.Text),
 				Convert.ToDouble(ParamsListViewer.Items[0].SubItems[2].Text.Replace(".", ",")),
 				Convert.ToDouble(ParamsListViewer.Items[1].SubItems[2].Text.Replace(".", ",")),
@@ -173,8 +175,8 @@ namespace Метод_случайного_спуска
 			ParamsListViewer.Items[0].SubItems[2].Text = opt.IS0.ToString();
 			ParamsListViewer.Items[1].SubItems[1].Text = opt.F0.ToString();
 			ParamsListViewer.Items[1].SubItems[2].Text = opt.F0.ToString();
-			ParamsListViewer.Items[2].SubItems[1].Text = opt.R00.ToString();
-			ParamsListViewer.Items[2].SubItems[2].Text = opt.R00.ToString();
+			ParamsListViewer.Items[2].SubItems[1].Text = opt.R0.ToString();
+			ParamsListViewer.Items[2].SubItems[2].Text = opt.R0.ToString();
 			ParamsListViewer.Items[3].SubItems[1].Text = opt.IKF0.ToString();
 			ParamsListViewer.Items[3].SubItems[2].Text = opt.IKF0.ToString();
 
@@ -456,6 +458,38 @@ namespace Метод_случайного_спуска
 				x = new double[length];
 				for (int i = 0; i < x.Length; i++) { x[i] = i; }
 				y = fi;
+			}
+
+			Graph graph = new Graph(x, y, "dFi от n", "n", "Fi", graphs)
+			{
+				Owner = this
+			};
+			graph.Show();
+			graphs.Add(graph);
+		}
+		private void syToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			double[] S = obj.Error();
+			int length = S.Length;
+			int step = 0;
+			double[] x = new double[2000];
+			double[] y = new double[2000];
+
+			if (length > 2000)
+			{
+				step = length / 2000;
+				for (int i = 0; i < 2000; i += 1)
+				{
+					x[i] = i * step;
+					y[i] = S[i * step];
+				}
+
+			}
+			else
+			{
+				x = new double[length];
+				for (int i = 0; i < x.Length; i++) { x[i] = i; }
+				y = S;
 			}
 
 			Graph graph = new Graph(x, y, "dFi от n", "n", "Fi", graphs)

@@ -69,8 +69,8 @@ namespace RandomDescent
 			return dfy.ToArray();
 		}
 
-		public object IS0 { get { return Is.Value; } }
-		public object F0 { get { return f.Value; } }
+		public double IS0 { get { return Is.Value; } }
+		public double F0 { get { return f.Value; } }
 
 		public double initErr()
 		{
@@ -80,6 +80,8 @@ namespace RandomDescent
 		{
 			return er;
 		}
+
+		public double[] Error() { return Sy.ToArray(); }
 
 		#endregion
 

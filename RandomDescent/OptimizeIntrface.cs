@@ -28,6 +28,7 @@ namespace RandomDescent
 
 		double[] DFY();
 		double[] DISY();
+		double[] Error();
 
 	}
 }
