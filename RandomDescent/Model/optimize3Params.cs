@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace RandomDescent
 {
@@ -87,11 +85,17 @@ namespace RandomDescent
 		public double F0 { get { return f.Value; } }
 		public double R0 { get { return R.Value; } }
 		public double[] Error() { return Sy.ToArray(); }
+
+		public double initErr()
+		{
+			return initEr;
+		}
+		public double optimizeErr()
+		{
+			return er;
+		}
 		#endregion
 
-		#region методы
-
-		// Конструктор
 		public Optimize3Params(double[] I, double[] U, int nStep, double Is, double f, double R)
 		{
 
@@ -122,7 +126,7 @@ namespace RandomDescent
 			initEr = c;
 		}
 
-		// сам спуск - простейший
+		#region методы
 		public void doOptimize()
 		{
 			z = 0;
@@ -173,7 +177,7 @@ namespace RandomDescent
 			double S = 0;
 			for (int j = 0; j < I.Length; j++)
 			{
-				Id = Is * (Math.Exp(U[j] / f - R * I[j]) - 1);
+				Id = Is * (Math.Exp((U[j] - R * I[j]) / f) - 1);
 				S += Math.Abs((I[j] - Id) / I[j]);
 			}
 			return S;
@@ -192,15 +196,7 @@ namespace RandomDescent
 
 		private double initEr = 0, er = 0;
 
-		public double initErr()
-		{
-			return initEr;
-		}
-		public double optimizeErr()
-		{
-			return er;
-		}
-
+		#region инициализация ВАХ
 		double[] UU_;
 		private void initVAX()
 		{
@@ -220,7 +216,9 @@ namespace RandomDescent
 		{
 			return I;
 		}
+		#endregion
 
+		#region рассчет погрешностей
 		double SCO_ABS_cur, SCO_REL_cur;
 		public double getSCO_ABS_cur()
 		{
@@ -229,27 +227,6 @@ namespace RandomDescent
 		public double getSCO_REL_cur()
 		{
 			return SCO_REL_cur;
-		}
-		double[] I_err;
-		public double[] inaccuracyOfCUrrent()
-		{
-			I_err = new double[I.Length];
-			double SCO_absolut = 0;
-			double SCO_relative = 0;
-			double VD = U[0];
-			for (int i = 0; i < I.Length; i++)
-			{
-				VD = _VD(U[i], Is.Value, f.Value, 1000, R.Value, U[i] - R.Value * I[i]);
-
-				I_err[i] = (I[i] - Is.Value * (Math.Exp(VD / f.Value) - 1));
-
-				SCO_absolut += Math.Pow((I_err[i]), 2);
-				SCO_relative += Math.Pow(I_err[i] / I[i], 2);
-				I_err[i] = (I_err[i] / I[i]) * 100;
-			}
-			SCO_ABS_cur = Math.Sqrt(SCO_absolut / (I_err.Length - 1));
-			SCO_REL_cur = Math.Sqrt(SCO_relative / (I_err.Length - 1));
-			return I_err;
 		}
 
 		double SCO_ABS_vol, SCO_REL_vol;
@@ -261,6 +238,30 @@ namespace RandomDescent
 		{
 			return SCO_REL_vol;
 		}
+
+		double[] I_err;
+		public double[] inaccuracyOfCUrrent()
+		{
+			I_err = new double[I.Length];
+			double SCO_absolut = 0;
+			double SCO_relative = 0;
+			double VD = U[0];
+
+			for (int i = 0; i < I.Length; i++)
+			{
+				VD = _VD(U[i], Is.Value, f.Value, 1000, R.Value, VD);
+
+				I_err[i] = I[i] - Is.Value * (Math.Exp(VD / f.Value) - 1);
+
+				SCO_absolut += Math.Pow(I_err[i], 2);
+				SCO_relative += Math.Pow(I_err[i] / I[i], 2);
+				I_err[i] = (I_err[i] / I[i]) * 100;
+			}
+			SCO_ABS_cur = Math.Sqrt(SCO_absolut / (I_err.Length - 1));
+			SCO_REL_cur = Math.Sqrt(SCO_relative / (I_err.Length - 1));
+			return I_err;
+		}
+
 		double[] U_err;
 		public double[] inaccuracyOfVoltage()
 		{
@@ -281,8 +282,6 @@ namespace RandomDescent
 			return U_err;
 		}
 
-
-
 		//падение напряжения на диоде
 		private double _VD(double UU, double Is, double f, double IK, double R, double VD)
 		{
@@ -301,7 +300,7 @@ namespace RandomDescent
 			}
 			return VD;
 		}
-
 		#endregion
+#endregion
 	}
 }
