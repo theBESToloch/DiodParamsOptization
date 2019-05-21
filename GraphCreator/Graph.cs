@@ -76,9 +76,9 @@ namespace GraphCreator
 			GraphPanel.GraphPane.YAxis.Title.Text = yL;
 			GraphPanel.GraphPane.Title.Text = "";
 			GraphPanel.GraphPane.AddCurve(titel, x1, y1, col, SymbolType.None);
-			LineItem myCurve = GraphPanel.GraphPane.AddCurve("", x1, y1, col);
-			myCurve.Line.Width = 5;
-			myCurve.Symbol.Fill.Color = col;
+			/*LineItem myCurve = GraphPanel.GraphPane.AddCurve("", x1, y1, col);
+			myCurve.Line.Width = 1;
+			myCurve.Symbol.Fill.Color = col;*/
 			GraphPanel.GraphPane.XAxis.MajorGrid.IsVisible = true;
 			GraphPanel.GraphPane.YAxis.MajorGrid.IsVisible = true;
 			GraphPanel.AxisChange();
@@ -87,7 +87,6 @@ namespace GraphCreator
 
 		void Graff(double[] x1, double[] y1, string titel, string xL, string yL)
 		{
-
 			Color color = Color.FromArgb(0, 0, 0);
 			GraphPanel.IsShowPointValues = true;
 			GraphPanel.GraphPane.XAxis.Title.Text = xL;

@@ -5,11 +5,9 @@ using System.Text;
 
 namespace RandomDescent
 {
-	public class Optimize3Params : Optimize
+	public class Optimize3Params : IOptimize, IVAX, IInaccuracy
 	{
 		#region Поля
-
-		private int nStep;
 
 		double z = 0;
 		int len = 0;
@@ -47,11 +45,6 @@ namespace RandomDescent
 			get { return Sy; }
 		}
 
-		public List<double> Y
-		{
-			get { return y; }
-		}
-
 		public List<double> ISY
 		{
 			get { return ISy; }
@@ -87,12 +80,11 @@ namespace RandomDescent
 		public double F0 { get { return f.Value; } }
 		public double R0 { get { return R.Value; } }
 		public double[] Error() { return Sy.ToArray(); }
+		public double[] Y() { return y.ToArray(); }
 		#endregion
 
-		#region методы
-
 		// Конструктор
-		public Optimize3Params(double[] I, double[] U, int nStep, double Is, double f, double R)
+		public Optimize3Params(double[] I, double[] U, double Is, double f, double R)
 		{
 
 			ISy = new List<double>();
@@ -115,22 +107,20 @@ namespace RandomDescent
 			this.U = U;
 			len = I.Length;
 
-			this.nStep = nStep;
-
 
 			c = CalculationError(Is, f, R);
-			initEr = c;
+			InitEr = c;
 		}
 
-		// сам спуск - простейший
-		public void doOptimize()
+		#region методы
+		public void DoOptimize(int nStep)
 		{
 			z = 0;
 
 			// Основной цикл
 			for (double i = 0; i < nStep - 1; i++)
 			{
-				normalizeParams();
+				NormalizeParams();
 
 				S = CalculationError(Is.GetNewValue(), f.GetNewValue(), R.GetNewValue());
 
@@ -165,7 +155,22 @@ namespace RandomDescent
 			ISy.Add(Is.Value);
 			fy.Add(f.Value);
 			Ry.Add(R.Value);
-			er = c;
+			Er = c;
+		}
+
+		public void DoOptimizeUniform(int n)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void DoOptimizeUniformAndNormalize(int n)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void DoOptimizeAndNormalize(int n)
+		{
+			throw new NotImplementedException();
 		}
 
 		double CalculationError(double Is, double f, double R)
@@ -179,7 +184,7 @@ namespace RandomDescent
 			return S;
 		}
 
-		private void normalizeParams()
+		private void NormalizeParams()
 		{
 			double LenghtVector = Math.Abs(f.Vector) + Math.Abs(Is.Vector) + Math.Abs(R.Vector);
 			if (LenghtVector > 1)
@@ -190,19 +195,20 @@ namespace RandomDescent
 			}
 		}
 
-		private double initEr = 0, er = 0;
+		private double InitEr = 0, Er = 0;
 
-		public double initErr()
+		public double InitErr()
 		{
-			return initEr;
+			return InitEr;
 		}
-		public double optimizeErr()
+		public double OptimizeErr()
 		{
-			return er;
+			return Er;
 		}
 
+		#region инициализация ВАХ
 		double[] UU_;
-		private void initVAX()
+		private void InitVAX()
 		{
 			UU_ = new double[U.Length];
 			for (int i = 0; i < U.Length; i++)
@@ -211,27 +217,29 @@ namespace RandomDescent
 			}
 		}
 
-		public double[] getMassU()
+		public double[] GetU()
 		{
-			initVAX();
+			InitVAX();
 			return UU_;
 		}
-		public double[] getMassI()
+		public double[] GetI()
 		{
 			return I;
 		}
+		#endregion
 
+		#region рассчет погрешностей
 		double SCO_ABS_cur, SCO_REL_cur;
-		public double getSCO_ABS_cur()
+		public double GetSCO_ABS_cur()
 		{
 			return SCO_ABS_cur;
 		}
-		public double getSCO_REL_cur()
+		public double GetSCO_REL_cur()
 		{
 			return SCO_REL_cur;
 		}
 		double[] I_err;
-		public double[] inaccuracyOfCUrrent()
+		public double[] InaccuracyOfCUrrent()
 		{
 			I_err = new double[I.Length];
 			double SCO_absolut = 0;
@@ -252,17 +260,18 @@ namespace RandomDescent
 			return I_err;
 		}
 
+	
 		double SCO_ABS_vol, SCO_REL_vol;
-		public double getSCO_ABS_vol()
+		public double GetSCO_ABS_vol()
 		{
 			return SCO_ABS_vol;
 		}
-		public double getSCO_REL_vol()
+		public double GetSCO_REL_vol()
 		{
 			return SCO_REL_vol;
 		}
 		double[] U_err;
-		public double[] inaccuracyOfVoltage()
+		public double[] InaccuracyOfVoltage()
 		{
 			U_err = new double[U.Length];
 			double SCO_absolut = 0;
@@ -280,8 +289,6 @@ namespace RandomDescent
 			SCO_REL_vol = Math.Sqrt(SCO_relative / (U_err.Length - 1));
 			return U_err;
 		}
-
-
 
 		//падение напряжения на диоде
 		private double _VD(double UU, double Is, double f, double IK, double R, double VD)
@@ -301,7 +308,7 @@ namespace RandomDescent
 			}
 			return VD;
 		}
-
+		#endregion
 		#endregion
 	}
 }

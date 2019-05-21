@@ -5,30 +5,18 @@ using System.Text;
 
 namespace RandomDescent
 {
-	public interface Optimize
+	public interface IOptimize
 	{
-		void doOptimize();
+		void DoOptimize(int n);
+		void DoOptimizeUniform(int n);
+		void DoOptimizeUniformAndNormalize(int n);
+		void DoOptimizeAndNormalize(int n);
 
-		double[] getMassI();
+		double OptimizeErr();
 
-		double[] getMassU();
-
-
-		double[] inaccuracyOfVoltage();
-		double getSCO_REL_vol();
-		double getSCO_ABS_vol();
-
-
-		double[] inaccuracyOfCUrrent();
-		double getSCO_ABS_cur();
-		double getSCO_REL_cur();
-
-		double initErr();
-		double optimizeErr();
-
-		double[] DFY();
-		double[] DISY();
 		double[] Error();
+		double[] Y();
+
 
 	}
 }

@@ -3,12 +3,10 @@ using System.Collections.Generic;
 
 namespace RandomDescent
 {
-	public class Optimize2Params : Optimize
+	public class Optimize2Params : IOptimize, IVAX, IInaccuracy
 	{
 
 		#region Поля
-
-		private int nStep; // кол-во шагов
 
 		double z = 0;
 		int len = 0;
@@ -26,7 +24,7 @@ namespace RandomDescent
 		List<double> y;
 
 		private double c = 0, Id = 0, S = 0;
-		private double initEr = 0, er = 0;
+		private double InitEr = 0, Er = 0;
 
 		OptimizeParam Is;
 		OptimizeParam f;
@@ -37,16 +35,6 @@ namespace RandomDescent
 		public double Z
 		{
 			get { return z; }
-		}
-
-		public List<double> SY
-		{
-			get { return Sy; }
-		}
-
-		public List<double> Y
-		{
-			get { return y; }
 		}
 
 		public List<double> ISY
@@ -72,20 +60,20 @@ namespace RandomDescent
 		public double IS0 { get { return Is.Value; } }
 		public double F0 { get { return f.Value; } }
 
-		public double initErr()
+		public double InitErr()
 		{
-			return initEr;
+			return InitEr;
 		}
-		public double optimizeErr()
+		public double OptimizeErr()
 		{
-			return er;
+			return Er;
 		}
 
 		public double[] Error() { return Sy.ToArray(); }
-
+		public double[] Y() { return y.ToArray(); }
 		#endregion
 
-		public Optimize2Params(double[] I, double[] U, int nStep, double Is, double f)
+		public Optimize2Params(double[] I, double[] U, double Is, double f)
 		{
 			ISy = new List<double>();
 			fy = new List<double>();
@@ -104,24 +92,25 @@ namespace RandomDescent
 			this.U = U;
 			len = I.Length;
 
-			this.nStep = nStep;
-
 			c = CalculationError(Is, f);
-			initEr = c;
+			InitEr = c;
+			Sy.Add(c);
 		}
 		
 		#region методы
-		public void doOptimize()
+		public void DoOptimize(int nStep)
 		{
+			double step = y.Count != 0 ? y[y.Count - 1] : 0; 
 			z = 0;
 
 			// Основной цикл
-			for (double i = 0; i < nStep - 1; i++)
+			for (int i = 0; i < nStep; i++)
 			{
 
-				NormalizeParams();
+				Is.GetNewValue();
+				f.GetNewValue();
 
-				S = CalculationError(Is.GetNewValue(), f.GetNewValue());
+				S = CalculationError(Is.CurrentValue, f.CurrentValue);
 
 				// условие
 				if (S < c)
@@ -130,7 +119,50 @@ namespace RandomDescent
 					Is.InitValue();
 					f.InitValue();
 
-					y.Add(i);
+					y.Add(step+i);
+					Sy.Add(S);
+
+					ISy.Add(Is.CurrentValue);
+					fy.Add(f.CurrentValue);
+					z++;
+				}
+				else
+				{
+					Is.MissValues();
+					f.MissValues();
+				}
+				dfy.Add(f.Range);
+				dIsy.Add(Is.Range);
+			}
+			y.Add(step+nStep);
+			Sy.Add(c);
+			ISy.Add(Is.Value);
+			fy.Add(f.Value);
+			Er = c;
+		}
+
+		public void DoOptimizeUniform(int nStep)
+		{
+			double step = y.Count != 0 ? y[y.Count - 1] : 0;
+			z = 0;
+
+			// Основной цикл
+			for (int i = 0; i < nStep - 1; i++)
+			{
+
+				Is.GetNewValueUniform();
+				f.GetNewValueUniform();
+
+				S = CalculationError(Is.CurrentValue, f.CurrentValue);
+
+				// условие
+				if (S < c)
+				{
+					c = S;
+					Is.InitValue();
+					f.InitValue();
+
+					y.Add(step+ i);
 					Sy.Add(S);
 					ISy.Add(Is.CurrentValue);
 					fy.Add(f.CurrentValue);
@@ -144,11 +176,98 @@ namespace RandomDescent
 				dfy.Add(f.Range);
 				dIsy.Add(Is.Range);
 			}
-			y.Add(nStep);
+			y.Add(step+nStep);
 			Sy.Add(c);
 			ISy.Add(Is.Value);
 			fy.Add(f.Value);
-			er = c;
+			Er = c;
+		}
+
+		public void DoOptimizeUniformAndNormalize(int nStep)
+		{
+			double step = y.Count != 0 ? y[y.Count - 1] : 0;
+			z = 0;
+
+			// Основной цикл
+			for (int i = 0; i < nStep - 1; i++)
+			{
+
+				Is.GetNewValueUniform();
+				f.GetNewValueUniform();
+				NormalizeParams();
+
+				S = CalculationError(Is.CurrentValue, f.CurrentValue);
+
+				// условие
+				if (S < c)
+				{
+					c = S;
+					Is.InitValue();
+					f.InitValue();
+
+					y.Add(step+i);
+					Sy.Add(S);
+					ISy.Add(Is.CurrentValue);
+					fy.Add(f.CurrentValue);
+					z++;
+				}
+				else
+				{
+					Is.MissValues();
+					f.MissValues();
+				}
+				dfy.Add(f.Range);
+				dIsy.Add(Is.Range);
+			}
+			y.Add(step+nStep);
+			Sy.Add(c);
+			ISy.Add(Is.Value);
+			fy.Add(f.Value);
+			Er = c;
+		}
+
+		public void DoOptimizeAndNormalize(int nStep)
+		{
+			double step = y.Count != 0 ? y[y.Count - 1] : 0;
+			z = 0;
+
+			// Основной цикл
+			for (int i = 0; i < nStep; i++)
+			{
+
+				Is.GetNewValue();
+				f.GetNewValue();
+				NormalizeParams();
+
+				S = CalculationError(Is.CurrentValue, f.CurrentValue);
+
+				// условие
+				if (S < c)
+				{
+					c = S;
+					Is.InitValue();
+					f.InitValue();
+
+					y.Add(step + i);
+					Sy.Add(S);
+
+					ISy.Add(Is.CurrentValue);
+					fy.Add(f.CurrentValue);
+					z++;
+				}
+				else
+				{
+					Is.MissValues();
+					f.MissValues();
+				}
+				dfy.Add(f.Range);
+				dIsy.Add(Is.Range);
+			}
+			y.Add(step + nStep);
+			Sy.Add(c);
+			ISy.Add(Is.Value);
+			fy.Add(f.Value);
+			Er = c;
 		}
 
 		double CalculationError(double Is, double f)
@@ -175,7 +294,7 @@ namespace RandomDescent
 		#region инициализация ВАХ
 		double[] II_;
 
-		private void initVAX()
+		private void InitVAX()
 		{
 			II_ = new double[U.Length];
 
@@ -185,41 +304,39 @@ namespace RandomDescent
 			}
 		}
 
-		public double[] getMassU()
+		public double[] GetU()
 		{
 			return U;
 		}
-		public double[] getMassI()
+		public double[] GetI()
 		{
-			initVAX();
+			InitVAX();
 			return II_;
 		}
 		#endregion
 		#region рассчет погрешностей
 		double SCO_ABS_cur, SCO_REL_cur;
-		public double getSCO_ABS_cur()
+		public double GetSCO_ABS_cur()
 		{
 			return SCO_ABS_cur;
 		}
-		public double getSCO_REL_cur()
+		public double GetSCO_REL_cur()
 		{
 			return SCO_REL_cur;
 		}
 
-
-
 		double SCO_ABS_vol, SCO_REL_vol;
-		public double getSCO_ABS_vol()
+		public double GetSCO_ABS_vol()
 		{
 			return SCO_ABS_vol;
 		}
-		public double getSCO_REL_vol()
+		public double GetSCO_REL_vol()
 		{
 			return SCO_REL_vol;
 		}
 
 		double[] I_err;
-		public double[] inaccuracyOfCUrrent()
+		public double[] InaccuracyOfCUrrent()
 		{
 			I_err = new double[I.Length];
 			double SCO_absolut = 0;
@@ -239,7 +356,7 @@ namespace RandomDescent
 		}
 
 		double[] U_err;
-		public double[] inaccuracyOfVoltage()
+		public double[] InaccuracyOfVoltage()
 		{
 			U_err = new double[U.Length];
 			double SCO_absolut = 0;

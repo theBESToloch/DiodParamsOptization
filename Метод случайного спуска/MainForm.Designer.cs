@@ -53,6 +53,8 @@ namespace Метод_случайного_спуска
 			this.рамкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.IsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.FiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.ошибкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.syToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
 			this.SCO_ABS = new System.Windows.Forms.Label();
@@ -68,8 +70,7 @@ namespace Метод_случайного_спуска
 			this.ParamName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.Value = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.approximation = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.ошибкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.syToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.OptimizeMethod = new System.Windows.Forms.TextBox();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -198,6 +199,21 @@ namespace Метод_случайного_спуска
 			this.FiToolStripMenuItem.Size = new System.Drawing.Size(82, 22);
 			this.FiToolStripMenuItem.Text = "fi";
 			this.FiToolStripMenuItem.Click += new System.EventHandler(this.FiToolStripMenuItem_Click);
+			// 
+			// ошибкаToolStripMenuItem
+			// 
+			this.ошибкаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.syToolStripMenuItem});
+			this.ошибкаToolStripMenuItem.Name = "ошибкаToolStripMenuItem";
+			this.ошибкаToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.ошибкаToolStripMenuItem.Text = "ошибка";
+			// 
+			// syToolStripMenuItem
+			// 
+			this.syToolStripMenuItem.Name = "syToolStripMenuItem";
+			this.syToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.syToolStripMenuItem.Text = "Sy";
+			this.syToolStripMenuItem.Click += new System.EventHandler(this.syToolStripMenuItem_Click);
 			// 
 			// label1
 			// 
@@ -336,20 +352,13 @@ namespace Метод_случайного_спуска
 			this.approximation.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.approximation.Width = 148;
 			// 
-			// ошибкаToolStripMenuItem
+			// OptimizeMethod
 			// 
-			this.ошибкаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.syToolStripMenuItem});
-			this.ошибкаToolStripMenuItem.Name = "ошибкаToolStripMenuItem";
-			this.ошибкаToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.ошибкаToolStripMenuItem.Text = "ошибка";
-			// 
-			// syToolStripMenuItem
-			// 
-			this.syToolStripMenuItem.Name = "syToolStripMenuItem";
-			this.syToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.syToolStripMenuItem.Text = "Sy";
-			this.syToolStripMenuItem.Click += new System.EventHandler(this.syToolStripMenuItem_Click);
+			this.OptimizeMethod.Location = new System.Drawing.Point(299, 24);
+			this.OptimizeMethod.Name = "OptimizeMethod";
+			this.OptimizeMethod.Size = new System.Drawing.Size(43, 20);
+			this.OptimizeMethod.TabIndex = 73;
+			this.OptimizeMethod.Text = "1";
 			// 
 			// MainForm
 			// 
@@ -357,6 +366,7 @@ namespace Метод_случайного_спуска
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.GhostWhite;
 			this.ClientSize = new System.Drawing.Size(440, 559);
+			this.Controls.Add(this.OptimizeMethod);
 			this.Controls.Add(this.ParamsListViewer);
 			this.Controls.Add(this.Perform);
 			this.Controls.Add(this.InitOptimizeModel);
@@ -410,5 +420,6 @@ namespace Метод_случайного_спуска
 		private System.Windows.Forms.ToolStripMenuItem FiToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem ошибкаToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem syToolStripMenuItem;
+		private System.Windows.Forms.TextBox OptimizeMethod;
 	}
 }
