@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace RandomDescent
 {
@@ -178,7 +176,7 @@ namespace RandomDescent
 			double S = 0;
 			for (int j = 0; j < I.Length; j++)
 			{
-				Id = Is * (Math.Exp(U[j] / f - R * I[j]) - 1);
+				Id = Is * (Math.Exp((U[j] - R * I[j]) / f) - 1);
 				S += Math.Abs((I[j] - Id) / I[j]);
 			}
 			return S;
@@ -238,6 +236,17 @@ namespace RandomDescent
 		{
 			return SCO_REL_cur;
 		}
+
+		double SCO_ABS_vol, SCO_REL_vol;
+		public double getSCO_ABS_vol()
+		{
+			return SCO_ABS_vol;
+		}
+		public double getSCO_REL_vol()
+		{
+			return SCO_REL_vol;
+		}
+
 		double[] I_err;
 		public double[] InaccuracyOfCUrrent()
 		{
@@ -245,13 +254,14 @@ namespace RandomDescent
 			double SCO_absolut = 0;
 			double SCO_relative = 0;
 			double VD = U[0];
+
 			for (int i = 0; i < I.Length; i++)
 			{
-				VD = _VD(U[i], Is.Value, f.Value, 1000, R.Value, U[i] - R.Value * I[i]);
+				VD = _VD(U[i], Is.Value, f.Value, 1000, R.Value, VD);
 
-				I_err[i] = (I[i] - Is.Value * (Math.Exp(VD / f.Value) - 1));
+				I_err[i] = I[i] - Is.Value * (Math.Exp(VD / f.Value) - 1);
 
-				SCO_absolut += Math.Pow((I_err[i]), 2);
+				SCO_absolut += Math.Pow(I_err[i], 2);
 				SCO_relative += Math.Pow(I_err[i] / I[i], 2);
 				I_err[i] = (I_err[i] / I[i]) * 100;
 			}

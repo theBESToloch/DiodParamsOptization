@@ -96,7 +96,7 @@ namespace RandomDescent
 			InitEr = c;
 			Sy.Add(c);
 		}
-		
+
 		#region методы
 		public void DoOptimize(int nStep)
 		{
@@ -314,6 +314,7 @@ namespace RandomDescent
 			return II_;
 		}
 		#endregion
+
 		#region рассчет погрешностей
 		double SCO_ABS_cur, SCO_REL_cur;
 		public double GetSCO_ABS_cur()
@@ -346,7 +347,7 @@ namespace RandomDescent
 			{
 				I_err[i] = I[i] - Is.Value * (Math.Exp(U[i] / f.Value) - 1);
 
-				SCO_absolut += Math.Pow((I_err[i]), 2);
+				SCO_absolut += Math.Pow(I_err[i], 2);
 				SCO_relative += Math.Pow(I_err[i] / I[i], 2);
 				I_err[i] = (I_err[i] / I[i]) * 100;
 			}
