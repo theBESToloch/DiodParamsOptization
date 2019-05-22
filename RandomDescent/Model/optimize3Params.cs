@@ -8,7 +8,6 @@ namespace RandomDescent
 		#region Поля
 
 		double z = 0;
-		int len = 0;
 
 		private double[] I, U;
 
@@ -103,7 +102,6 @@ namespace RandomDescent
 			// Загрузка данных
 			this.I = I;
 			this.U = U;
-			len = I.Length;
 
 
 			c = CalculationError(Is, f, R);
@@ -236,17 +234,6 @@ namespace RandomDescent
 		{
 			return SCO_REL_cur;
 		}
-
-		double SCO_ABS_vol, SCO_REL_vol;
-		public double getSCO_ABS_vol()
-		{
-			return SCO_ABS_vol;
-		}
-		public double getSCO_REL_vol()
-		{
-			return SCO_REL_vol;
-		}
-
 		double[] I_err;
 		public double[] InaccuracyOfCUrrent()
 		{
