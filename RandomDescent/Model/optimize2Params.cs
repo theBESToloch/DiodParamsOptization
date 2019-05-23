@@ -9,7 +9,6 @@ namespace RandomDescent
 		#region Поля
 
 		double z = 0;
-		int len = 0;
 
 		private double[] I, U;
 
@@ -90,7 +89,6 @@ namespace RandomDescent
 			// Загрузка данных
 			this.I = I;
 			this.U = U;
-			len = I.Length;
 
 			c = CalculationError(Is, f);
 			InitEr = c;

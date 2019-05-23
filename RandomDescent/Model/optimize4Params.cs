@@ -9,7 +9,6 @@ namespace RandomDescent
 		#region Поля
 
 		private double z = 0;
-		private int len = 0;
 
 		private double[] I, U;
 
@@ -91,10 +90,9 @@ namespace RandomDescent
 			// Загрузка данных
 			this.I = I;
 			this.U = U;
-			len = I.Length;
-
+			
 			c = CalculationError(Is, f, R, IKF);
-			initEr = c;
+			InitEr = c;
 		}
 
 		#region методы
@@ -106,7 +104,7 @@ namespace RandomDescent
 			// Основной цикл
 			for (double i = 0; i < nStep - 1; i++)
 			{
-				normalizeParams();
+				NormalizeParams();
 				S = CalculationError(Is.GetNewValue(), f.GetNewValue(), R.GetNewValue(), IKF.GetNewValue());
 
 				// условие
@@ -145,7 +143,7 @@ namespace RandomDescent
 			fy.Add(f.Value);
 			Ry.Add(R.Value);
 			IKFy.Add(IKF.Value);
-			er = c;
+			Er = c;
 		}
 
 		public void DoOptimizeUniform(int n)
@@ -174,7 +172,7 @@ namespace RandomDescent
 			return S;
 		}
 
-		private void normalizeParams()
+		private void NormalizeParams()
 		{
 			double LenghtVector = Math.Abs(f.Vector) + Math.Abs(Is.Vector) + Math.Abs(R.Vector) + Math.Abs(IKF.Vector);
 			if (LenghtVector > 1)
@@ -186,15 +184,15 @@ namespace RandomDescent
 			}
 		}
 
-		private double initEr = 0, er = 0;
+		private double InitEr = 0, Er = 0;
 
-		public double initErr()
+		public double InitErr()
 		{
-			return initEr;
+			return InitEr;
 		}
 		public double OptimizeErr()
 		{
-			return er;
+			return Er;
 		}
 
 		#region инициализация ВАХ
