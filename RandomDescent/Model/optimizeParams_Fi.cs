@@ -57,11 +57,11 @@ namespace RandomDescent
 		public double[] FPAR0 { get { return FPar.Value; } }
 		public double[] DFY() { return dfy.ToArray(); }
 		public double[] DISY() { return dIsy.ToArray(); }
-		public double[] Error() {return Sy.ToArray();}
-		public double[] Y() {return y.ToArray();}
+		public double[] Error() { return Sy.ToArray(); }
+		public double[] Y() { return y.ToArray(); }
 		#endregion
 
-		public OptimizeParams_Fi(double[] I, double[] U,double Is, double f, double R, double IKF, double[] FPar)
+		public OptimizeParams_Fi(double[] I, double[] U, double Is, double f, double R, double IKF, double[] FPar)
 		{
 
 			ISy = new List<double>();
@@ -97,6 +97,7 @@ namespace RandomDescent
 		#region методы
 		public void DoOptimize(int nStep)
 		{
+			double step = y.Count != 0 ? y[y.Count - 1] : 0;
 			z = 0;
 
 			// Основной цикл
@@ -119,7 +120,7 @@ namespace RandomDescent
 					FPar.InitValue();
 
 
-					y.Add(i);
+					y.Add(step + i);
 					Sy.Add(S);
 					ISy.Add(Is.CurrentValue);
 					fy.Add(f.CurrentValue);
@@ -140,7 +141,7 @@ namespace RandomDescent
 				dRy.Add(R.Range);
 				dIKFy.Add(IKF.Range);
 			}
-			y.Add(nStep);
+			y.Add(step + nStep);
 			Sy.Add(c);
 			ISy.Add(Is.Value);
 			fy.Add(f.Value);
@@ -185,7 +186,7 @@ namespace RandomDescent
 
 			//return f + FPar[0] * U * U;
 
-			return f + FPar[0]*Math.Sqrt(U * U + 1e-16) + FPar[0]*U;
+			return f + FPar[0] * Math.Sqrt(U * U + 1e-16) + FPar[0] * U;
 
 
 			//return f * (1 + FPar[0] * I + FPar[1] * Math.Pow(I, 2)) / (FPar[2] * I);

@@ -5,6 +5,10 @@ using System.IO;
 using System.Windows.Forms;
 using ZedGraph;
 
+using OxyPlot;
+using OxyPlot.Series;
+using OxyPlot.Axes;
+
 namespace GraphCreator
 {
 	public partial class Graph : Form
@@ -14,102 +18,58 @@ namespace GraphCreator
 		List<Chart> charts = new List<Chart>();
 		List<Graph> graphs;
 
-		public Graph(double[] x1, double[] y1, string titel, string xL, string yL, Color col, List<Graph> graphs)
+		public Graph(double[] x1, double[] y1, string title, string xL, string yL, List<Graph> graphs)
 		{
 			InitializeComponent();
-			Graff(x1, y1, titel, xL, yL, col);
-			Chart chart = new Chart(x1, y1, titel, xL, yL);
+			Chart chart = new Chart(x1, y1, title, xL, yL);
 			charts.Add(chart);
 			this.graphs = graphs;
+
+			var myModel = new PlotModel { Title = title };
+			this.plotView1.Model = myModel;
+
+			Plot(x1, y1, title, xL, yL);
 		}
 
-		public Graph(double[] x1, double[] y1, string titel, string xL, string yL, List<Graph> graphs)
-		{
-			InitializeComponent();
-			Graff(x1, y1, titel, xL, yL);
-			Chart chart = new Chart(x1, y1, titel, xL, yL);
-			charts.Add(chart);
-			this.graphs = graphs;
-		}
-
-		//масштаб логарифмический
 		bool press_x = false, press_y = false;
 
 		private void LogyToolStripMenuItem_Click(object sender, EventArgs e)
 		{
+			plotView1.Model.InvalidatePlot(true);
 			if (press_y == false)
 			{
-				GraphPanel.GraphPane.YAxis.Type = AxisType.Log;
+				plotView1.Model.Axes[1] = new LogarithmicAxis { Position = AxisPosition.Left };
 				press_y = true;
 			}
 			else
 			{
-				GraphPanel.GraphPane.YAxis.Type = AxisType.Linear;
+				plotView1.Model.Axes[1] = new LinearAxis { Position = AxisPosition.Left };
 				press_y = false;
 			}
-
-			GraphPanel.AxisChange();
-			GraphPanel.Invalidate();
 		}
 
 		private void LogxToolStripMenuItem_Click(object sender, EventArgs e)
 		{
+			plotView1.Model.InvalidatePlot(true);
 			if (press_x == false)
 			{
-				GraphPanel.GraphPane.XAxis.Type = AxisType.Log;
+				plotView1.Model.Axes[0] = new LogarithmicAxis { Position = AxisPosition.Bottom };
 				press_x = true;
 			}
 			else
 			{
-				GraphPanel.GraphPane.XAxis.Type = AxisType.Linear;
+				plotView1.Model.Axes[0] = new LinearAxis { Position = AxisPosition.Bottom };
 				press_x = false;
 			}
-			GraphPanel.AxisChange();
-			GraphPanel.Invalidate();
 		}
 
-		//главная функция вывода графиков
-		void Graff(double[] x1, double[] y1, string titel, string xL, string yL, Color col)
+		void Plot(double[] x1, double[] y1, string title, string xL, string yL)
 		{
-			GraphPanel.IsShowPointValues = true;
-			GraphPanel.GraphPane.XAxis.Title.Text = xL;
-			GraphPanel.GraphPane.YAxis.Title.Text = yL;
-			GraphPanel.GraphPane.Title.Text = "";
-			GraphPanel.GraphPane.AddCurve(titel, x1, y1, col, SymbolType.None);
-			/*LineItem myCurve = GraphPanel.GraphPane.AddCurve("", x1, y1, col);
-			myCurve.Line.Width = 1;
-			myCurve.Symbol.Fill.Color = col;*/
-			GraphPanel.GraphPane.XAxis.MajorGrid.IsVisible = true;
-			GraphPanel.GraphPane.YAxis.MajorGrid.IsVisible = true;
-			GraphPanel.AxisChange();
-			GraphPanel.Invalidate();
-		}
-
-		void Graff(double[] x1, double[] y1, string titel, string xL, string yL)
-		{
-			Color color = Color.FromArgb(0, 0, 0);
-			GraphPanel.IsShowPointValues = true;
-			GraphPanel.GraphPane.XAxis.Title.Text = xL;
-			GraphPanel.GraphPane.YAxis.Title.Text = yL;
-			GraphPanel.GraphPane.Title.Text = "";
-			GraphPanel.GraphPane.AddCurve(titel, x1, y1, color, SymbolType.None);
-			GraphPanel.GraphPane.XAxis.MajorGrid.IsVisible = true;
-			GraphPanel.GraphPane.YAxis.MajorGrid.IsVisible = true;
-			GraphPanel.AxisChange();
-			GraphPanel.Invalidate();
-		}
-
-		void GraffSyY(double[] x1, double[] y1, string titel, string xL, string yL, Color a)
-		{
-			GraphPanel.IsShowPointValues = true;
-			GraphPanel.GraphPane.XAxis.Title.Text = xL;
-			GraphPanel.GraphPane.YAxis.Title.Text = yL;
-			GraphPanel.GraphPane.Title.Text = "";
-			GraphPanel.GraphPane.AddCurve(titel, x1, y1, a, SymbolType.None);
-			GraphPanel.GraphPane.XAxis.MajorGrid.IsVisible = true;
-			GraphPanel.GraphPane.YAxis.MajorGrid.IsVisible = true;
-			GraphPanel.AxisChange();
-			GraphPanel.Invalidate();
+			
+			var lineSeries = new LineSeries();
+			for(int i = 0; i < x1.Length;i++) lineSeries.Points.Add(new OxyPlot.DataPoint(x1[i], y1[i]));
+			this.plotView1.Model.Series.Add(lineSeries);
+			
 		}
 
 		private void AddToolStripMenuItem_Click(object sender, EventArgs e)
@@ -128,15 +88,12 @@ namespace GraphCreator
 			}
 		}
 
-		Random ran = new Random();
-
 		private void Redraw()
 		{
-			GraphPanel.GraphPane.CurveList.Clear();
 			Chart[] chartsAr = charts.ToArray();
 			for (int i = 0; i < chartsAr.Length; i++)
 			{
-				Graff(chartsAr[i].X, chartsAr[i].Y, chartsAr[i].Title, chartsAr[i].XL, chartsAr[i].YL, Color.FromArgb(ran.Next(255), ran.Next(255), ran.Next(255)));
+				Plot(chartsAr[i].X, chartsAr[i].Y, chartsAr[i].Title, chartsAr[i].XL, chartsAr[i].YL);
 			}
 		}
 
@@ -151,7 +108,6 @@ namespace GraphCreator
 			}
 			for (int i = 0; i < charts.Count; i++)
 				WriteArray(Path + "\\" + (i + 1) + " ", charts[i].X, charts[i].Y);
-
 		}
 
 		void WriteArray(string path, double[] array1, double[] array2)
@@ -170,6 +126,15 @@ namespace GraphCreator
 				}
 				sw.WriteLine(String.Join(" ", line));
 				sw.WriteLine(String.Join(" ", line1));
+			}
+		}
+
+		private void сохранитьSvgToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			using (var stream = File.Create("1234.svg"))
+			{
+				var exporter = new SvgExporter { Width = 600, Height = 400 };
+				exporter.Export(plotView1.Model, stream);
 			}
 		}
 

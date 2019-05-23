@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Windows.Forms;
 using RandomDescent;
 using GraphCreator;
@@ -364,7 +363,7 @@ namespace Метод_случайного_спуска
 
 		private void ИзмереннаяToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			Graph graph = new Graph(VAX.U, VAX.I, "ВАХ", "U", "I", Color.Brown, graphs);
+			Graph graph = new Graph(VAX.U, VAX.I, "ВАХ", "U", "I", graphs);
 			graph.Owner = this;
 			graph.Show();
 			graphs.Add(graph);
@@ -372,7 +371,7 @@ namespace Метод_случайного_спуска
 
 		private void АппроксимированнаяToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			Graph graph = new Graph(((IVAX)obj).GetU(), ((IVAX)obj).GetI(), "ВАХ(аппроксимированная)", "U", "I", Color.Black, graphs)
+			Graph graph = new Graph(((IVAX)obj).GetU(), ((IVAX)obj).GetI(), "ВАХ(аппроксимированная)", "U", "I", graphs)
 			{
 				Owner = this
 			};
@@ -387,7 +386,7 @@ namespace Метод_случайного_спуска
 			SCO_ABS.Text = ((IInaccuracy)obj).GetSCO_ABS_cur().ToString();
 			SCO_REL.Text = ((IInaccuracy)obj).GetSCO_REL_cur().ToString();
 
-			Graph graph = new Graph(VAX.U, I, "погрешность", "U", "%", Color.Green, graphs);
+			Graph graph = new Graph(VAX.U, I, "погрешность", "U", "%", graphs);
 			graph.Owner = this;
 			graph.Show();
 			graphs.Add(graph);
@@ -400,7 +399,7 @@ namespace Метод_случайного_спуска
 			SCO_ABS.Text = ((IInaccuracy)obj).GetSCO_ABS_vol().ToString();
 			SCO_REL.Text = ((IInaccuracy)obj).GetSCO_REL_vol().ToString();
 
-			Graph graph = new Graph(VAX.I, U, "погрешность", "I", "%", Color.Red, graphs);
+			Graph graph = new Graph(VAX.I, U, "погрешность", "I", "%", graphs);
 			graph.Owner = this;
 			graph.Show();
 			graphs.Add(graph);

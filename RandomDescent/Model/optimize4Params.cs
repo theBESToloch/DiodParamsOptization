@@ -96,10 +96,11 @@ namespace RandomDescent
 			c = CalculationError(Is, f, R, IKF);
 			initEr = c;
 		}
-		
+
 		#region методы
 		public void DoOptimize(int nStep)
 		{
+			double step = y.Count != 0 ? y[y.Count - 1] : 0;
 			z = 0;
 
 			// Основной цикл
@@ -118,7 +119,7 @@ namespace RandomDescent
 					R.InitValue();
 					IKF.InitValue();
 
-					y.Add(i);
+					y.Add(step + i);
 					Sy.Add(S);
 					ISy.Add(Is.CurrentValue);
 					fy.Add(f.CurrentValue);
@@ -138,7 +139,7 @@ namespace RandomDescent
 				dRy.Add(R.Range);
 				dIKFy.Add(IKF.Range);
 			}
-			y.Add(nStep);
+			y.Add(step + nStep);
 			Sy.Add(c);
 			ISy.Add(Is.Value);
 			fy.Add(f.Value);
@@ -258,7 +259,7 @@ namespace RandomDescent
 			SCO_REL_cur = Math.Sqrt(SCO_relative / (I_err.Length - 1));
 			return I_err;
 		}
-	
+
 		double[] U_err;
 		public double[] InaccuracyOfVoltage()
 		{

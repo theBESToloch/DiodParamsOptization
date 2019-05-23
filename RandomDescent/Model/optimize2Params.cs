@@ -100,7 +100,7 @@ namespace RandomDescent
 		#region методы
 		public void DoOptimize(int nStep)
 		{
-			double step = y.Count != 0 ? y[y.Count - 1] : 0; 
+			double step = y.Count != 0 ? y[y.Count - 1] : 0;
 			z = 0;
 
 			// Основной цикл
@@ -119,7 +119,7 @@ namespace RandomDescent
 					Is.InitValue();
 					f.InitValue();
 
-					y.Add(step+i);
+					y.Add(step + i);
 					Sy.Add(S);
 
 					ISy.Add(Is.CurrentValue);
@@ -134,7 +134,7 @@ namespace RandomDescent
 				dfy.Add(f.Range);
 				dIsy.Add(Is.Range);
 			}
-			y.Add(step+nStep);
+			y.Add(step + nStep);
 			Sy.Add(c);
 			ISy.Add(Is.Value);
 			fy.Add(f.Value);
@@ -162,7 +162,7 @@ namespace RandomDescent
 					Is.InitValue();
 					f.InitValue();
 
-					y.Add(step+ i);
+					y.Add(step + i);
 					Sy.Add(S);
 					ISy.Add(Is.CurrentValue);
 					fy.Add(f.CurrentValue);
@@ -176,7 +176,7 @@ namespace RandomDescent
 				dfy.Add(f.Range);
 				dIsy.Add(Is.Range);
 			}
-			y.Add(step+nStep);
+			y.Add(step + nStep);
 			Sy.Add(c);
 			ISy.Add(Is.Value);
 			fy.Add(f.Value);
@@ -205,7 +205,7 @@ namespace RandomDescent
 					Is.InitValue();
 					f.InitValue();
 
-					y.Add(step+i);
+					y.Add(step + i);
 					Sy.Add(S);
 					ISy.Add(Is.CurrentValue);
 					fy.Add(f.CurrentValue);
@@ -219,7 +219,7 @@ namespace RandomDescent
 				dfy.Add(f.Range);
 				dIsy.Add(Is.Range);
 			}
-			y.Add(step+nStep);
+			y.Add(step + nStep);
 			Sy.Add(c);
 			ISy.Add(Is.Value);
 			fy.Add(f.Value);
