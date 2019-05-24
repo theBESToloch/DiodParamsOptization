@@ -57,6 +57,8 @@ namespace Метод_случайного_спуска
 			this.syToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.вычисленияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.всеПриближенияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.графикиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.sОтNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
 			this.SCO_ABS = new System.Windows.Forms.Label();
@@ -72,8 +74,7 @@ namespace Метод_случайного_спуска
 			this.ParamName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.Value = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.approximation = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.графикиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.sОтNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -150,7 +151,7 @@ namespace Метод_случайного_спуска
             this.погрешностиToolStripMenuItem,
             this.погрешностьПоТокуToolStripMenuItem});
 			this.вАХToolStripMenuItem.Name = "вАХToolStripMenuItem";
-			this.вАХToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.вАХToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
 			this.вАХToolStripMenuItem.Text = "ВАХ";
 			// 
 			// измереннаяToolStripMenuItem
@@ -187,7 +188,7 @@ namespace Метод_случайного_спуска
             this.IsToolStripMenuItem,
             this.FiToolStripMenuItem});
 			this.рамкаToolStripMenuItem.Name = "рамкаToolStripMenuItem";
-			this.рамкаToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.рамкаToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
 			this.рамкаToolStripMenuItem.Text = "рамка";
 			// 
 			// IsToolStripMenuItem
@@ -209,7 +210,7 @@ namespace Метод_случайного_спуска
 			this.ошибкаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.syToolStripMenuItem});
 			this.ошибкаToolStripMenuItem.Name = "ошибкаToolStripMenuItem";
-			this.ошибкаToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.ошибкаToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
 			this.ошибкаToolStripMenuItem.Text = "ошибка";
 			// 
 			// syToolStripMenuItem
@@ -230,9 +231,26 @@ namespace Метод_случайного_спуска
 			// 
 			// всеПриближенияToolStripMenuItem
 			// 
+			this.всеПриближенияToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem2});
 			this.всеПриближенияToolStripMenuItem.Name = "всеПриближенияToolStripMenuItem";
 			this.всеПриближенияToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
 			this.всеПриближенияToolStripMenuItem.Text = "Расчет всех приближений";
+			// 
+			// графикиToolStripMenuItem
+			// 
+			this.графикиToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sОтNToolStripMenuItem});
+			this.графикиToolStripMenuItem.Name = "графикиToolStripMenuItem";
+			this.графикиToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
+			this.графикиToolStripMenuItem.Text = "графики";
+			// 
+			// sОтNToolStripMenuItem
+			// 
+			this.sОтNToolStripMenuItem.Name = "sОтNToolStripMenuItem";
+			this.sОтNToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.sОтNToolStripMenuItem.Text = "S от n";
+			this.sОтNToolStripMenuItem.Click += new System.EventHandler(this.sОтNToolStripMenuItem_Click);
 			// 
 			// label1
 			// 
@@ -371,19 +389,12 @@ namespace Метод_случайного_спуска
 			this.approximation.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.approximation.Width = 148;
 			// 
-			// графикиToolStripMenuItem
+			// toolStripMenuItem2
 			// 
-			this.графикиToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sОтNToolStripMenuItem});
-			this.графикиToolStripMenuItem.Name = "графикиToolStripMenuItem";
-			this.графикиToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
-			this.графикиToolStripMenuItem.Text = "графики";
-			// 
-			// sОтNToolStripMenuItem
-			// 
-			this.sОтNToolStripMenuItem.Name = "sОтNToolStripMenuItem";
-			this.sОтNToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.sОтNToolStripMenuItem.Text = "S от n";
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+			this.toolStripMenuItem2.Text = "+-50%";
+			this.toolStripMenuItem2.Click += new System.EventHandler(this.PerformAllFiftyPercentMenuItem2_Click);
 			// 
 			// MainForm
 			// 
@@ -448,5 +459,6 @@ namespace Метод_случайного_спуска
 		private System.Windows.Forms.ToolStripMenuItem всеПриближенияToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem графикиToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem sОтNToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
 	}
 }

@@ -32,12 +32,12 @@ namespace Метод_случайного_спуска
 			graphs = new List<Graph>();
 			par = new Dictionary<string, double>
 			{
-				{ "IKF", 0.005 },
-				{ "R", 13 },
-				{ "fi", 0.029 },
-				{ "Is", 22.3E-12 },
-				{ "a1", 0.029 },
-				{ "a2", 0.001 }
+				{ "IKF", 0.001425 },
+				{ "R", 24.064 },
+				{ "fi", 38.536E-3 },
+				{ "Is", 1.535E-6 },
+				{ "a1", 4.19E-3 },
+				{ "a2", 1.04E-3 }
 			};
 
 			ParamsListViewer.Items.Add(new ListViewItem(new string[] { "Is", par["Is"].ToString(), par["Is"].ToString() }));
@@ -54,9 +54,9 @@ namespace Метод_случайного_спуска
 			{
 				obj.DoOptimize(Convert.ToInt32(nSteps.Text));
 			}
-			catch
+			catch(Exception e)
 			{
-				MessageBox.Show("Ошибка вычислений");
+				Console.WriteLine("Ошибка вычислений" + e);
 			}
 
 		}
@@ -100,7 +100,6 @@ namespace Метод_случайного_спуска
 		private void CompleteThreeParamsModelOptimize()
 		{
 			Optimize3Params opt = (Optimize3Params)obj;
-
 			ParamsListViewer.Items[0].SubItems[1].Text = opt.IS0.ToString();
 			ParamsListViewer.Items[0].SubItems[2].Text = opt.IS0.ToString();
 			ParamsListViewer.Items[1].SubItems[1].Text = opt.F0.ToString();
@@ -153,7 +152,6 @@ namespace Метод_случайного_спуска
 				{
 					Convert.ToDouble(ParamsListViewer.Items[4].SubItems[2].Text.Replace(".", ",")),
 					Convert.ToDouble(ParamsListViewer.Items[5].SubItems[2].Text.Replace(".", ",")),
-					Convert.ToDouble(ParamsListViewer.Items[6].SubItems[2].Text.Replace(".", ","))
 				}
 				);
 			DoWork();
@@ -177,8 +175,6 @@ namespace Метод_случайного_спуска
 			ParamsListViewer.Items[4].SubItems[2].Text = opt.FPAR0[0].ToString();
 			ParamsListViewer.Items[5].SubItems[1].Text = opt.FPAR0[1].ToString();
 			ParamsListViewer.Items[5].SubItems[2].Text = opt.FPAR0[1].ToString();
-			ParamsListViewer.Items[6].SubItems[1].Text = opt.FPAR0[2].ToString();
-			ParamsListViewer.Items[6].SubItems[2].Text = opt.FPAR0[2].ToString();
 			label1.Text = opt.Z.ToString();
 
 			Err.Text = obj.OptimizeErr().ToString();
@@ -491,6 +487,96 @@ namespace Метод_случайного_спуска
 			};
 			graph.Show();
 			graphs.Add(graph);
+		}
+
+		OptimizeParams_Fi[] optimize;
+		int count = 0;
+		private void PerformAllFiftyPercentMenuItem2_Click(object sender, EventArgs e)
+		{
+			if (optimize == null)
+			{
+				count = ParamsListViewer.Items.Count;
+
+				//массив параметров
+				var param = new Dictionary<string, double>
+				{
+					{ "IKF", Convert.ToDouble(ParamsListViewer.Items[3].SubItems[2].Text.Replace(".", ",")) },
+					{ "R",   Convert.ToDouble(ParamsListViewer.Items[2].SubItems[2].Text.Replace(".", ",")) },
+					{ "fi",  Convert.ToDouble(ParamsListViewer.Items[1].SubItems[2].Text.Replace(".", ",")) },
+					{ "Is",  Convert.ToDouble(ParamsListViewer.Items[0].SubItems[2].Text.Replace(".", ",")) },
+					{ "a1",  Convert.ToDouble(ParamsListViewer.Items[4].SubItems[2].Text.Replace(".", ",")) },
+					{ "a2",  Convert.ToDouble(ParamsListViewer.Items[5].SubItems[2].Text.Replace(".", ",")) }
+				};
+				//массив приближений параметров
+				var delparam = new Dictionary<string, double>
+				{
+					{ "dIKF", Convert.ToDouble(ParamsListViewer.Items[3].SubItems[2].Text.Replace(".", ","))/2 },
+					{ "dR",   Convert.ToDouble(ParamsListViewer.Items[2].SubItems[2].Text.Replace(".", ","))/2 },
+					{ "dfi",  Convert.ToDouble(ParamsListViewer.Items[1].SubItems[2].Text.Replace(".", ","))/2 },
+					{ "dIs",  Convert.ToDouble(ParamsListViewer.Items[0].SubItems[2].Text.Replace(".", ","))/2 },
+					{ "da1",  Convert.ToDouble(ParamsListViewer.Items[4].SubItems[2].Text.Replace(".", ","))/2 },
+					{ "da2",  Convert.ToDouble(ParamsListViewer.Items[5].SubItems[2].Text.Replace(".", ","))/2 }
+				};
+
+				double[,] mas = new double[Convert.ToInt16(Math.Pow(2, count)), count];
+				int aa = Convert.ToInt16(Math.Pow(2, count)) * 2 - 1;  // *2 нужно чтобы была первая единица, иначе если будет 0, в аа массив будет на 1 меньше 
+																	   //двумерная двуричная матрица
+				for (int j = 0; j < Convert.ToInt16(Math.Pow(2, count)); j++)
+				{
+					string a = Convert.ToString(aa, 2);
+					for (int i = 0; i < count; i++)
+					{
+						if (a[count - i] == '1') mas[j, i] = 1;
+						else mas[j, i] = -1;
+					}
+					aa--;
+				}
+
+
+				int len = Convert.ToInt16(Math.Pow(2, count)) > 10 ? 10 : Convert.ToInt16(Math.Pow(2, count));
+				optimize = new OptimizeParams_Fi[len];
+				for (int i = 0; i < len; i++)
+					optimize[i] = new OptimizeParams_Fi(
+						VAX.I,
+						VAX.U,
+						param["Is"]  + delparam["dIs"]  * mas[i, 0],
+						param["fi"]  + delparam["dfi"]  * mas[i, 1],
+						param["R"]   + delparam["dR"]   * mas[i, 2],
+						param["IKF"] + delparam["dIKF"] * mas[i, 3],
+						new double[]
+						{
+						param["a1"] + delparam["da1"] * mas[i, 4],
+						param["a2"] + delparam["da2"] * mas[i, 5],
+						}
+					);
+
+			}
+
+			for (int i = 0; i < optimize.Length; i++)
+			{
+				obj = optimize[i];
+				DoWork();
+			}
+		}
+
+		private void sОтNToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if(optimize != null)
+			{
+				List<double[]> x = new List<double[]>();
+				List<double[]> y = new List<double[]>();
+
+				foreach(OptimizeParams_Fi opf in optimize)
+				{
+					x.Add(opf.Y());
+					y.Add(opf.Error());
+				}
+
+				Graph graph = new Graph(x, y, "ВАХ", "U", "I", graphs);
+				graph.Owner = this;
+				graph.Show();
+				graphs.Add(graph);
+			}
 		}
 	}
 }

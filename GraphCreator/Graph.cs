@@ -31,6 +31,22 @@ namespace GraphCreator
 			Plot(x1, y1, title, xL, yL);
 		}
 
+		public Graph(List<double[]>  x1, List<double[]> y1, string title, string xL, string yL, List<Graph> graphs)
+		{
+			InitializeComponent();
+
+			this.graphs = graphs;
+			var myModel = new PlotModel { Title = title };
+			this.plotView1.Model = myModel;
+
+			for (int i = 0; i < x1.Count; i++)
+			{
+				Chart chart = new Chart(x1[i], y1[i], title, xL, yL);
+				charts.Add(chart);
+				Plot(x1[i], y1[i], title, xL, yL);
+			}
+		}
+
 		bool press_x = false, press_y = false;
 
 		private void LogyToolStripMenuItem_Click(object sender, EventArgs e)
@@ -131,7 +147,15 @@ namespace GraphCreator
 
 		private void сохранитьSvgToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			using (var stream = File.Create("1234.svg"))
+			FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+			String Path = "";
+
+			if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+			{
+				Path = folderBrowserDialog.SelectedPath;
+			}
+
+			using (var stream = File.Create(Path+ "\\"+ this.plotView1.Model.Title + "-" + DateTime.Now.ToString().Replace(".", "-").Replace(":", "-")+ ".svg"))
 			{
 				var exporter = new SvgExporter { Width = 600, Height = 400 };
 				exporter.Export(plotView1.Model, stream);

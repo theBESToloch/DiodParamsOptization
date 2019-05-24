@@ -21,10 +21,10 @@ namespace RandomDescent
 		List<double> Ry;
 		List<double> IKFy;
 
-		List<double> dfy;
+		/*List<double> dfy;
 		List<double> dIsy;
 		List<double> dRy;
-		List<double> dIKFy;
+		List<double> dIKFy;*/
 
 		List<double> Sy;
 		List<double> y;
@@ -55,8 +55,6 @@ namespace RandomDescent
 		public double R0 { get { return R.Value; } }
 		public double IKF0 { get { return IKF.Value; } }
 		public double[] FPAR0 { get { return FPar.Value; } }
-		public double[] DFY() { return dfy.ToArray(); }
-		public double[] DISY() { return dIsy.ToArray(); }
 		public double[] Error() { return Sy.ToArray(); }
 		public double[] Y() { return y.ToArray(); }
 		#endregion
@@ -68,11 +66,6 @@ namespace RandomDescent
 			fy = new List<double>();
 			Ry = new List<double>();
 			IKFy = new List<double>();
-
-			dfy = new List<double>();
-			dIsy = new List<double>();
-			dRy = new List<double>();
-			dIKFy = new List<double>();
 
 			Sy = new List<double>();
 			y = new List<double>();
@@ -136,10 +129,6 @@ namespace RandomDescent
 					IKF.MissValues();
 					FPar.MissValues();
 				}
-				dfy.Add(f.Range);
-				dIsy.Add(Is.Range);
-				dRy.Add(R.Range);
-				dIKFy.Add(IKF.Range);
 			}
 			y.Add(step + nStep);
 			Sy.Add(c);
