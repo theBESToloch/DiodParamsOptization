@@ -24,8 +24,6 @@ namespace Метод_случайного_спуска
 		private List<Graph> graphs;
 		#endregion
 
-		int OptimizeMethodVal = 0;
-
 		public MainForm()
 		{
 			InitializeComponent();
@@ -46,8 +44,6 @@ namespace Метод_случайного_спуска
 			ParamsListViewer.Items.Add(new ListViewItem(new string[] { "fi", par["fi"].ToString(), par["fi"].ToString() }));
 
 			d += OptimizeTwoParamsModel;
-
-			OptimizeMethodVal = Convert.ToInt32(OptimizeMethod.Text);
 		}
 
 		#region вычисления
@@ -56,15 +52,7 @@ namespace Метод_случайного_спуска
 		{
 			try
 			{
-
-				switch (OptimizeMethodVal)
-				{
-					case 1: obj.DoOptimize(Convert.ToInt32(nSteps.Text)); break;
-					case 2: obj.DoOptimizeUniform(Convert.ToInt32(nSteps.Text)); break;
-					case 3: obj.DoOptimizeUniformAndNormalize(Convert.ToInt32(nSteps.Text)); break;
-					case 4: obj.DoOptimizeAndNormalize(Convert.ToInt32(nSteps.Text)); break;
-				}
-
+				obj.DoOptimize(Convert.ToInt32(nSteps.Text));
 			}
 			catch
 			{
@@ -75,12 +63,11 @@ namespace Метод_случайного_спуска
 
 		private void OptimizeTwoParamsModel()
 		{
-			if (obj == null || obj.GetType() != typeof(Optimize2Params) || OptimizeMethodVal != Convert.ToInt32(OptimizeMethod.Text))
+			if (obj == null || obj.GetType() != typeof(Optimize2Params))
 			{
 				obj = new Optimize2Params(VAX.I, VAX.U,
 					Convert.ToDouble(ParamsListViewer.Items[0].SubItems[2].Text.Replace(".", ",")),
 					Convert.ToDouble(ParamsListViewer.Items[1].SubItems[2].Text.Replace(".", ",")));
-				OptimizeMethodVal = Convert.ToInt32(OptimizeMethod.Text);
 			}
 			DoWork();
 			CompleteTwoParamsModelOptimize();
@@ -489,8 +476,8 @@ namespace Метод_случайного_спуска
 					x[i] = arg[Convert.ToInt32(i * step)];
 					y[i] = S[Convert.ToInt32(i * step)];
 				}
-				x[1999] = arg[arg.Length-1];
-				y[1999] = S[S.Length-1];
+				x[1999] = arg[arg.Length - 1];
+				y[1999] = S[S.Length - 1];
 			}
 			else
 			{
