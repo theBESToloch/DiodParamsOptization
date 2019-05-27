@@ -7,6 +7,7 @@ namespace RandomDescent.Domain
 {
 	class OptimizeParams
 	{
+
 		//начальное значение
 		public double[] Value { get; set; }
 		//Текущее приближение

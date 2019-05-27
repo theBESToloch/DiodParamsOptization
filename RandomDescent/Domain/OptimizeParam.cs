@@ -36,6 +36,11 @@ namespace RandomDescent
 			return CurrentValue = Value + Vector * Range;
 		}
 
+		/*public double GetNewValue()
+		{
+			Vector = RandomEngine.NextRandom();
+			return CurrentValue = Value + Vector * Range;
+		}*/
 
 		public double GetNewValueUniform()
 		{
@@ -45,13 +50,13 @@ namespace RandomDescent
 
 		public void InitValue()
 		{
-			Range *= 1.005;
+//			Range *= 1.005;
 			Value = CurrentValue;
 		}
 
 		public void MissValues()
 		{
-			Range /=1.00001;
+//			Range /=1.00001;
 		}
 	}
 }

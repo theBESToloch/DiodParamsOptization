@@ -572,7 +572,47 @@ namespace Метод_случайного_спуска
 					y.Add(opf.Error());
 				}
 
-				Graph graph = new Graph(x, y, "ВАХ", "U", "I", graphs);
+				Graph graph = new Graph(x, y, "S от n", "n", "S", graphs);
+				graph.Owner = this;
+				graph.Show();
+				graphs.Add(graph);
+			}
+		}
+
+		private void isОтNToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (optimize != null)
+			{
+				List<double[]> x = new List<double[]>();
+				List<double[]> y = new List<double[]>();
+
+				foreach (OptimizeParams_Fi opf in optimize)
+				{
+					x.Add(opf.Y());
+					y.Add(opf.ISY());
+				}
+
+				Graph graph = new Graph(x, y, "Is от n", "n", "Is", graphs);
+				graph.Owner = this;
+				graph.Show();
+				graphs.Add(graph);
+			}
+		}
+
+		private void fiОтNToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (optimize != null)
+			{
+				List<double[]> x = new List<double[]>();
+				List<double[]> y = new List<double[]>();
+
+				foreach (OptimizeParams_Fi opf in optimize)
+				{
+					x.Add(opf.Y());
+					y.Add(opf.FY());
+				}
+
+				Graph graph = new Graph(x, y, "f от n", "n", "f", graphs);
 				graph.Owner = this;
 				graph.Show();
 				graphs.Add(graph);

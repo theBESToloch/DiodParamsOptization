@@ -50,6 +50,8 @@ namespace RandomDescent
 			get { return Sy; }
 		}
 
+		public double[] ISY() { return ISy.ToArray(); }
+		public double[] FY() { return fy.ToArray(); }
 		public double IS0 { get { return Is.Value; } }
 		public double F0 { get { return f.Value; } }
 		public double R0 { get { return R.Value; } }

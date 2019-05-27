@@ -57,6 +57,7 @@ namespace Метод_случайного_спуска
 			this.syToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.вычисленияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.всеПриближенияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.графикиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.sОтNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.label1 = new System.Windows.Forms.Label();
@@ -74,7 +75,8 @@ namespace Метод_случайного_спуска
 			this.ParamName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.Value = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.approximation = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.isОтNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.fiОтNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -237,10 +239,19 @@ namespace Метод_случайного_спуска
 			this.всеПриближенияToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
 			this.всеПриближенияToolStripMenuItem.Text = "Расчет всех приближений";
 			// 
+			// toolStripMenuItem2
+			// 
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+			this.toolStripMenuItem2.Text = "+-50%";
+			this.toolStripMenuItem2.Click += new System.EventHandler(this.PerformAllFiftyPercentMenuItem2_Click);
+			// 
 			// графикиToolStripMenuItem
 			// 
 			this.графикиToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sОтNToolStripMenuItem});
+            this.sОтNToolStripMenuItem,
+            this.isОтNToolStripMenuItem,
+            this.fiОтNToolStripMenuItem});
 			this.графикиToolStripMenuItem.Name = "графикиToolStripMenuItem";
 			this.графикиToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
 			this.графикиToolStripMenuItem.Text = "графики";
@@ -389,12 +400,19 @@ namespace Метод_случайного_спуска
 			this.approximation.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.approximation.Width = 148;
 			// 
-			// toolStripMenuItem2
+			// isОтNToolStripMenuItem
 			// 
-			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
-			this.toolStripMenuItem2.Text = "+-50%";
-			this.toolStripMenuItem2.Click += new System.EventHandler(this.PerformAllFiftyPercentMenuItem2_Click);
+			this.isОтNToolStripMenuItem.Name = "isОтNToolStripMenuItem";
+			this.isОтNToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.isОтNToolStripMenuItem.Text = "Is от n";
+			this.isОтNToolStripMenuItem.Click += new System.EventHandler(this.isОтNToolStripMenuItem_Click);
+			// 
+			// fiОтNToolStripMenuItem
+			// 
+			this.fiОтNToolStripMenuItem.Name = "fiОтNToolStripMenuItem";
+			this.fiОтNToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.fiОтNToolStripMenuItem.Text = "fi от n";
+			this.fiОтNToolStripMenuItem.Click += new System.EventHandler(this.fiОтNToolStripMenuItem_Click);
 			// 
 			// MainForm
 			// 
@@ -460,5 +478,7 @@ namespace Метод_случайного_спуска
 		private System.Windows.Forms.ToolStripMenuItem графикиToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem sОтNToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+		private System.Windows.Forms.ToolStripMenuItem isОтNToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem fiОтNToolStripMenuItem;
 	}
 }
