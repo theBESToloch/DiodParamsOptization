@@ -17,18 +17,22 @@ namespace RandomDescent.Domain
 
 		public double[] Vector { get; set; }
 
+		public double[] Eps { get; set; }
+
 		internal OptimizeParams(double[] CurrentValue)
 		{
-			Value = new double[CurrentValue.Length];
+			Value =				new double[CurrentValue.Length];
 			this.CurrentValue = new double[CurrentValue.Length];
-			Range = new double[CurrentValue.Length];
-			Vector = new double[CurrentValue.Length];
+			Range =				new double[CurrentValue.Length];
+			Vector =			new double[CurrentValue.Length];
+			Eps =				new double[CurrentValue.Length];
 
 			for (int i = 0; i < CurrentValue.Length; i++)
 			{
 				Value[i] = CurrentValue[i];
 				this.CurrentValue[i] = CurrentValue[i];
 				Range[i] = CurrentValue[i] / 100;
+				Eps[i] = Range[i] / 1000000;
 			}
 		}
 
@@ -52,7 +56,7 @@ namespace RandomDescent.Domain
 			for (int i = 0; i < Range.Length; i++)
 			{
 				Vector[i] = Math.Pow(RandomEngine.NextRandom(), 3);
-				CurrentValue[i] = Value[i] + Vector[i] * Range[i];
+				CurrentValue[i] = Value[i] + Vector[i] * Range[i] + Eps[i];
 			}
 			return CurrentValue;
 		}
@@ -68,7 +72,7 @@ namespace RandomDescent.Domain
 
 		public void MissValues()
 		{
-			for (int i = 0; i < Range.Length; i++)
+		for (int i = 0; i < Range.Length; i++)
 				Range[i] /= 1.00001;
 		}
 

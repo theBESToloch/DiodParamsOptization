@@ -146,21 +146,6 @@ namespace RandomDescent
 			Er = c;
 		}
 
-		public void DoOptimizeUniform(int n)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void DoOptimizeUniformAndNormalize(int n)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void DoOptimizeAndNormalize(int n)
-		{
-			throw new NotImplementedException();
-		}
-
 		double CalculationError(double Is, double f, double R, double IKF)
 		{
 			double S = 0;

@@ -141,21 +141,6 @@ namespace RandomDescent
 			Er = c;
 		}
 
-		public void DoOptimizeUniform(int n)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void DoOptimizeUniformAndNormalize(int n)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void DoOptimizeAndNormalize(int n)
-		{
-			throw new NotImplementedException();
-		}
-
 		double CalculationError(double Is, double f, double R, double IKF, double[] FPar)
 		{
 			double S = 0;
@@ -175,9 +160,9 @@ namespace RandomDescent
 
 			U -= FPar[1];
 
-			//return f + FPar[0] * U * U;
+			return f + FPar[0] * U * U;
 
-			return f + FPar[0] * Math.Sqrt(U * U + 1e-16) + FPar[0] * U;
+			//return f + FPar[0] * Math.Sqrt(U * U + 1e-16) + FPar[0] * U;
 
 
 			//return f * (1 + FPar[0] * I + FPar[1] * Math.Pow(I, 2)) / (FPar[2] * I);

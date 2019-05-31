@@ -139,135 +139,6 @@ namespace RandomDescent
 			Er = c;
 		}
 
-		public void DoOptimizeUniform(int nStep)
-		{
-			double step = y.Count != 0 ? y[y.Count - 1] : 0;
-			z = 0;
-
-			// Основной цикл
-			for (int i = 0; i < nStep - 1; i++)
-			{
-
-				Is.GetNewValueUniform();
-				f.GetNewValueUniform();
-
-				S = CalculationError(Is.CurrentValue, f.CurrentValue);
-
-				// условие
-				if (S < c)
-				{
-					c = S;
-					Is.InitValue();
-					f.InitValue();
-
-					y.Add(step + i);
-					Sy.Add(S);
-					ISy.Add(Is.CurrentValue);
-					fy.Add(f.CurrentValue);
-					z++;
-				}
-				else
-				{
-					Is.MissValues();
-					f.MissValues();
-				}
-				dfy.Add(f.Range);
-				dIsy.Add(Is.Range);
-			}
-			y.Add(step + nStep);
-			Sy.Add(c);
-			ISy.Add(Is.Value);
-			fy.Add(f.Value);
-			Er = c;
-		}
-
-		public void DoOptimizeUniformAndNormalize(int nStep)
-		{
-			double step = y.Count != 0 ? y[y.Count - 1] : 0;
-			z = 0;
-
-			// Основной цикл
-			for (int i = 0; i < nStep - 1; i++)
-			{
-
-				Is.GetNewValueUniform();
-				f.GetNewValueUniform();
-				NormalizeParams();
-
-				S = CalculationError(Is.CurrentValue, f.CurrentValue);
-
-				// условие
-				if (S < c)
-				{
-					c = S;
-					Is.InitValue();
-					f.InitValue();
-
-					y.Add(step + i);
-					Sy.Add(S);
-					ISy.Add(Is.CurrentValue);
-					fy.Add(f.CurrentValue);
-					z++;
-				}
-				else
-				{
-					Is.MissValues();
-					f.MissValues();
-				}
-				dfy.Add(f.Range);
-				dIsy.Add(Is.Range);
-			}
-			y.Add(step + nStep);
-			Sy.Add(c);
-			ISy.Add(Is.Value);
-			fy.Add(f.Value);
-			Er = c;
-		}
-
-		public void DoOptimizeAndNormalize(int nStep)
-		{
-			double step = y.Count != 0 ? y[y.Count - 1] : 0;
-			z = 0;
-
-			// Основной цикл
-			for (int i = 0; i < nStep; i++)
-			{
-
-				Is.GetNewValue();
-				f.GetNewValue();
-				NormalizeParams();
-
-				S = CalculationError(Is.CurrentValue, f.CurrentValue);
-
-				// условие
-				if (S < c)
-				{
-					c = S;
-					Is.InitValue();
-					f.InitValue();
-
-					y.Add(step + i);
-					Sy.Add(S);
-
-					ISy.Add(Is.CurrentValue);
-					fy.Add(f.CurrentValue);
-					z++;
-				}
-				else
-				{
-					Is.MissValues();
-					f.MissValues();
-				}
-				dfy.Add(f.Range);
-				dIsy.Add(Is.Range);
-			}
-			y.Add(step + nStep);
-			Sy.Add(c);
-			ISy.Add(Is.Value);
-			fy.Add(f.Value);
-			Er = c;
-		}
-
 		double CalculationError(double Is, double f)
 		{
 			double S = 0;
@@ -350,7 +221,7 @@ namespace RandomDescent
 				I_err[i] = (I_err[i] / I[i]) * 100;
 			}
 			SCO_ABS_cur = Math.Sqrt(SCO_absolut / (I_err.Length - 1));
-			SCO_REL_cur = Math.Sqrt(SCO_relative / (I_err.Length - 1));
+			SCO_REL_cur = Math.Sqrt(SCO_relative / (I_err.Length - 1))*100;
 			return I_err;
 		}
 
@@ -370,7 +241,7 @@ namespace RandomDescent
 				U_err[i] = (U_err[i] / U[i]) * 100;
 			}
 			SCO_ABS_vol = Math.Sqrt(SCO_absolut / (U_err.Length - 1));
-			SCO_REL_vol = Math.Sqrt(SCO_relative / (U_err.Length - 1));
+			SCO_REL_vol = Math.Sqrt(SCO_relative / (U_err.Length - 1))*100;
 			return U_err;
 		}
 		#endregion

@@ -16,11 +16,14 @@ namespace RandomDescent
 
 		public double Vector { get; set; }
 
+		public double Eps { get; set; }
+
 		internal OptimizeParam(double CurrentValue)
 		{
 			Value = CurrentValue;
 			this.CurrentValue = CurrentValue;
 			Range = CurrentValue / 100;
+			Eps = Range / 1000000;
 		}
 
 		internal OptimizeParam(double CurrentValue, double Range)
@@ -28,12 +31,13 @@ namespace RandomDescent
 			this.Value = CurrentValue;
 			this.CurrentValue = CurrentValue;
 			this.Range = Range;
+			Eps = Range / 1000000;
 		}
 
 		public double GetNewValue()
 		{
 			Vector = Math.Pow(RandomEngine.NextRandom(), 3);
-			return CurrentValue = Value + Vector * Range;
+			return CurrentValue = Value + Vector * Range + Eps;
 		}
 
 		/*public double GetNewValue()
@@ -42,21 +46,15 @@ namespace RandomDescent
 			return CurrentValue = Value + Vector * Range;
 		}*/
 
-		public double GetNewValueUniform()
-		{
-			Vector = RandomEngine.NextRandom();
-			return CurrentValue = Value + Vector * Range;
-		}
-
 		public void InitValue()
 		{
-//			Range *= 1.005;
+			Range *= 1.005;
 			Value = CurrentValue;
 		}
 
 		public void MissValues()
 		{
-//			Range /=1.00001;
+			Range /=1.00001;
 		}
 	}
 }
