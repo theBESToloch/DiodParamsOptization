@@ -46,7 +46,6 @@ namespace GraphCreator
 			}
 		}
 
-
 		void Plot(double[] x1, double[] y1, string title, string xL, string yL)
 		{
 			var lineSeries = new LineSeries();
@@ -277,6 +276,7 @@ namespace GraphCreator
 				press_y = false;
 			}
 		}
+
 		private void LogxToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			plotView1.Model.InvalidatePlot(true);
@@ -293,7 +293,23 @@ namespace GraphCreator
 		}
 
 
-	
+
+		private void отобразитьТочкиToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+
+
+			/*foreach(LineSeries ls in plotView1.Model.Series)
+			{
+				ls.MarkerFill = OxyColor.FromRgb(0, 0, 0);
+				ls.MarkerType = MarkerType.Circle;
+			}*/
+
+			for(int i = 0; i < plotView1.Model.Series.Count; i++)
+			{
+				((LineSeries)plotView1.Model.Series[i]).MarkerFill = OxyColor.FromRgb(0, 0, 0);
+				((LineSeries)plotView1.Model.Series[i]).MarkerType = MarkerType.Circle;
+			}
+		}
 
 	}
 }
