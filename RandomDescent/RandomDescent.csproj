@@ -54,6 +54,12 @@
     <Compile Include="generators\Generator.cs" />
     <Compile Include="InaccuracyInterface.cs" />
     <Compile Include="Model\optimize4Params.cs" />
+    <Compile Include="Model\optimizeParams_Is_1.cs" />
+    <Compile Include="Model\optimizeParams_Is_and_Fi_2.cs" />
+    <Compile Include="Model\optimizeParams_Is_and_Fi.cs" />
+    <Compile Include="Model\optimizeParams_Is.cs" />
+    <Compile Include="Model\optimizeParams_Fi2.cs" />
+    <Compile Include="Model\optimizeParams_Fi1.cs" />
     <Compile Include="OptimizeIntrface.cs" />
     <Compile Include="Model\optimize2Params.cs" />
     <Compile Include="generators\DistributionModel\NormalDistribution.cs" />

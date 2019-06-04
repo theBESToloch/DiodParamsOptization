@@ -77,14 +77,14 @@ namespace RandomDescent
 			this.R = new OptimizeParam(R, R / 100);
 			this.IKF = new OptimizeParam(IKF, IKF / 100);
 
-			this.FPar = new OptimizeParams(FPar);
+			this.FPar = new OptimizeParams(new double[] { 1 });
 
 			// Загрузка данных
 			this.I = I;
 			this.U = U;
 			len = I.Length;
 
-			c = CalculationError(Is, f, R, IKF, FPar);
+			c = CalculationError(this.Is.Value, this.f.Value, this.R.Value, this.IKF.Value, this.FPar.Value);
 
 			InitEr = c;
 		}
@@ -156,14 +156,12 @@ namespace RandomDescent
 
 		private double calcFi(double f, double[] FPar, double U)
 		{
-			if (U < FPar[1]) return f;
+			//if (U < FPar[1]) return f;
+			//U -= FPar[1];
 
-			U -= FPar[1];
-
-			return f + FPar[0] * U * U;
+			return f * (1 + FPar[0] * U * U);
 
 			//return f + FPar[0] * Math.Sqrt(U * U + 1e-16) + FPar[0] * U;
-
 
 			//return f * (1 + FPar[0] * I + FPar[1] * Math.Pow(I, 2)) / (FPar[2] * I);
 			//return f - 0.5 * FPar[0] * ((1 - Math.Exp(-(FPar[1] * (I - FPar[2])))) / (1 + Math.Exp(-(FPar[1] * (I - FPar[2])))));ш8
@@ -257,7 +255,7 @@ namespace RandomDescent
 				I_err[i] = (I_err[i] / I[i]) * 100;
 			}
 			SCO_ABS_cur = Math.Sqrt(SCO_absolut / (I_err.Length - 1));
-			SCO_REL_cur = Math.Sqrt(SCO_relative / (I_err.Length - 1));
+			SCO_REL_cur = Math.Sqrt(SCO_relative / (I_err.Length - 1)) * 100;
 			return I_err;
 		}
 
@@ -278,7 +276,7 @@ namespace RandomDescent
 				U_err[i] = (U_err[i] / U[i]) * 100;
 			}
 			SCO_ABS_vol = Math.Sqrt(SCO_absolut / (U_err.Length - 1));
-			SCO_REL_vol = Math.Sqrt(SCO_relative / (U_err.Length - 1));
+			SCO_REL_vol = Math.Sqrt(SCO_relative / (U_err.Length - 1)) * 100;
 			return U_err;
 		}
 

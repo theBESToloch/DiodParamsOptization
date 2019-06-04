@@ -56,7 +56,7 @@ namespace RandomDescent.Domain
 			for (int i = 0; i < Range.Length; i++)
 			{
 				Vector[i] = Math.Pow(RandomEngine.NextRandom(), 3);
-				CurrentValue[i] = Value[i] + Vector[i] * Range[i] + Eps[i];
+				CurrentValue[i] = Value[i] + Vector[i] * (Range[i] + Eps[i]);
 			}
 			return CurrentValue;
 		}

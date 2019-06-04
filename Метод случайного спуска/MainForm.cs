@@ -142,8 +142,8 @@ namespace Метод_случайного_спуска
 
 		private void OptimizeFiParamsModel()
 		{
-			if (!(obj != null && obj.GetType() == typeof(OptimizeParams_Fi)))
-				obj = new OptimizeParams_Fi(VAX.I, VAX.U,
+			if (!(obj != null && obj.GetType() == typeof(OptimizeParams_Is_and_Fi_2)))
+				obj = new OptimizeParams_Is_and_Fi_2(VAX.I, VAX.U,
 				Convert.ToDouble(ParamsListViewer.Items[0].SubItems[2].Text.Replace(".", ",")),
 				Convert.ToDouble(ParamsListViewer.Items[1].SubItems[2].Text.Replace(".", ",")),
 				Convert.ToDouble(ParamsListViewer.Items[2].SubItems[2].Text.Replace(".", ",")),
@@ -160,7 +160,7 @@ namespace Метод_случайного_спуска
 		}
 		private void CompleteFiParamsModelOptimize()
 		{
-			OptimizeParams_Fi opt = (OptimizeParams_Fi)obj;
+			OptimizeParams_Is_and_Fi_2 opt = (OptimizeParams_Is_and_Fi_2)obj;
 
 			ParamsListViewer.Items[0].SubItems[1].Text = opt.IS0.ToString();
 			ParamsListViewer.Items[0].SubItems[2].Text = opt.IS0.ToString();
@@ -489,7 +489,7 @@ namespace Метод_случайного_спуска
 			graphs.Add(graph);
 		}
 
-		OptimizeParams_Fi[] optimize;
+		OptimizeParams_Is_and_Fi_2[] optimize;
 		int count = 0;
 		private void PerformAllFiftyPercentMenuItem2_Click(object sender, EventArgs e)
 		{
@@ -534,9 +534,9 @@ namespace Метод_случайного_спуска
 
 
 				int len = Convert.ToInt16(Math.Pow(2, count)) > 10 ? 10 : Convert.ToInt16(Math.Pow(2, count));
-				optimize = new OptimizeParams_Fi[len];
+				optimize = new OptimizeParams_Is_and_Fi_2[len];
 				for (int i = 0; i < len; i++)
-					optimize[i] = new OptimizeParams_Fi(
+					optimize[i] = new OptimizeParams_Is_and_Fi_2(
 						VAX.I,
 						VAX.U,
 						param["Is"]  + delparam["dIs"]  * mas[i, 0],
@@ -566,7 +566,7 @@ namespace Метод_случайного_спуска
 				List<double[]> x = new List<double[]>();
 				List<double[]> y = new List<double[]>();
 
-				foreach(OptimizeParams_Fi opf in optimize)
+				foreach(OptimizeParams_Is_and_Fi_2 opf in optimize)
 				{
 					x.Add(opf.Y());
 					y.Add(opf.Error());
@@ -586,7 +586,7 @@ namespace Метод_случайного_спуска
 				List<double[]> x = new List<double[]>();
 				List<double[]> y = new List<double[]>();
 
-				foreach (OptimizeParams_Fi opf in optimize)
+				foreach (OptimizeParams_Is_and_Fi_2 opf in optimize)
 				{
 					x.Add(opf.Y());
 					y.Add(opf.ISY());
@@ -606,7 +606,7 @@ namespace Метод_случайного_спуска
 				List<double[]> x = new List<double[]>();
 				List<double[]> y = new List<double[]>();
 
-				foreach (OptimizeParams_Fi opf in optimize)
+				foreach (OptimizeParams_Is_and_Fi_2 opf in optimize)
 				{
 					x.Add(opf.Y());
 					y.Add(opf.FY());

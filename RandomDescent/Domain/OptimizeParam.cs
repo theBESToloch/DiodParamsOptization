@@ -37,7 +37,7 @@ namespace RandomDescent
 		public double GetNewValue()
 		{
 			Vector = Math.Pow(RandomEngine.NextRandom(), 3);
-			return CurrentValue = Value + Vector * Range + Eps;
+			return CurrentValue = Value + Vector * (Range + Eps);
 		}
 
 		/*public double GetNewValue()
