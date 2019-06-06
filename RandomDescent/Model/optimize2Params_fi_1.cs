@@ -149,7 +149,7 @@ namespace RandomDescent
 			{
 				parF = calcFi(f, FPar, U[j]);
 				Id = Is * (Math.Exp(U[j] / parF) - 1);
-				S += Math.Abs((I[j] - Id) / I[j]);
+				S += Math.Abs(Math.Pow((I[j] - Id) / I[j], 2));
 			}
 			return S;
 		}
@@ -222,7 +222,7 @@ namespace RandomDescent
 				I_err[i] = (I_err[i] / I[i]) * 100;
 			}
 			SCO_ABS_cur = Math.Sqrt(SCO_absolut / (I_err.Length - 1));
-			SCO_REL_cur = Math.Sqrt(SCO_relative / (I_err.Length - 1))*100;
+			SCO_REL_cur = Math.Sqrt(SCO_relative / (I_err.Length - 1)) * 100;
 			return I_err;
 		}
 
@@ -243,7 +243,7 @@ namespace RandomDescent
 				U_err[i] = (U_err[i] / U[i]) * 100;
 			}
 			SCO_ABS_vol = Math.Sqrt(SCO_absolut / (U_err.Length - 1));
-			SCO_REL_vol = Math.Sqrt(SCO_relative / (U_err.Length - 1))*100;
+			SCO_REL_vol = Math.Sqrt(SCO_relative / (U_err.Length - 1)) * 100;
 			return U_err;
 		}
 		#endregion

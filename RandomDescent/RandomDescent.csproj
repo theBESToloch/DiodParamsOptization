@@ -57,6 +57,7 @@
     <Compile Include="Model\optimize2Params_fi_2.cs" />
     <Compile Include="Model\optimize2Params_Is_3.cs" />
     <Compile Include="Model\optimize2Params_Is_2.cs" />
+    <Compile Include="Model\optimize2Params_Is__fi_2.cs" />
     <Compile Include="Model\optimize2Params_Is__fi_1.cs" />
     <Compile Include="Model\optimize2Params_Is_1.cs" />
     <Compile Include="Model\optimize2Params_fi_1.cs" />

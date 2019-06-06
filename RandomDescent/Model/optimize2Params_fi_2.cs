@@ -149,7 +149,7 @@ namespace RandomDescent
 			{
 				parF = calcFi(f, FPar, U[j]);
 				Id = Is * (Math.Exp(U[j] / parF) - 1);
-				S += Math.Abs((I[j] - Id) / I[j]);
+				S += Math.Abs(Math.Pow((I[j] - Id) / I[j], 2));
 			}
 			return S;
 		}
