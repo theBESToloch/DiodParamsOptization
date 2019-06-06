@@ -53,6 +53,9 @@
     <Compile Include="generators\ExceptionMessages.Designer.cs" />
     <Compile Include="generators\Generator.cs" />
     <Compile Include="InaccuracyInterface.cs" />
+    <Compile Include="Model\optimize2Params_Is__fi_1.cs" />
+    <Compile Include="Model\optimize2Params_Is_1.cs" />
+    <Compile Include="Model\optimize2Params_fi_1.cs" />
     <Compile Include="Model\optimize4Params.cs" />
     <Compile Include="Model\optimizeParams_Is_1.cs" />
     <Compile Include="Model\optimizeParams_Is_and_Fi_2.cs" />

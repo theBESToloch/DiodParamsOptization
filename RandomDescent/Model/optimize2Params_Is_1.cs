@@ -1,34 +1,34 @@
-﻿using System;
+﻿using RandomDescent.Domain;
+using System;
 using System.Collections.Generic;
 
 namespace RandomDescent
 {
-	public class Optimize3Params : IOptimize, IVAX, IInaccuracy
+	public class Optimize2Params_Is_1 : IOptimize, IVAX, IInaccuracy
 	{
+
 		#region Поля
 
 		double z = 0;
-		int len = 0;
 
 		private double[] I, U;
 
 
 		List<double> ISy;
 		List<double> fy;
-		List<double> Ry;
 
 		List<double> dfy;
 		List<double> dIsy;
-		List<double> dRy;
 
 		List<double> Sy;
 		List<double> y;
 
-		double c = 0, Id = 0, S = 0;
+		private double c = 0, Id = 0, S = 0;
+		private double InitEr = 0, Er = 0;
 
 		OptimizeParam Is;
 		OptimizeParam f;
-		OptimizeParam R;
+		OptimizeParams IsPar;
 		#endregion
 
 		#region Свойства
@@ -36,11 +36,6 @@ namespace RandomDescent
 		public double Z
 		{
 			get { return z; }
-		}
-
-		public List<double> SY
-		{
-			get { return Sy; }
 		}
 
 		public List<double> ISY
@@ -63,123 +58,8 @@ namespace RandomDescent
 			return dfy.ToArray();
 		}
 
-		public List<double> RY
-		{
-			get { return Ry; }
-		}
-
-		public double[] DRY
-		{
-			get { return dRy.ToArray(); }
-		}
-
-
 		public double IS0 { get { return Is.Value; } }
 		public double F0 { get { return f.Value; } }
-		public double R0 { get { return R.Value; } }
-		public double[] Error() { return Sy.ToArray(); }
-		public double[] Y() { return y.ToArray(); }
-		#endregion
-
-		// Конструктор
-		public Optimize3Params(double[] I, double[] U, double Is, double f, double R)
-		{
-
-			ISy = new List<double>();
-			fy = new List<double>();
-			Ry = new List<double>();
-
-			dfy = new List<double>();
-			dIsy = new List<double>();
-			dRy = new List<double>();
-
-			Sy = new List<double>();
-			y = new List<double>();
-
-			this.Is = new OptimizeParam(Is, Is / 100);
-			this.f = new OptimizeParam(f, f / 100);
-			this.R = new OptimizeParam(R, R / 100);
-
-			// Загрузка данных
-			this.I = I;
-			this.U = U;
-			len = I.Length;
-
-
-			c = CalculationError(Is, f, R);
-			InitEr = c;
-		}
-
-		#region методы
-		public void DoOptimize(int nStep)
-		{
-			double step = y.Count != 0 ? y[y.Count - 1] : 0;
-			z = 0;
-
-			// Основной цикл
-			for (double i = 0; i < nStep - 1; i++)
-			{
-				NormalizeParams();
-
-				S = CalculationError(Is.GetNewValue(), f.GetNewValue(), R.GetNewValue());
-
-				// условие
-				if (S < c)
-				{
-					c = S;
-
-					Is.InitValue();
-					f.InitValue();
-					R.InitValue();
-
-					y.Add(step + i);
-					Sy.Add(S);
-					ISy.Add(Is.CurrentValue);
-					fy.Add(f.CurrentValue);
-					Ry.Add(R.CurrentValue);
-					z++;
-				}
-				else
-				{
-					Is.MissValues();
-					f.MissValues();
-					R.MissValues();
-				}
-				dfy.Add(f.Range);
-				dIsy.Add(Is.Range);
-				dRy.Add(R.Range);
-			}
-			y.Add(step + nStep);
-			Sy.Add(c);
-			ISy.Add(Is.Value);
-			fy.Add(f.Value);
-			Ry.Add(R.Value);
-			Er = c;
-		}
-
-		double CalculationError(double Is, double f, double R)
-		{
-			double S = 0;
-			for (int j = 0; j < I.Length; j++)
-			{
-				Id = Is * (Math.Exp((U[j] - R * I[j]) / f) - 1);
-				S += Math.Abs((I[j] - Id) / I[j]);
-			}
-			return S;
-		}
-
-		private void NormalizeParams()
-		{
-			double LenghtVector = Math.Abs(f.Vector) + Math.Abs(Is.Vector) + Math.Abs(R.Vector);
-			if (LenghtVector > 1)
-			{
-				f.CurrentValue += f.Value + f.Vector * f.Range / LenghtVector;
-				Is.CurrentValue += Is.Value + Is.Vector * Is.Range / LenghtVector;
-				R.CurrentValue += R.Value + R.Vector * R.Range / LenghtVector;
-			}
-		}
-
-		private double InitEr = 0, Er = 0;
 
 		public double InitErr()
 		{
@@ -190,25 +70,117 @@ namespace RandomDescent
 			return Er;
 		}
 
+		public double[] Error() { return Sy.ToArray(); }
+		public double[] Y() { return y.ToArray(); }
+		#endregion
+
+		public Optimize2Params_Is_1(double[] I, double[] U, double Is, double f)
+		{
+			ISy = new List<double>();
+			fy = new List<double>();
+
+			dfy = new List<double>();
+			dIsy = new List<double>();
+
+			Sy = new List<double>();
+			y = new List<double>();
+
+			this.Is = new OptimizeParam(Is, Is / 100);
+			this.f = new OptimizeParam(f, f / 100);
+
+			this.IsPar = new OptimizeParams(new double[] { 1 });
+
+			// Загрузка данных
+			this.I = I;
+			this.U = U;
+
+			c = CalculationError(this.Is.Value, this.f.Value, this.IsPar.Value);
+			InitEr = c;
+			Sy.Add(c);
+		}
+
+		#region методы
+		public void DoOptimize(int nStep)
+		{
+			double step = y.Count != 0 ? y[y.Count - 1] : 0;
+			z = 0;
+
+			// Основной цикл
+			for (int i = 0; i < nStep; i++)
+			{
+
+				S = CalculationError(Is.GetNewValue(), f.GetNewValue(), IsPar.GetNewValue());
+
+				// условие
+				if (S < c)
+				{
+					c = S;
+					Is.InitValue();
+					f.InitValue();
+					IsPar.InitValue();
+
+					y.Add(step + i);
+					Sy.Add(S);
+
+					ISy.Add(Is.CurrentValue);
+					fy.Add(f.CurrentValue);
+					z++;
+				}
+				else
+				{
+					Is.MissValues();
+					f.MissValues();
+					IsPar.MissValues();
+				}
+			}
+			y.Add(step + nStep);
+			Sy.Add(c);
+
+			ISy.Add(Is.Value);
+			fy.Add(f.Value);
+			Er = c;
+		}
+
+		double CalculationError(double Is, double f, double[] IsPar)
+		{
+			double S = 0;
+			double parIs = 0;
+			for (int j = 0; j < I.Length; j++)
+			{
+				parIs = CalcIs(Is, IsPar, U[j]);
+				Id = parIs * (Math.Exp(U[j] / f) - 1);
+				S += Math.Abs((I[j] - Id) / I[j]);
+			}
+			return S;
+		}
+
+		private double CalcIs(double Is, double[] IsPar, double U)
+		{
+			return Is * (1 + IsPar[0] * U*U*U*U);
+		}
+
 		#region инициализация ВАХ
-		double[] UU_;
+		double[] II_;
+
 		private void InitVAX()
 		{
-			UU_ = new double[U.Length];
+			II_ = new double[U.Length];
+			double parIs = 0;
 			for (int i = 0; i < U.Length; i++)
 			{
-				UU_[i] = f.Value * Math.Log((I[i] / Is.Value) + 1) + R.Value * I[i];
+				parIs = CalcIs(Is.Value, IsPar.Value, U[i]);
+				II_[i] = parIs * (Math.Exp(U[i] / f.Value) - 1);
 			}
 		}
 
 		public double[] GetU()
 		{
-			InitVAX();
-			return UU_;
+			return U;
 		}
 		public double[] GetI()
 		{
-			return I;
+			InitVAX();
+			return II_;
 		}
 		#endregion
 
@@ -239,11 +211,11 @@ namespace RandomDescent
 			I_err = new double[I.Length];
 			double SCO_absolut = 0;
 			double SCO_relative = 0;
-			double VD = U[0];
-
+			double parIs = 0;
 			for (int i = 0; i < I.Length; i++)
 			{
-				I_err[i] = I[i] - Is.Value * (Math.Exp((U[i]- R.Value* I[i]) / f.Value) - 1);
+				parIs = CalcIs(Is.Value, IsPar.Value, U[i]);
+				I_err[i] = I[i] - parIs * (Math.Exp(U[i] / f.Value) - 1);
 
 				SCO_absolut += Math.Pow(I_err[i], 2);
 				SCO_relative += Math.Pow(I_err[i] / I[i], 2);
@@ -260,10 +232,11 @@ namespace RandomDescent
 			U_err = new double[U.Length];
 			double SCO_absolut = 0;
 			double SCO_relative = 0;
-
+			double parIs = 0;
 			for (int i = 0; i < U.Length; i++)
 			{
-				U_err[i] = U[i] - Math.Log(I[i] / Is.Value + 1) * f.Value - R.Value * I[i];
+				parIs = CalcIs(Is.Value, IsPar.Value, U[i]);
+				U_err[i] = U[i] - Math.Log(I[i] / parIs + 1) * f.Value;
 
 				SCO_absolut += Math.Pow(U_err[i], 2);
 				SCO_relative += Math.Pow(U_err[i] / U[i], 2);
@@ -273,25 +246,8 @@ namespace RandomDescent
 			SCO_REL_vol = Math.Sqrt(SCO_relative / (U_err.Length - 1)) * 100;
 			return U_err;
 		}
-
-		//падение напряжения на диоде
-		private double _VD(double UU, double Is, double f, double R, double VD)
-		{
-			double FL = 9, FN = 8;
-			double a, b1, FD, F;
-			while (Math.Abs(FL) > Math.Abs(FN) + 1e-16)
-			{
-				a = Is * (Math.Exp(VD / f) - 1);
-				b1 = Is / f * Math.Exp(VD / f);
-				FD = 1 / R + b1;
-				F = (VD - UU) / R + a;
-				VD = VD - F / FD;
-				FL = FN;
-				FN = F;
-			}
-			return VD;
-		}
 		#endregion
+
 		#endregion
 	}
 }

@@ -117,6 +117,7 @@ namespace RandomDescent
 
 					y.Add(step + i);
 					Sy.Add(S);
+
 					ISy.Add(Is.CurrentValue);
 					fy.Add(f.CurrentValue);
 					Ry.Add(R.CurrentValue);
@@ -134,6 +135,7 @@ namespace RandomDescent
 			}
 			y.Add(step + nStep);
 			Sy.Add(c);
+
 			ISy.Add(Is.Value);
 			fy.Add(f.Value);
 			Ry.Add(R.Value);
@@ -275,6 +277,7 @@ namespace RandomDescent
 				SCO_relative += Math.Pow(U_err[i] / U[i], 2);
 				U_err[i] = (U_err[i] / U[i]) * 100;
 			}
+
 			SCO_ABS_vol = Math.Sqrt(SCO_absolut / (U_err.Length - 1));
 			SCO_REL_vol = Math.Sqrt(SCO_relative / (U_err.Length - 1)) * 100;
 			return U_err;
