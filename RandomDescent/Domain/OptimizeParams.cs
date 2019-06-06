@@ -65,7 +65,7 @@ namespace RandomDescent.Domain
 		{
 			for (int i = 0; i < Range.Length; i++)
 			{
-				Range[i] *= 1.005;
+				Range[i] *= 1.007;
 				Value[i] = CurrentValue[i];
 			}
 		}

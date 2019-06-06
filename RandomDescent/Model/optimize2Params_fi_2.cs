@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace RandomDescent
 {
-	public class Optimize2Params_Is_1 : IOptimize, IVAX, IInaccuracy
+	public class Optimize2Params_fi_2 : IOptimize, IVAX, IInaccuracy
 	{
 
 		#region Поля
@@ -28,7 +28,7 @@ namespace RandomDescent
 
 		OptimizeParam Is;
 		OptimizeParam f;
-		OptimizeParams IsPar;
+		OptimizeParams FPar;
 		#endregion
 
 		#region Свойства
@@ -74,7 +74,7 @@ namespace RandomDescent
 		public double[] Y() { return y.ToArray(); }
 		#endregion
 
-		public Optimize2Params_Is_1(double[] I, double[] U, double Is, double f)
+		public Optimize2Params_fi_2(double[] I, double[] U, double Is, double f)
 		{
 			ISy = new List<double>();
 			fy = new List<double>();
@@ -88,13 +88,13 @@ namespace RandomDescent
 			this.Is = new OptimizeParam(Is, Is / 100);
 			this.f = new OptimizeParam(f, f / 100);
 
-			this.IsPar = new OptimizeParams(new double[] { 1 });
+			this.FPar = new OptimizeParams(new double[] { 1, 1, 1 });
 
 			// Загрузка данных
 			this.I = I;
 			this.U = U;
 
-			c = CalculationError(this.Is.Value, this.f.Value, this.IsPar.Value);
+			c = CalculationError(this.Is.Value, this.f.Value, this.FPar.Value);
 			InitEr = c;
 			Sy.Add(c);
 		}
@@ -109,7 +109,7 @@ namespace RandomDescent
 			for (int i = 0; i < nStep; i++)
 			{
 
-				S = CalculationError(Is.GetNewValue(), f.GetNewValue(), IsPar.GetNewValue());
+				S = CalculationError(Is.GetNewValue(), f.GetNewValue(), FPar.GetNewValue());
 
 				// условие
 				if (S < c)
@@ -117,7 +117,7 @@ namespace RandomDescent
 					c = S;
 					Is.InitValue();
 					f.InitValue();
-					IsPar.InitValue();
+					FPar.InitValue();
 
 					y.Add(step + i);
 					Sy.Add(S);
@@ -130,7 +130,7 @@ namespace RandomDescent
 				{
 					Is.MissValues();
 					f.MissValues();
-					IsPar.MissValues();
+					FPar.MissValues();
 				}
 			}
 			y.Add(step + nStep);
@@ -141,22 +141,22 @@ namespace RandomDescent
 			Er = c;
 		}
 
-		double CalculationError(double Is, double f, double[] IsPar)
+		double CalculationError(double Is, double f, double[] FPar)
 		{
 			double S = 0;
-			double parIs = 0;
+			double parF = 0;
 			for (int j = 0; j < I.Length; j++)
 			{
-				parIs = CalcIs(Is, IsPar, U[j]);
-				Id = parIs * (Math.Exp(U[j] / f) - 1);
+				parF = calcFi(f, FPar, U[j]);
+				Id = Is * (Math.Exp(U[j] / parF) - 1);
 				S += Math.Abs((I[j] - Id) / I[j]);
 			}
 			return S;
 		}
 
-		private double CalcIs(double Is, double[] IsPar, double U)
+		private double calcFi(double f, double[] FPar, double U)
 		{
-			return Is * (1 + IsPar[0] * U * U * U * U);
+			return f * ((1 + FPar[0] * U * U + FPar[1] * U * U * U)/(1+ FPar[2] * U * U));
 		}
 
 		#region инициализация ВАХ
@@ -165,11 +165,11 @@ namespace RandomDescent
 		private void InitVAX()
 		{
 			II_ = new double[U.Length];
-			double parIs = 0;
+			double parF = 0;
 			for (int i = 0; i < U.Length; i++)
 			{
-				parIs = CalcIs(Is.Value, IsPar.Value, U[i]);
-				II_[i] = parIs * (Math.Exp(U[i] / f.Value) - 1);
+				parF = calcFi(f.Value, FPar.Value, U[i]);
+				II_[i] = Is.Value * (Math.Exp(U[i] / parF) - 1);
 			}
 		}
 
@@ -211,18 +211,18 @@ namespace RandomDescent
 			I_err = new double[I.Length];
 			double SCO_absolut = 0;
 			double SCO_relative = 0;
-			double parIs = 0;
+			double parF = 0;
 			for (int i = 0; i < I.Length; i++)
 			{
-				parIs = CalcIs(Is.Value, IsPar.Value, U[i]);
-				I_err[i] = I[i] - parIs * (Math.Exp(U[i] / f.Value) - 1);
+				parF = calcFi(f.Value, FPar.Value, U[i]);
+				I_err[i] = I[i] - Is.Value * (Math.Exp(U[i] / parF) - 1);
 
 				SCO_absolut += Math.Pow(I_err[i], 2);
 				SCO_relative += Math.Pow(I_err[i] / I[i], 2);
 				I_err[i] = (I_err[i] / I[i]) * 100;
 			}
 			SCO_ABS_cur = Math.Sqrt(SCO_absolut / (I_err.Length - 1));
-			SCO_REL_cur = Math.Sqrt(SCO_relative / (I_err.Length - 1)) * 100;
+			SCO_REL_cur = Math.Sqrt(SCO_relative / (I_err.Length - 1))*100;
 			return I_err;
 		}
 
@@ -232,18 +232,18 @@ namespace RandomDescent
 			U_err = new double[U.Length];
 			double SCO_absolut = 0;
 			double SCO_relative = 0;
-			double parIs = 0;
+			double parF = 0;
 			for (int i = 0; i < U.Length; i++)
 			{
-				parIs = CalcIs(Is.Value, IsPar.Value, U[i]);
-				U_err[i] = U[i] - Math.Log(I[i] / parIs + 1) * f.Value;
+				parF = calcFi(f.Value, FPar.Value, U[i]);
+				U_err[i] = U[i] - Math.Log(I[i] / Is.Value + 1) * parF;
 
 				SCO_absolut += Math.Pow(U_err[i], 2);
 				SCO_relative += Math.Pow(U_err[i] / U[i], 2);
 				U_err[i] = (U_err[i] / U[i]) * 100;
 			}
 			SCO_ABS_vol = Math.Sqrt(SCO_absolut / (U_err.Length - 1));
-			SCO_REL_vol = Math.Sqrt(SCO_relative / (U_err.Length - 1)) * 100;
+			SCO_REL_vol = Math.Sqrt(SCO_relative / (U_err.Length - 1))*100;
 			return U_err;
 		}
 		#endregion

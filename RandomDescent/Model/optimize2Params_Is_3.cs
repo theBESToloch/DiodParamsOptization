@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace RandomDescent
 {
-	public class Optimize2Params_Is_1 : IOptimize, IVAX, IInaccuracy
+	public class Optimize2Params_Is_3 : IOptimize, IVAX, IInaccuracy
 	{
 
 		#region Поля
@@ -74,7 +74,7 @@ namespace RandomDescent
 		public double[] Y() { return y.ToArray(); }
 		#endregion
 
-		public Optimize2Params_Is_1(double[] I, double[] U, double Is, double f)
+		public Optimize2Params_Is_3(double[] I, double[] U, double Is, double f)
 		{
 			ISy = new List<double>();
 			fy = new List<double>();
@@ -88,7 +88,7 @@ namespace RandomDescent
 			this.Is = new OptimizeParam(Is, Is / 100);
 			this.f = new OptimizeParam(f, f / 100);
 
-			this.IsPar = new OptimizeParams(new double[] { 1 });
+			this.IsPar = new OptimizeParams(new double[] { 1, 1, 1, 1, 1 });
 
 			// Загрузка данных
 			this.I = I;
@@ -156,7 +156,7 @@ namespace RandomDescent
 
 		private double CalcIs(double Is, double[] IsPar, double U)
 		{
-			return Is * (1 + IsPar[0] * U * U * U * U);
+			return Is * (1 + IsPar[0] * Math.Pow(U, 2) + IsPar[1] * Math.Pow(U, 3) + IsPar[2] * Math.Pow(U, 4)) / (1 + IsPar[3] * Math.Pow(U, 2) + IsPar[4] * Math.Pow(U, 3));
 		}
 
 		#region инициализация ВАХ

@@ -48,13 +48,13 @@ namespace RandomDescent
 
 		public void InitValue()
 		{
-			Range *= 1.005;
+			Range *= 1.007;
 			Value = CurrentValue;
 		}
 
 		public void MissValues()
 		{
-			Range /=1.00001;
+			Range /= 1.00001;
 		}
 	}
 }
