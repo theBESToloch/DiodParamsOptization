@@ -157,19 +157,19 @@ namespace RandomDescent
 
 				Id = parIs * (Math.Exp(U[j] / parFi) - 1);
 
-				S += Math.Abs((I[j] - Id) / I[j]);
+				S += Math.Abs(Math.Pow((I[j] - Id) / I[j], 2));
 			}
 			return S;
 		}
 
 		private double CalcIs(double Is, double[] IsPar, double U)
 		{
-			return Is * (1 + IsPar[0] * U*U*U*U);
+			return Is * (1 + IsPar[0] * U * U);
 		}
 
 		private double CalcFi(double f, double[] FiPar, double U)
 		{
-			return f * (1 + FiPar[0] * U);
+			return f * (1 + FiPar[0] * U * U);
 		}
 
 		#region инициализация ВАХ

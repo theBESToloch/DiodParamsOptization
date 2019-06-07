@@ -63,9 +63,9 @@ namespace Метод_случайного_спуска
 
 		private void OptimizeTwoParamsModel()
 		{
-			if (obj == null || obj.GetType() != typeof(Optimize2Params_fi_3))
+			if (obj == null || obj.GetType() != typeof(Optimize2Params_Is_fi_2))
 			{
-				obj = new Optimize2Params_fi_3(VAX.I, VAX.U,
+				obj = new Optimize2Params_Is_fi_2(VAX.I, VAX.U,
 					Convert.ToDouble(ParamsListViewer.Items[0].SubItems[2].Text.Replace(".", ",")),
 					Convert.ToDouble(ParamsListViewer.Items[1].SubItems[2].Text.Replace(".", ",")));
 			}
@@ -75,7 +75,7 @@ namespace Метод_случайного_спуска
 		}
 		private void CompleteTwoParamsModelOptimize()
 		{
-			Optimize2Params_fi_3 opt = (Optimize2Params_fi_3)obj;
+			Optimize2Params_Is_fi_2 opt = (Optimize2Params_Is_fi_2)obj;
 
 			ParamsListViewer.Items[0].SubItems[1].Text = opt.IS0.ToString();
 			ParamsListViewer.Items[1].SubItems[1].Text = opt.F0.ToString();

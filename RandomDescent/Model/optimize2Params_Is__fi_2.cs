@@ -90,7 +90,7 @@ namespace RandomDescent
 			this.f = new OptimizeParam(0.025732229502618);
 
 			this.IsPar = new OptimizeParams(new double[] { 1.260399733585351, 14.98016379442909, -16.63977230380133, 53.539103166112966, 26.140015305438816 });
-			this.FiPar = new OptimizeParams(new double[] { 3.227588794037406 });
+			this.FiPar = new OptimizeParams(new double[] { 3.227588794037406, 1, 1 });
 
 			// Загрузка данных
 			this.I = I;
@@ -164,12 +164,14 @@ namespace RandomDescent
 
 		private double CalcIs(double Is, double[] IsPar, double U)
 		{
+			//return Is * (1 + IsPar[0] * Math.Pow(U, 4));
 			return Is * (1 + IsPar[0] * Math.Pow(U, 2) + IsPar[1] * Math.Pow(U, 3) + IsPar[2] * Math.Pow(U, 4)) / (1 + IsPar[3] * Math.Pow(U, 2) + IsPar[4] * Math.Pow(U, 3));
 		}
 
 		private double CalcFi(double f, double[] FiPar, double U)
 		{
-			return f * (1 + FiPar[0] * U);
+			//return f * (1 + FiPar[0] * Math.Pow(U, 2) + FiPar[1] * Math.Pow(U, 3)) / (1 + FiPar[2] * Math.Pow(U, 2));
+			return f * (1 + FiPar[0] * U * U);
 		}
 
 		#region инициализация ВАХ
